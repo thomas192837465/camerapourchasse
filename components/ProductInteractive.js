@@ -1,10 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import { CameraIcon, CheckIcon, StarRating } from "./Icons";
+import Image from "next/image";
+import { CameraIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, StarRating } from "./Icons";
 import { useCart } from "@/lib/cart-context";
 import QtyStepper from "./QtyStepper";
 import Tabs from "./Tabs";
+
+const VISIBLE_THUMBS = 3;
 
 export default function ProductInteractive({ product }) {
   const images = (product.images || []).filter((img) => img.url);
@@ -13,6 +16,20 @@ export default function ProductInteractive({ product }) {
   const [qty, setQty] = useState(1);
   const { addItem } = useCart();
   const [added, setAdded] = useState(false);
+
+  function showPrev() {
+    setActiveImage((i) => (i - 1 + images.length) % images.length);
+  }
+
+  function showNext() {
+    setActiveImage((i) => (i + 1) % images.length);
+  }
+
+  const TOTAL_SLOTS = 4;
+  const hasOverflow = images.length > TOTAL_SLOTS;
+  const visibleThumbs = hasOverflow ? images.slice(0, VISIBLE_THUMBS) : images;
+  const overflowImage = hasOverflow ? images[VISIBLE_THUMBS] : null;
+  const overflowCount = hasOverflow ? images.length - TOTAL_SLOTS : 0;
 
   function handleAdd() {
     addItem(
@@ -34,21 +51,53 @@ export default function ProductInteractive({ product }) {
       <div>
         <div className="gallery-main">
           {images.length ? (
-            <img src={images[activeImage]?.url} alt={images[activeImage]?.alt || product.name} />
+            <Image
+              src={images[activeImage]?.url}
+              alt={images[activeImage]?.alt || product.name}
+              fill
+              sizes="(max-width: 960px) 100vw, 50vw"
+              style={{ objectFit: "contain" }}
+              priority
+            />
           ) : (
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", color: "rgba(255,255,255,0.85)" }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", color: "var(--ink-faint)" }}>
               <CameraIcon style={{ width: "34%", height: "34%", strokeWidth: 1.1 }} />
             </div>
           )}
+          {images.length > 1 ? (
+            <>
+              <button type="button" className="gallery-nav prev" onClick={showPrev} aria-label="Photo précédente">
+                <ChevronLeftIcon />
+              </button>
+              <button type="button" className="gallery-nav next" onClick={showNext} aria-label="Photo suivante">
+                <ChevronRightIcon />
+              </button>
+            </>
+          ) : null}
         </div>
 
         {images.length > 1 ? (
           <div className="gallery-thumbs">
-            {images.map((img, i) => (
+            {visibleThumbs.map((img, i) => (
               <button key={i} className={i === activeImage ? "active" : ""} onClick={() => setActiveImage(i)}>
-                <img src={img.url} alt={img.alt || product.name} />
+                <Image src={img.url} alt={img.alt || product.name} fill sizes="100px" style={{ objectFit: "contain" }} />
               </button>
             ))}
+            {overflowImage ? (
+              <button
+                className={activeImage >= VISIBLE_THUMBS ? "active" : ""}
+                onClick={() => setActiveImage(VISIBLE_THUMBS)}
+              >
+                <Image
+                  src={overflowImage.url}
+                  alt={overflowImage.alt || product.name}
+                  fill
+                  sizes="100px"
+                  style={{ objectFit: "contain" }}
+                />
+                <span className="gallery-thumbs-more-overlay">+{overflowCount}</span>
+              </button>
+            ) : null}
           </div>
         ) : null}
       </div>
@@ -72,8 +121,8 @@ export default function ProductInteractive({ product }) {
 
         {product.features?.length ? (
           <ul className="pd-features">
-            {product.features.map((f) => (
-              <li key={f}>
+            {product.features.map((f, i) => (
+              <li key={i}>
                 <CheckIcon /> {f}
               </li>
             ))}
@@ -86,9 +135,9 @@ export default function ProductInteractive({ product }) {
               Variante : <em>{variant}</em>
             </p>
             <div className="swatches">
-              {product.variants.map((v) => (
+              {product.variants.map((v, i) => (
                 <button
-                  key={v.name}
+                  key={i}
                   className={`swatch ${variant === v.name ? "active" : ""}`}
                   style={{ background: v.colorHex }}
                   aria-label={v.name}
@@ -119,8 +168,8 @@ export default function ProductInteractive({ product }) {
               content: product.specs?.length ? (
                 <table className="spec-table">
                   <tbody>
-                    {product.specs.map((s) => (
-                      <tr key={s.label}>
+                    {product.specs.map((s, i) => (
+                      <tr key={i}>
                         <td>{s.label}</td>
                         <td>{s.value}</td>
                       </tr>
@@ -134,34 +183,12 @@ export default function ProductInteractive({ product }) {
             {
               key: "avis",
               label: "Avis Clients",
-              content: (
-                <div className="review-list">
-                  <div className="review">
-                    <div className="avatar">ML</div>
-                    <div>
-                      <div className="review-head">
-                        <strong>Marc L.</strong>
-                        <span className="stars">★★★★★</span>
-                        <span style={{ fontSize: "0.78rem", color: "var(--ink-faint)" }}>5/5</span>
-                      </div>
-                      <p>
-                        Excellente caméra, déclenchement très rapide et images nettes même de nuit. La connexion 4G
-                        fonctionne parfaitement en forêt.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="review">
-                    <div className="avatar">SD</div>
-                    <div>
-                      <div className="review-head">
-                        <strong>Sophie D.</strong>
-                        <span className="stars">★★★★★</span>
-                        <span style={{ fontSize: "0.78rem", color: "var(--ink-faint)" }}>5/5</span>
-                      </div>
-                      <p>Boîtier très solide et parfaitement étanche après plusieurs semaines sous la pluie.</p>
-                    </div>
-                  </div>
-                </div>
+              content: product.rating?.count ? (
+                <p>
+                  {product.rating.count} avis, note moyenne {(product.rating.average || 0).toFixed(1)}/5.
+                </p>
+              ) : (
+                <p>Aucun avis pour le moment. Soyez le premier à donner votre avis sur ce produit.</p>
               ),
             },
           ]}

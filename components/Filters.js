@@ -3,16 +3,17 @@
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { ChevronDownIcon } from "./Icons";
 
-const RESOLUTION_OPTIONS = ["4K UHD", "30 MP", "50 MP"];
-const VISION_OPTIONS = ["Vision Nocturne No-Glow", "Vision couleur basse lumière"];
-const RANGE_OPTIONS = ["Détection 25 m", "Détection 15 m", "Détection 10 m"];
-
-export default function Filters({ categories }) {
+export default function Filters({ categories, options, selectedCategorySlugs }) {
+  const RESOLUTION_OPTIONS = options?.resolutionOptions || [];
+  const VISION_OPTIONS = options?.visionOptions || [];
+  const RANGE_OPTIONS = options?.rangeOptions || [];
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
 
-  const selectedCategories = (searchParams.get("categorie") || "").split(",").filter(Boolean);
+  // La catégorie active vient soit du chemin (/produits/{slug}, URL canonique passée en prop),
+  // soit de l'ancienne query string (?categorie=a,b, utilisée pour la multi-sélection).
+  const selectedCategories = selectedCategorySlugs ?? (searchParams.get("categorie") || "").split(",").filter(Boolean);
   const selectedTags = (searchParams.get("tags") || "").split(",").filter(Boolean);
   const maxPrice = Number(searchParams.get("max") || 500);
 
@@ -30,6 +31,25 @@ export default function Filters({ categories }) {
       if (next.length) params.set(key, next.join(","));
       else params.delete(key);
     });
+  }
+
+  function toggleCategory(slug) {
+    const next = selectedCategories.includes(slug)
+      ? selectedCategories.filter((v) => v !== slug)
+      : [...selectedCategories, slug];
+
+    const params = new URLSearchParams(searchParams.toString());
+    params.delete("categorie");
+
+    if (next.length === 1) {
+      // Une seule catégorie sélectionnée : URL canonique /produits/{slug} (meilleure pour le SEO).
+      const qs = params.toString();
+      router.push(`/produits/${next[0]}${qs ? `?${qs}` : ""}`);
+    } else {
+      // Aucune ou plusieurs catégories : reste sur /produits avec ?categorie=a,b.
+      if (next.length) params.set("categorie", next.join(","));
+      router.push(`/produits${params.toString() ? `?${params.toString()}` : ""}`);
+    }
   }
 
   function setMaxPrice(value) {
@@ -50,7 +70,7 @@ export default function Filters({ categories }) {
               <input
                 type="checkbox"
                 checked={selectedCategories.includes(cat.slug)}
-                onChange={() => toggleListParam("categorie", cat.slug, selectedCategories)}
+                onChange={() => toggleCategory(cat.slug)}
               />
               {cat.name}
             </label>
@@ -79,59 +99,65 @@ export default function Filters({ categories }) {
         </div>
       </details>
 
-      <details className="filter-group" open>
-        <summary>
-          Résolution <ChevronDownIcon />
-        </summary>
-        <div className="filter-body">
-          {RESOLUTION_OPTIONS.map((opt) => (
-            <label className="filter-checkbox" key={opt}>
-              <input
-                type="checkbox"
-                checked={selectedTags.includes(opt)}
-                onChange={() => toggleListParam("tags", opt, selectedTags)}
-              />
-              {opt}
-            </label>
-          ))}
-        </div>
-      </details>
+      {RESOLUTION_OPTIONS.length ? (
+        <details className="filter-group" open>
+          <summary>
+            Résolution <ChevronDownIcon />
+          </summary>
+          <div className="filter-body">
+            {RESOLUTION_OPTIONS.map((opt) => (
+              <label className="filter-checkbox" key={opt}>
+                <input
+                  type="checkbox"
+                  checked={selectedTags.includes(opt)}
+                  onChange={() => toggleListParam("tags", opt, selectedTags)}
+                />
+                {opt}
+              </label>
+            ))}
+          </div>
+        </details>
+      ) : null}
 
-      <details className="filter-group" open>
-        <summary>
-          Vision de Nuit <ChevronDownIcon />
-        </summary>
-        <div className="filter-body">
-          {VISION_OPTIONS.map((opt) => (
-            <label className="filter-checkbox" key={opt}>
-              <input
-                type="checkbox"
-                checked={selectedTags.includes(opt)}
-                onChange={() => toggleListParam("tags", opt, selectedTags)}
-              />
-              {opt}
-            </label>
-          ))}
-        </div>
-      </details>
+      {VISION_OPTIONS.length ? (
+        <details className="filter-group" open>
+          <summary>
+            Vision de Nuit <ChevronDownIcon />
+          </summary>
+          <div className="filter-body">
+            {VISION_OPTIONS.map((opt) => (
+              <label className="filter-checkbox" key={opt}>
+                <input
+                  type="checkbox"
+                  checked={selectedTags.includes(opt)}
+                  onChange={() => toggleListParam("tags", opt, selectedTags)}
+                />
+                {opt}
+              </label>
+            ))}
+          </div>
+        </details>
+      ) : null}
 
-      <details className="filter-group" open>
-        <summary>
-          Portée <ChevronDownIcon />
-        </summary>
-        <div className="filter-body">
-          {RANGE_OPTIONS.map((opt) => (
-            <label className="filter-checkbox" key={opt}>
-              <input
-                type="checkbox"
-                checked={selectedTags.includes(opt)}
-                onChange={() => toggleListParam("tags", opt, selectedTags)}
-              />
-              {opt}
-            </label>
-          ))}
-        </div>
-      </details>
+      {RANGE_OPTIONS.length ? (
+        <details className="filter-group" open>
+          <summary>
+            Portée <ChevronDownIcon />
+          </summary>
+          <div className="filter-body">
+            {RANGE_OPTIONS.map((opt) => (
+              <label className="filter-checkbox" key={opt}>
+                <input
+                  type="checkbox"
+                  checked={selectedTags.includes(opt)}
+                  onChange={() => toggleListParam("tags", opt, selectedTags)}
+                />
+                {opt}
+              </label>
+            ))}
+          </div>
+        </details>
+      ) : null}
     </aside>
   );
 }

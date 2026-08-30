@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { getAllProductsAdmin } from "@/lib/products";
 import { getAllOrders, ORDER_STATUSES } from "@/lib/orders";
+import RevenueChart from "@/components/admin/RevenueChart";
 
 export default function AdminDashboard() {
   const [products, setProducts] = useState([]);
@@ -20,6 +21,15 @@ export default function AdminDashboard() {
   }, []);
 
   const statusLabel = (value) => ORDER_STATUSES.find((s) => s.value === value)?.label || value;
+
+  const paidOrders = orders.filter((o) => o.status !== "annulee");
+  const totalRevenue = paidOrders.reduce((sum, o) => sum + Number(o.total || 0), 0);
+  const thirtyDaysAgo = Date.now() - 30 * 24 * 60 * 60 * 1000;
+  const revenue30d = paidOrders.reduce((sum, o) => {
+    const date = o.createdAt?.toDate ? o.createdAt.toDate() : o.createdAt ? new Date(o.createdAt) : null;
+    if (!date || date.getTime() < thirtyDaysAgo) return sum;
+    return sum + Number(o.total || 0);
+  }, 0);
 
   return (
     <>
@@ -45,6 +55,19 @@ export default function AdminDashboard() {
           </div>
           <div className="label">Nouvelles commandes</div>
         </div>
+        <div className="stat-card">
+          <div className="value">{loading ? "…" : `€${totalRevenue.toFixed(2).replace(".", ",")}`}</div>
+          <div className="label">Chiffre d'affaires total</div>
+        </div>
+        <div className="stat-card">
+          <div className="value">{loading ? "…" : `€${revenue30d.toFixed(2).replace(".", ",")}`}</div>
+          <div className="label">30 derniers jours</div>
+        </div>
+      </div>
+
+      <div className="admin-card">
+        <h2>Chiffre d'affaires — 14 derniers jours</h2>
+        {loading ? <p>Chargement…</p> : <RevenueChart orders={orders} />}
       </div>
 
       <div className="admin-card">

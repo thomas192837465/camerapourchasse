@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { useCart } from "@/lib/cart-context";
 import QtyStepper from "./QtyStepper";
 import { CartIcon } from "./Icons";
@@ -30,7 +31,11 @@ export default function CartView() {
         <div>
           {items.map((item) => (
             <div className="cart-line" key={item.key}>
-              <div className="cart-line-thumb">{item.image ? <img src={item.image} alt={item.name} /> : null}</div>
+              <div className="cart-line-thumb">
+                {item.image ? (
+                  <Image src={item.image} alt={item.name} fill sizes="80px" style={{ objectFit: "contain" }} />
+                ) : null}
+              </div>
               <div>
                 <h3>{item.name}</h3>
                 {item.variant ? <div className="variant">Variante : {item.variant}</div> : null}

@@ -1,10 +1,21 @@
+"use client";
+
+import { useState } from "react";
 import Link from "next/link";
 import { LogoMarkIcon } from "./Icons";
 
 export default function Footer({ content }) {
+  const [subscribed, setSubscribed] = useState(false);
+
+  function handleSubscribe(e) {
+    e.preventDefault();
+    // Pas encore branché à un service d'e-mailing — retour visuel honnête en attendant.
+    setSubscribed(true);
+  }
+
   return (
     <footer className="site-footer">
-      <div className="container">
+      <div className="container footer-grid">
         <div className="footer-brand">
           <div className="logo">
             <span className="logo-mark" style={{ background: "rgba(255,255,255,0.1)" }}>
@@ -17,31 +28,56 @@ export default function Footer({ content }) {
           </div>
           <p>{content.footerDescription}</p>
         </div>
+
         <div>
-          <h4>Boutique</h4>
+          <h4>Produits</h4>
           <ul>
-            <li><Link href="/produits?categorie=cameras-4g">Caméras 4G</Link></li>
-            <li><Link href="/produits?categorie=vision-nocturne">Vision Nocturne</Link></li>
-            <li><Link href="/produits?categorie=accessoires">Accessoires</Link></li>
+            <li><Link href="/produits/cameras-4g">Caméras 4G</Link></li>
+            <li><Link href="/produits/vision-nocturne">Vision Nocturne</Link></li>
+            <li><Link href="/produits/accessoires">Accessoires</Link></li>
           </ul>
         </div>
         <div>
-          <h4>Support</h4>
+          <h4>Guide & Support</h4>
           <ul>
+            <li><Link href="#">Comment choisir sa caméra</Link></li>
             <li><Link href="#">Livraison</Link></li>
             <li><Link href="#">Garantie</Link></li>
             <li><Link href="#">Contact</Link></li>
           </ul>
         </div>
         <div>
-          <h4>Entreprise</h4>
+          <h4>À propos</h4>
           <ul>
+            <li><Link href="#">Notre histoire</Link></li>
             <li><Link href="#">Blog</Link></li>
-            <li><Link href="#">À propos</Link></li>
           </ul>
         </div>
+        <div>
+          <h4>Légal</h4>
+          <ul>
+            <li><Link href="/mentions-legales">Mentions légales</Link></li>
+            <li><Link href="/cgv">CGV</Link></li>
+          </ul>
+        </div>
+
+        <div className="footer-newsletter">
+          <h4>{content.newsletterTitle}</h4>
+          {subscribed ? (
+            <p className="footer-newsletter-thanks">Merci ! Vous êtes bien inscrit(e).</p>
+          ) : (
+            <form onSubmit={handleSubscribe}>
+              <input type="email" required placeholder="Votre e-mail" aria-label="E-mail" />
+              <button type="submit" className="btn btn-primary">
+                S'inscrire
+              </button>
+            </form>
+          )}
+        </div>
       </div>
-      <div className="footer-bottom">© {new Date().getFullYear()} {content.logoLine1} {content.logoLine2}. Tous droits réservés.</div>
+      <div className="footer-bottom">
+        <div>© {new Date().getFullYear()} {content.logoLine1} {content.logoLine2}. Tous droits réservés.</div>
+      </div>
     </footer>
   );
 }

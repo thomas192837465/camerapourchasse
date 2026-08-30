@@ -35,11 +35,25 @@ service cloud.firestore {
       allow update, delete: if isAdmin();
     }
 
-    // Administrateurs : un utilisateur ne peut lire que son propre statut ; la création se fait
-    // manuellement depuis la console Firebase (aucune écriture cliente autorisée).
+    // Administrateurs : un utilisateur peut lire son propre statut ; un admin peut lire la liste
+    // complète et ajouter/retirer d'autres admins (mais seulement un compte déjà admin, jamais
+    // un compte quelconque — évite qu'un utilisateur s'auto-attribue les droits admin).
     match /admins/{uid} {
-      allow read: if request.auth != null && request.auth.uid == uid;
-      allow write: if false;
+      allow read: if request.auth != null && (request.auth.uid == uid || isAdmin());
+      allow write: if isAdmin();
+    }
+
+    // Bibliothèque média : photos déjà envoyées sur Cloudinary, réutilisables entre produits.
+    // Usage interne à l'admin uniquement.
+    match /media/{mediaId} {
+      allow read, write: if isAdmin();
+    }
+
+    // Contenu d'enrichissement des produits Shopify (photos, FAQ, SEO...) : lecture publique
+    // (utilisée sur la fiche produit du site), écriture admin uniquement.
+    match /shopifyProductContent/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
     }
   }
 }

@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ImageUploader from "./ImageUploader";
+import SingleImageField from "./SingleImageField";
 import { slugify } from "@/lib/products";
 import { TrashIcon } from "@/components/Icons";
 
@@ -18,12 +19,14 @@ const emptyProduct = {
   categoryId: "",
   status: "published",
   isBestSeller: false,
+  supplierLink: "",
   images: [],
   features: [],
   specs: [],
   variants: [],
+  faq: [],
   rating: { average: 0, count: 0 },
-  seo: { metaTitle: "", metaDescription: "" },
+  seo: { metaTitle: "", metaDescription: "", featuredImage: { url: "", alt: "" } },
 };
 
 export default function ProductForm({ initialProduct, categories, generalSettings, onSubmit, onDelete }) {
@@ -103,7 +106,7 @@ export default function ProductForm({ initialProduct, categories, generalSetting
             <select required value={product.categoryId} onChange={(e) => set("categoryId", e.target.value)}>
               <option value="">— Choisir —</option>
               {categories.map((c) => (
-                <option key={c.id} value={c.id}>
+                <option key={c.id} value={c.slug}>
                   {c.name}
                 </option>
               ))}
@@ -150,6 +153,22 @@ export default function ProductForm({ initialProduct, categories, generalSetting
               Mettre en avant ("Meilleures Ventes")
             </label>
           </div>
+        </div>
+      </div>
+
+      <div className="admin-card">
+        <h2>Fournisseur</h2>
+        <div className="form-field">
+          <label>Lien du produit chez le fournisseur (ex : AliExpress)</label>
+          <input
+            type="url"
+            placeholder="https://www.aliexpress.com/item/..."
+            value={product.supplierLink}
+            onChange={(e) => set("supplierLink", e.target.value)}
+          />
+          <span className="form-hint">
+            Affiché sur chaque commande contenant ce produit, pour passer la commande fournisseur en un clic.
+          </span>
         </div>
       </div>
 
@@ -235,6 +254,38 @@ export default function ProductForm({ initialProduct, categories, generalSetting
       </div>
 
       <div className="admin-card">
+        <h2>FAQ (questions fréquentes)</h2>
+        <p className="form-hint" style={{ marginBottom: 10 }}>
+          Affichée sur la fiche produit au-dessus de "Vous pourriez aimer", avec les balises SEO nécessaires pour
+          apparaître en résultat enrichi ("rich snippet") dans Google.
+        </p>
+        {product.faq.map((item, i) => (
+          <div className="repeatable-row" key={i}>
+            <div className="form-field">
+              <input
+                placeholder="Question (ex : Quelle est l'autonomie de la batterie ?)"
+                value={item.question}
+                onChange={(e) => updateListItem("faq", i, { ...item, question: e.target.value })}
+              />
+              <textarea
+                rows={2}
+                placeholder="Réponse"
+                value={item.answer}
+                onChange={(e) => updateListItem("faq", i, { ...item, answer: e.target.value })}
+                style={{ marginTop: 6 }}
+              />
+            </div>
+            <button type="button" className="icon-btn" onClick={() => removeListItem("faq", i)}>
+              <TrashIcon />
+            </button>
+          </div>
+        ))}
+        <button type="button" className="add-row-btn" onClick={() => addListItem("faq", { question: "", answer: "" })}>
+          + Ajouter une question
+        </button>
+      </div>
+
+      <div className="admin-card">
         <h2>SEO</h2>
         <div className="form-field">
           <label>Titre meta (balise &lt;title&gt;)</label>
@@ -251,6 +302,17 @@ export default function ProductForm({ initialProduct, categories, generalSetting
             value={product.seo.metaDescription}
             placeholder={product.shortDescription}
             onChange={(e) => set("seo", { ...product.seo, metaDescription: e.target.value })}
+          />
+        </div>
+        <div className="form-field">
+          <label>Image de mise en avant (Google / partage sur les réseaux sociaux)</label>
+          <p className="form-hint" style={{ marginBottom: 8 }}>
+            Sans image choisie ici, la première photo du produit est utilisée par défaut.
+          </p>
+          <SingleImageField
+            value={product.seo.featuredImage}
+            onChange={(img) => set("seo", { ...product.seo, featuredImage: img })}
+            altPlaceholder="Texte alternatif (SEO)"
           />
         </div>
       </div>

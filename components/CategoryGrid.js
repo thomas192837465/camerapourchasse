@@ -1,27 +1,32 @@
 import Link from "next/link";
-import { CameraIcon, MoonIcon, ImageIcon, CardIcon } from "./Icons";
+import Image from "next/image";
+import { CameraIcon } from "./Icons";
 
-const ICONS = {
-  camera: CameraIcon,
-  moon: MoonIcon,
-  image: ImageIcon,
-  card: CardIcon,
-};
-
-export default function CategoryGrid({ categories }) {
+export default function CategoryGrid({ title, categories }) {
   return (
-    <div className="categories-grid">
-      {categories.map((cat) => {
-        const Icon = ICONS[cat.icon] || CameraIcon;
-        return (
-          <Link key={cat.id} className="category-card" href={`/produits?categorie=${cat.slug}`}>
-            <span className="category-icon">
-              <Icon />
-            </span>
+    <section className="section">
+      <h2 className="section-title">{title}</h2>
+      <div className="categories-grid">
+        {categories.map((cat) => (
+          <Link key={cat.id} className="category-card" href={`/produits/${cat.slug}`}>
+            {cat.image?.url ? (
+              <Image
+                src={cat.image.url}
+                alt={cat.image.alt || cat.name}
+                fill
+                sizes="(max-width: 960px) 100vw, 33vw"
+                style={{ objectFit: "cover" }}
+              />
+            ) : (
+              <span className="category-card-placeholder">
+                <CameraIcon />
+              </span>
+            )}
+            <span className="category-card-overlay" aria-hidden="true" />
             <h3>{cat.name}</h3>
           </Link>
-        );
-      })}
-    </div>
+        ))}
+      </div>
+    </section>
   );
 }

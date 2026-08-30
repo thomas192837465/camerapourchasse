@@ -3,11 +3,14 @@
 import { useRef, useState } from "react";
 import { resizeImageToFit } from "@/lib/image";
 import { uploadToCloudinary, cloudinaryEnabled } from "@/lib/cloudinary";
+import { addMediaItem } from "@/lib/media";
+import MediaLibraryPicker from "./MediaLibraryPicker";
 
 export default function ImageUploader({ images, onChange, targetSize }) {
   const inputRef = useRef(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
+  const [showLibrary, setShowLibrary] = useState(false);
 
   async function handleFiles(e) {
     const files = Array.from(e.target.files || []);
@@ -27,7 +30,9 @@ export default function ImageUploader({ images, onChange, targetSize }) {
       for (const file of files) {
         const blob = await resizeImageToFit(file, targetSize.width, targetSize.height);
         const { url, publicId } = await uploadToCloudinary(blob);
-        uploaded.push({ url, cloudinaryId: publicId, alt: "" });
+        const item = { url, cloudinaryId: publicId, alt: "" };
+        uploaded.push(item);
+        addMediaItem(item).catch(() => {});
       }
       onChange([...images, ...uploaded]);
     } catch (err) {
@@ -36,6 +41,11 @@ export default function ImageUploader({ images, onChange, targetSize }) {
       setUploading(false);
       if (inputRef.current) inputRef.current.value = "";
     }
+  }
+
+  function handleSelectFromLibrary(item) {
+    onChange([...images, { url: item.url, cloudinaryId: item.cloudinaryId, alt: item.alt || "" }]);
+    setShowLibrary(false);
   }
 
   function handleRemove(index) {
@@ -59,8 +69,8 @@ export default function ImageUploader({ images, onChange, targetSize }) {
   return (
     <div>
       <p className="form-hint" style={{ marginBottom: 10 }}>
-        Les photos sont automatiquement recadrées en {targetSize.width}×{targetSize.height}px. La première photo est
-        utilisée comme image principale.
+        Les photos sont automatiquement redimensionnées en {targetSize.width}×{targetSize.height}px sur fond blanc
+        (le produit entier reste visible, sans recadrage). La première photo est utilisée comme image principale.
       </p>
 
       {!cloudinaryEnabled ? (
@@ -109,10 +119,24 @@ export default function ImageUploader({ images, onChange, targetSize }) {
           <span style={{ fontSize: "1.4rem" }}>+</span>
           {uploading ? "Envoi…" : "Ajouter des photos"}
         </button>
+
+        <button
+          type="button"
+          className="uploader-add"
+          onClick={() => setShowLibrary(true)}
+          disabled={!cloudinaryEnabled}
+        >
+          <span style={{ fontSize: "1.4rem" }}>🖼</span>
+          Choisir dans la bibliothèque
+        </button>
       </div>
 
       <input ref={inputRef} type="file" accept="image/*" multiple hidden onChange={handleFiles} />
       {error ? <div className="banner error">{error}</div> : null}
+
+      {showLibrary ? (
+        <MediaLibraryPicker onSelect={handleSelectFromLibrary} onClose={() => setShowLibrary(false)} />
+      ) : null}
     </div>
   );
 }

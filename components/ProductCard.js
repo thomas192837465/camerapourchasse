@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { CameraIcon, StarRating } from "./Icons";
 import { useCart } from "@/lib/cart-context";
 
@@ -21,17 +22,23 @@ export default function ProductCard({ product }) {
 
   return (
     <article className="product-card">
-      <Link className="product-thumb" href={`/produits/${product.slug}`}>
+      <Link className="product-thumb" href={`/produits/${product.categoryId}/${product.slug}`}>
         {product.isBestSeller ? <span className="badge">Best-seller</span> : null}
         {image ? (
-          <img src={image} alt={product.images.find((i) => i.url === image)?.alt || product.name} />
+          <Image
+            src={image}
+            alt={product.images.find((i) => i.url === image)?.alt || product.name}
+            fill
+            sizes="(max-width: 640px) 45vw, 280px"
+            style={{ objectFit: "contain" }}
+          />
         ) : (
           <CameraIcon strokeWidth="1.1" />
         )}
       </Link>
       <div className="product-body">
         <h3>
-          <Link href={`/produits/${product.slug}`}>{product.name}</Link>
+          <Link href={`/produits/${product.categoryId}/${product.slug}`}>{product.name}</Link>
         </h3>
         <StarRating average={product.rating?.average} count={product.rating?.count} />
         <div className="price">

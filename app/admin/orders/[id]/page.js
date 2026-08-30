@@ -3,6 +3,42 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { getOrderById, updateOrder, ORDER_STATUSES } from "@/lib/orders";
+import { getProductById } from "@/lib/products";
+
+function CopyButton({ text, label = "Copier" }) {
+  const [copied, setCopied] = useState(false);
+
+  async function handleCopy() {
+    try {
+      await navigator.clipboard.writeText(text);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
+    } catch {
+      // Presse-papiers indisponible (permissions navigateur) — rien à faire de plus ici.
+    }
+  }
+
+  if (!text) return null;
+
+  return (
+    <button
+      type="button"
+      onClick={handleCopy}
+      style={{
+        fontSize: "0.72rem",
+        background: "none",
+        border: "1px solid var(--border)",
+        borderRadius: 6,
+        padding: "2px 8px",
+        marginLeft: 8,
+        color: copied ? "var(--green-700)" : "var(--ink-soft)",
+        cursor: "pointer",
+      }}
+    >
+      {copied ? "Copié ✓" : label}
+    </button>
+  );
+}
 
 export default function AdminOrderDetailPage() {
   const { id } = useParams();
@@ -12,6 +48,7 @@ export default function AdminOrderDetailPage() {
   const [status, setStatus] = useState("nouvelle");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [supplierLinks, setSupplierLinks] = useState({});
 
   useEffect(() => {
     getOrderById(id).then((o) => {
@@ -19,6 +56,15 @@ export default function AdminOrderDetailPage() {
       if (o) {
         setShipping(o.shipping || { carrier: "", trackingNumber: "", trackingUrl: "" });
         setStatus(o.status || "nouvelle");
+        Promise.all(
+          (o.items || []).map((it) =>
+            it.productId
+              ? getProductById(it.productId)
+                  .then((p) => [it.productId, p?.supplierLink || ""])
+                  .catch(() => [it.productId, ""])
+              : Promise.resolve([it.productId, ""])
+          )
+        ).then((entries) => setSupplierLinks(Object.fromEntries(entries)));
       }
     });
   }, [id]);
@@ -49,11 +95,38 @@ export default function AdminOrderDetailPage() {
       </div>
 
       <div className="admin-card">
-        <h2>Client</h2>
-        <p>{order.customer?.name}</p>
-        <p className="form-hint">{order.customer?.email} · {order.customer?.phone}</p>
+        <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: 4 }}>
+          <h2 style={{ marginBottom: 0 }}>Client</h2>
+          <CopyButton
+            text={[
+              order.customer?.name,
+              order.customer?.address,
+              `${order.customer?.postalCode || ""} ${order.customer?.city || ""}`.trim(),
+              order.customer?.country,
+              order.customer?.phone,
+            ]
+              .filter(Boolean)
+              .join("\n")}
+            label="Copier toute l'adresse"
+          />
+        </div>
+        <p className="form-hint" style={{ marginBottom: 10 }}>
+          À coller dans le formulaire de livraison AliExpress au moment de passer la commande fournisseur.
+        </p>
+        <p>
+          {order.customer?.name}
+          <CopyButton text={order.customer?.name} />
+        </p>
+        <p className="form-hint">
+          {order.customer?.email} · {order.customer?.phone}
+          <CopyButton text={order.customer?.phone} label="Copier le tél." />
+        </p>
         <p className="form-hint">
           {order.customer?.address}, {order.customer?.postalCode} {order.customer?.city}, {order.customer?.country}
+          <CopyButton
+            text={`${order.customer?.address}, ${order.customer?.postalCode} ${order.customer?.city}, ${order.customer?.country}`}
+            label="Copier l'adresse"
+          />
         </p>
       </div>
 
@@ -66,6 +139,7 @@ export default function AdminOrderDetailPage() {
               <th>Variante</th>
               <th>Qté</th>
               <th>Prix</th>
+              <th>Fournisseur</th>
             </tr>
           </thead>
           <tbody>
@@ -75,6 +149,15 @@ export default function AdminOrderDetailPage() {
                 <td>{it.variant || "—"}</td>
                 <td>{it.qty}</td>
                 <td>€{Number(it.price).toFixed(2).replace(".", ",")}</td>
+                <td>
+                  {supplierLinks[it.productId] ? (
+                    <a href={supplierLinks[it.productId]} target="_blank" rel="noreferrer">
+                      Commander →
+                    </a>
+                  ) : (
+                    <span className="form-hint">—</span>
+                  )}
+                </td>
               </tr>
             ))}
           </tbody>

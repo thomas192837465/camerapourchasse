@@ -1,6 +1,10 @@
 import "./globals.css";
+import "@fortawesome/fontawesome-svg-core/styles.css";
+import { config } from "@fortawesome/fontawesome-svg-core";
 import { getSettings } from "@/lib/settings";
 import { CartProvider } from "@/lib/cart-context";
+
+config.autoAddCss = false;
 
 export async function generateMetadata() {
   const seo = await getSettings("seo");

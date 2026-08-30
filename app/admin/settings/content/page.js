@@ -3,6 +3,9 @@
 import { useEffect, useState } from "react";
 import { getSettings, saveSettings } from "@/lib/settings";
 import { defaultContent } from "@/lib/defaults";
+import SingleImageField from "@/components/admin/SingleImageField";
+import IconPicker from "@/components/admin/IconPicker";
+import { TrashIcon } from "@/components/Icons";
 
 export default function ContentSettingsPage() {
   const [content, setContent] = useState(defaultContent);
@@ -34,12 +37,55 @@ export default function ContentSettingsPage() {
     setContent((c) => ({ ...c, [field]: value }));
   }
 
+  function updateListItem(field, index, value) {
+    setContent((c) => ({ ...c, [field]: c[field].map((item, i) => (i === index ? value : item)) }));
+  }
+
+  function addListItem(field, item) {
+    setContent((c) => ({ ...c, [field]: [...c[field], item] }));
+  }
+
+  function removeListItem(field, index) {
+    setContent((c) => ({ ...c, [field]: c[field].filter((_, i) => i !== index) }));
+  }
+
+  function IconTextList({ field, itemPlaceholder }) {
+    return (
+      <>
+        {content[field].map((item, i) => (
+          <div className="repeatable-row" key={i}>
+            <IconPicker value={item.icon} onChange={(icon) => updateListItem(field, i, { ...item, icon })} />
+            <div className="form-field">
+              <input
+                placeholder="Titre"
+                value={item.title}
+                onChange={(e) => updateListItem(field, i, { ...item, title: e.target.value })}
+              />
+              <input
+                placeholder={itemPlaceholder || "Description"}
+                value={item.description}
+                onChange={(e) => updateListItem(field, i, { ...item, description: e.target.value })}
+                style={{ marginTop: 6 }}
+              />
+            </div>
+            <button type="button" className="icon-btn" onClick={() => removeListItem(field, i)}>
+              <TrashIcon />
+            </button>
+          </div>
+        ))}
+        <button type="button" className="add-row-btn" onClick={() => addListItem(field, { icon: "star", title: "", description: "" })}>
+          + Ajouter
+        </button>
+      </>
+    );
+  }
+
   return (
     <>
       <div className="admin-header">
         <div>
           <h1>Contenu de la page d'accueil</h1>
-          <p>Logo, texte du hero et pied de page.</p>
+          <p>Logo, hero, sections et pied de page.</p>
         </div>
       </div>
 
@@ -71,6 +117,47 @@ export default function ContentSettingsPage() {
           <label>Texte du bouton</label>
           <input value={content.heroButtonText} onChange={(e) => set("heroButtonText", e.target.value)} />
         </div>
+        <div className="form-field">
+          <label>Photo du hero (optionnel — sans photo, une illustration par défaut s'affiche)</label>
+          <SingleImageField
+            value={content.heroImage}
+            onChange={(img) => set("heroImage", img)}
+            altPlaceholder="Texte alternatif (SEO)"
+          />
+        </div>
+      </div>
+
+      <div className="admin-card">
+        <h2>Section "Promesse technique"</h2>
+        <div className="form-field">
+          <label>Titre de la section</label>
+          <input value={content.featuresTitle} onChange={(e) => set("featuresTitle", e.target.value)} />
+        </div>
+        <IconTextList field="features" />
+      </div>
+
+      <div className="admin-card">
+        <h2>Grille de catégories</h2>
+        <div className="form-field">
+          <label>Titre de la section (visible sur la page, utile pour le SEO)</label>
+          <input value={content.categoriesSectionTitle} onChange={(e) => set("categoriesSectionTitle", e.target.value)} />
+        </div>
+        <p className="form-hint">
+          Les photos de chaque catégorie (avec leur texte alternatif SEO) se gèrent dans Catalogue → Catégories.
+        </p>
+      </div>
+
+      <div className="admin-card">
+        <h2>Section "Meilleures ventes"</h2>
+        <div className="form-field">
+          <label>Titre de la section</label>
+          <input value={content.bestSellersTitle} onChange={(e) => set("bestSellersTitle", e.target.value)} />
+        </div>
+      </div>
+
+      <div className="admin-card">
+        <h2>Bandeau de réassurance (livraison, garantie...)</h2>
+        <IconTextList field="trustBadges" />
       </div>
 
       <div className="admin-card">
@@ -78,6 +165,10 @@ export default function ContentSettingsPage() {
         <div className="form-field">
           <label>Description sous le logo</label>
           <textarea rows={2} value={content.footerDescription} onChange={(e) => set("footerDescription", e.target.value)} />
+        </div>
+        <div className="form-field">
+          <label>Titre du bloc newsletter</label>
+          <input value={content.newsletterTitle} onChange={(e) => set("newsletterTitle", e.target.value)} />
         </div>
       </div>
 

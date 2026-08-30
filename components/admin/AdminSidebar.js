@@ -11,6 +11,8 @@ const LINKS = [
     group: "Catalogue",
     items: [
       { href: "/admin/products", label: "Produits" },
+      { href: "/admin/shopify-products", label: "Produits Shopify" },
+      { href: "/admin/categories", label: "Catégories" },
       { href: "/admin/orders", label: "Commandes" },
     ],
   },
@@ -19,8 +21,12 @@ const LINKS = [
     items: [
       { href: "/admin/settings/theme", label: "Thème & couleurs" },
       { href: "/admin/settings/content", label: "Contenu (accueil)" },
+      { href: "/admin/settings/navigation", label: "Navigation" },
+      { href: "/admin/settings/filters", label: "Filtres de recherche" },
       { href: "/admin/settings/seo", label: "SEO" },
       { href: "/admin/settings/general", label: "Photos produits" },
+      { href: "/admin/settings/legal", label: "Mentions légales & CGV" },
+      { href: "/admin/settings/team", label: "Équipe & administrateurs" },
       { href: "/admin/settings/shopify", label: "Shopify" },
     ],
   },

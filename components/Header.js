@@ -4,7 +4,7 @@ import Link from "next/link";
 import { LogoMarkIcon, CartIcon, UserIcon, ChevronDownIcon } from "./Icons";
 import { useCart } from "@/lib/cart-context";
 
-export default function Header({ content }) {
+export default function Header({ content, categories = [], navItems = [] }) {
   const { count } = useCart();
 
   return (
@@ -26,15 +26,19 @@ export default function Header({ content }) {
               Produits <ChevronDownIcon />
             </Link>
             <div className="nav-dropdown-panel">
-              <Link href="/produits?categorie=cameras-4g">Caméras 4G</Link>
-              <Link href="/produits?categorie=vision-nocturne">Vision Nocturne</Link>
-              <Link href="/produits?categorie=haute-resolution">Haute Résolution</Link>
+              {categories.map((cat) => (
+                <Link key={cat.id} href={`/produits/${cat.slug}`}>
+                  {cat.name}
+                </Link>
+              ))}
               <Link href="/produits">Toutes les caméras</Link>
             </div>
           </div>
-          <Link href="/produits?categorie=accessoires">Accessoires</Link>
-          <Link href="#">Blog</Link>
-          <Link href="#">Support</Link>
+          {navItems.map((item) => (
+            <Link key={item.id} href={item.href || "#"}>
+              {item.label}
+            </Link>
+          ))}
         </nav>
 
         <div className="header-actions">
