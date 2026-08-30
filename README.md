@@ -4,6 +4,9 @@ Boutique e-commerce (Next.js + Firebase) avec espace admin : produits (photos mu
 taille unique imposée), thème/couleurs, contenu, SEO, commandes, et réglages Shopify (à connecter
 plus tard).
 
+> Pour savoir où en est le projet (ce qui est déjà fait, ce qui reste à configurer), voir
+> [PROJECT_STATUS.md](PROJECT_STATUS.md).
+
 ## 1. Lancer le projet en local
 
 ```bash
