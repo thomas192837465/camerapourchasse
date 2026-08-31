@@ -118,12 +118,32 @@ export default function ContentSettingsPage() {
           <input value={content.heroButtonText} onChange={(e) => set("heroButtonText", e.target.value)} />
         </div>
         <div className="form-field">
-          <label>Photo du hero (optionnel — sans photo, une illustration par défaut s'affiche)</label>
+          <label>Photo du hero (à droite du texte — ex : une caméra de chasse)</label>
           <SingleImageField
             value={content.heroImage}
             onChange={(img) => set("heroImage", img)}
             altPlaceholder="Texte alternatif (SEO)"
           />
+        </div>
+        <div className="form-field">
+          <label>Texte manuscrit à côté de la photo (avec flèche — laisser vide pour le masquer)</label>
+          <input
+            value={content.heroImageCaption}
+            onChange={(e) => set("heroImageCaption", e.target.value)}
+            placeholder="ex : Capturez l'instant !"
+          />
+        </div>
+        <div className="form-field">
+          <label>Couleur du motif d'empreintes en fond</label>
+          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
+            <input
+              type="color"
+              value={content.heroPatternColor}
+              onChange={(e) => set("heroPatternColor", e.target.value)}
+              style={{ width: 40, height: 40, border: "none", borderRadius: 6 }}
+            />
+            <span className="form-hint hex">{content.heroPatternColor}</span>
+          </div>
         </div>
       </div>
 

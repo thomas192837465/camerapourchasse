@@ -4,7 +4,7 @@ import { CameraIcon } from "./Icons";
 
 export default function CategoryGrid({ title, categories }) {
   return (
-    <section className="section">
+    <section className="section decorative-section">
       <h2 className="section-title">{title}</h2>
       <div className="categories-grid">
         {categories.map((cat) => (

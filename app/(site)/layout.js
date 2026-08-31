@@ -2,6 +2,7 @@ import { getSettings } from "@/lib/settings";
 import { getCategories } from "@/lib/categories";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import CartDrawer from "@/components/CartDrawer";
 
 export default async function SiteLayout({ children }) {
   const [content, navigation, categories] = await Promise.all([
@@ -16,6 +17,7 @@ export default async function SiteLayout({ children }) {
       <Header content={content} categories={navCategories} navItems={navigation.items} />
       {children}
       <Footer content={content} />
+      <CartDrawer />
     </>
   );
 }

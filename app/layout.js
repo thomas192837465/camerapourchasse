@@ -1,10 +1,13 @@
 import "./globals.css";
 import "@fortawesome/fontawesome-svg-core/styles.css";
+import { Caveat } from "next/font/google";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import { getSettings } from "@/lib/settings";
 import { CartProvider } from "@/lib/cart-context";
 
 config.autoAddCss = false;
+
+const caveat = Caveat({ subsets: ["latin"], variable: "--font-handwritten", display: "swap" });
 
 export async function generateMetadata() {
   const seo = await getSettings("seo");
@@ -51,7 +54,7 @@ export default async function RootLayout({ children }) {
       <head>
         <style dangerouslySetInnerHTML={{ __html: themeToCssVars(theme) }} />
       </head>
-      <body>
+      <body className={caveat.variable}>
         <CartProvider>{children}</CartProvider>
       </body>
     </html>

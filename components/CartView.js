@@ -3,11 +3,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import { useCart } from "@/lib/cart-context";
+import { useCheckout } from "@/lib/useCheckout";
 import QtyStepper from "./QtyStepper";
 import { CartIcon } from "./Icons";
 
 export default function CartView() {
-  const { items, total, updateQty, removeItem } = useCart();
+  const { items, total, updateQty, removeItem, isShopifyCart, hasMixedSources } = useCart();
+  const { goToCheckout, redirecting, error } = useCheckout();
 
   if (!items.length) {
     return (
@@ -57,15 +59,30 @@ export default function CartView() {
           </div>
           <div className="summary-row">
             <span>Livraison</span>
-            <span>Calculée à l'étape suivante</span>
+            <span>Gratuite</span>
           </div>
           <div className="summary-row total">
             <span>Total</span>
             <span>€{total.toFixed(2).replace(".", ",")}</span>
           </div>
-          <Link href="/commande" className="btn btn-primary btn-block" style={{ marginTop: 18 }}>
-            Passer la commande
-          </Link>
+
+          {hasMixedSources ? (
+            <div className="banner warning" style={{ marginTop: 14 }}>
+              Ton panier mélange des produits qui ne peuvent pas être commandés ensemble pour l'instant. Retire l'un
+              des deux groupes de produits pour continuer.
+            </div>
+          ) : null}
+          {error ? <div className="banner error" style={{ marginTop: 14 }}>{error}</div> : null}
+
+          <button
+            type="button"
+            className="btn btn-primary btn-block"
+            style={{ marginTop: 18, opacity: hasMixedSources ? 0.5 : 1 }}
+            onClick={goToCheckout}
+            disabled={redirecting || hasMixedSources}
+          >
+            {redirecting ? "Redirection…" : isShopifyCart ? "Payer en ligne" : "Passer la commande"}
+          </button>
         </div>
       </div>
     </main>

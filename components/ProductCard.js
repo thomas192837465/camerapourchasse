@@ -17,6 +17,8 @@ export default function ProductCard({ product }) {
       price: product.price,
       image: image || "",
       variant: product.variants?.[0]?.name || "",
+      source: product.source,
+      shopifyVariantId: product.shopifyVariantId,
     });
   }
 

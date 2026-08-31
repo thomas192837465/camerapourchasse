@@ -5,7 +5,7 @@ import { LogoMarkIcon, CartIcon, UserIcon, ChevronDownIcon } from "./Icons";
 import { useCart } from "@/lib/cart-context";
 
 export default function Header({ content, categories = [], navItems = [] }) {
-  const { count } = useCart();
+  const { count, openDrawer } = useCart();
 
   return (
     <header className="site-header">
@@ -42,12 +42,12 @@ export default function Header({ content, categories = [], navItems = [] }) {
         </nav>
 
         <div className="header-actions">
-          <Link href="/panier" className="icon-btn" aria-label="Panier">
+          <button type="button" className="icon-btn" aria-label="Panier" onClick={openDrawer}>
             <CartIcon />
             <span className="cart-badge" style={{ display: count > 0 ? "flex" : "none" }}>
               {count}
             </span>
-          </Link>
+          </button>
           <Link href="/admin" className="icon-btn" aria-label="Compte">
             <UserIcon />
           </Link>

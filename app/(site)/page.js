@@ -14,11 +14,15 @@ export default async function HomePage() {
     getPublishedProducts({ isBestSeller: true }),
   ]);
 
+  const heroBackdropImages = bestSellers
+    .map((p) => p.images?.find((img) => img.url))
+    .filter(Boolean);
+
   return (
     <main>
-      <Hero content={content} />
+      <Hero content={content} images={heroBackdropImages} />
 
-      <TechPromise title={content.featuresTitle} items={content.features} />
+      <TechPromise items={content.features} />
 
       <div className="container">
         <CategoryGrid title={content.categoriesSectionTitle} categories={categories} />

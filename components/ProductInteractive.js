@@ -39,6 +39,8 @@ export default function ProductInteractive({ product }) {
         price: product.price,
         image: images[0]?.url || "",
         variant,
+        source: product.source,
+        shopifyVariantId: product.shopifyVariantId,
       },
       qty
     );
