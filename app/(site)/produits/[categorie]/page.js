@@ -43,6 +43,7 @@ export default async function CategoryOrLegacyProductPage({ params, searchParams
         filterOptions={filterOptions}
         selectedCategorySlugs={[category.slug]}
         title={category.name}
+        category={category}
       />
     );
   }

@@ -34,11 +34,26 @@ export default function Header({ content, categories = [], navItems = [] }) {
               <Link href="/produits">Toutes les caméras</Link>
             </div>
           </div>
-          {navItems.map((item) => (
-            <Link key={item.id} href={item.href || "#"}>
-              {item.label}
-            </Link>
-          ))}
+          {navItems.map((item) =>
+            item.children?.length ? (
+              <div className="nav-dropdown" key={item.id}>
+                <Link href={item.href || "#"}>
+                  {item.label} <ChevronDownIcon />
+                </Link>
+                <div className="nav-dropdown-panel">
+                  {item.children.map((child) => (
+                    <Link key={child.id} href={child.href || "#"}>
+                      {child.label}
+                    </Link>
+                  ))}
+                </div>
+              </div>
+            ) : (
+              <Link key={item.id} href={item.href || "#"}>
+                {item.label}
+              </Link>
+            )
+          )}
         </nav>
 
         <div className="header-actions">

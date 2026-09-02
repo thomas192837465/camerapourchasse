@@ -6,7 +6,7 @@ import { GridIcon, ListIcon } from "./Icons";
 
 const PAGE_SIZE = 9;
 
-export default function ResultsView({ products, title = "Résultats de recherche" }) {
+export default function ResultsView({ products }) {
   const [view, setView] = useState("grid");
   const [page, setPage] = useState(1);
 
@@ -17,10 +17,7 @@ export default function ResultsView({ products, title = "Résultats de recherche
   return (
     <section>
       <div className="results-header">
-        <div>
-          <h1>{title}</h1>
-          <p className="results-count">Affichage de {products.length} résultat{products.length > 1 ? "s" : ""}</p>
-        </div>
+        <p className="results-count">Affichage de {products.length} résultat{products.length > 1 ? "s" : ""}</p>
         <div className="view-toggle">
           <button className={view === "grid" ? "active" : ""} onClick={() => setView("grid")} aria-label="Vue grille">
             <GridIcon />

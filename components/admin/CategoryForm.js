@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { slugify } from "@/lib/products";
 import { TrashIcon } from "@/components/Icons";
 import SingleImageField from "./SingleImageField";
+import CategoryBlocksEditor from "./CategoryBlocksEditor";
 
 const emptyCategory = {
   name: "",
@@ -13,6 +14,7 @@ const emptyCategory = {
   showInNav: true,
   seo: { metaTitle: "", metaDescription: "" },
   image: { url: "", alt: "" },
+  blocks: [],
 };
 
 export default function CategoryForm({ initialCategory, onSubmit, onDelete }) {
@@ -94,6 +96,16 @@ export default function CategoryForm({ initialCategory, onSubmit, onDelete }) {
           onChange={(img) => set("image", img)}
           altPlaceholder="Texte alternatif (SEO) — ex : Caméra de chasse solaire posée sur un tronc"
         />
+      </div>
+
+      <div className="admin-card">
+        <h2>Contenu de la page (SEO)</h2>
+        <p className="form-hint" style={{ marginBottom: 10 }}>
+          Affiché sur la page dédiée /produits/{category.slug || "..."}, sous le titre H1. Ajoutez des blocs dans
+          l'ordre voulu (déplaçables avec les flèches) : titres, paragraphes (gras et liens possibles), photos,
+          tableaux et FAQ (avec balisage FAQPage pour Google et les IA).
+        </p>
+        <CategoryBlocksEditor blocks={category.blocks} onChange={(blocks) => set("blocks", blocks)} />
       </div>
 
       <div className="admin-card">
