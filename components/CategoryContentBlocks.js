@@ -17,6 +17,14 @@ export default function CategoryContentBlocks({ blocks }) {
           ) : null;
         }
 
+        if (block.type === "subheading") {
+          return block.text ? (
+            <h3 className="category-content-subheading" key={block.id}>
+              {block.text}
+            </h3>
+          ) : null;
+        }
+
         if (block.type === "paragraph") {
           return block.text ? (
             <p

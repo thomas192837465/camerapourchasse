@@ -5,6 +5,7 @@ import SingleImageField from "./SingleImageField";
 
 const BLOCK_LABELS = {
   heading: "Titre (H2)",
+  subheading: "Sous-titre (H3)",
   paragraph: "Paragraphe",
   image: "Photo",
   table: "Tableau",
@@ -15,6 +16,7 @@ function makeBlock(type) {
   const id = `blk-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
   const extra = {
     heading: { text: "" },
+    subheading: { text: "" },
     paragraph: { text: "" },
     image: { image: { url: "", alt: "" }, caption: "" },
     table: { title: "", intro: "", rows: [] },
@@ -69,9 +71,11 @@ export default function CategoryBlocksEditor({ blocks, onChange }) {
             </div>
           </div>
 
-          {block.type === "heading" ? (
+          {block.type === "heading" || block.type === "subheading" ? (
             <input
-              placeholder="ex : Comment choisir sa caméra solaire ?"
+              placeholder={
+                block.type === "heading" ? "ex : Comment choisir sa caméra solaire ?" : "ex : Panneau intégré ou externe"
+              }
               value={block.text}
               onChange={(e) => update(i, { text: e.target.value })}
             />
