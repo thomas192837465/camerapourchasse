@@ -70,8 +70,8 @@ export default function AccountDashboard({ user }) {
         </div>
       ) : (
         <p style={{ color: "var(--ink-soft)" }}>
-          Aucune commande pour le moment. Les commandes payées directement via Shopify n'apparaissent pas ici — leur
-          suivi se fait par l'e-mail de confirmation Shopify.
+          Aucune commande pour le moment. Les commandes payées en ligne par carte bancaire n'apparaissent pas ici —
+          leur suivi se fait par l'e-mail de confirmation envoyé après l'achat.
         </p>
       )}
     </div>
