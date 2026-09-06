@@ -2,6 +2,8 @@ import Link from "next/link";
 import { getSettings } from "@/lib/settings";
 import ContentBlocks from "@/components/ContentBlocks";
 
+export const revalidate = 60;
+
 export async function generateMetadata() {
   return {
     title: "Notre histoire",

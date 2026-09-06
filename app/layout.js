@@ -9,6 +9,8 @@ config.autoAddCss = false;
 
 const caveat = Caveat({ subsets: ["latin"], variable: "--font-handwritten", display: "swap" });
 
+export const revalidate = 60;
+
 // Favicon par défaut (pictogramme caméra sur fond vert) tant qu'aucune image n'est envoyée dans
 // Admin → Réglages → SEO — garantit qu'un favicon valide est toujours détectable, y compris par Google.
 const DEFAULT_FAVICON_SVG =

@@ -2,6 +2,10 @@ import Link from "next/link";
 import { getPublishedPosts } from "@/lib/posts";
 import BlogCard from "@/components/BlogCard";
 
+// Évite que cette page reste figée sur une version mise en cache au moment du build (voir
+// app/(site)/page.js) : un article publié depuis l'admin doit apparaître sans nouveau déploiement.
+export const revalidate = 60;
+
 export async function generateMetadata() {
   return {
     title: "Blog",

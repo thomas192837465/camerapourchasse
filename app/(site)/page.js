@@ -9,6 +9,10 @@ import CategoryGrid from "@/components/CategoryGrid";
 import ProductGrid from "@/components/ProductGrid";
 import TrustBadges from "@/components/TrustBadges";
 
+// Sans ça, Next.js peut figer cette page au moment du build sur Vercel : un produit ou un
+// article publié ensuite depuis l'admin n'apparaîtrait qu'après un nouveau déploiement.
+export const revalidate = 60;
+
 export default async function HomePage() {
   const [content, categories, allProducts, seo, legal] = await Promise.all([
     getSettings("content"),

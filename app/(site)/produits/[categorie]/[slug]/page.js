@@ -4,6 +4,8 @@ import { getCategoryBySlug } from "@/lib/categories";
 import { getSettings } from "@/lib/settings";
 import ProductDetail from "@/components/ProductDetail";
 
+export const revalidate = 60;
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const product = await getProductBySlug(slug);

@@ -6,6 +6,8 @@ import Footer from "@/components/Footer";
 import BlogTeaser from "@/components/BlogTeaser";
 import CartDrawer from "@/components/CartDrawer";
 
+export const revalidate = 60;
+
 export default async function SiteLayout({ children }) {
   const [content, navigation, categories, recentPosts] = await Promise.all([
     getSettings("content"),

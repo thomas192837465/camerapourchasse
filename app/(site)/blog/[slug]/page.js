@@ -6,6 +6,8 @@ import { getSettings } from "@/lib/settings";
 import ContentBlocks from "@/components/ContentBlocks";
 import BlogToc from "@/components/BlogToc";
 
+export const revalidate = 60;
+
 export async function generateMetadata({ params }) {
   const { slug } = await params;
   const post = await getPostBySlug(slug);
