@@ -74,6 +74,22 @@ export function SearchIcon(props) {
   );
 }
 
+export function MenuIcon(props) {
+  return (
+    <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" {...props}>
+      <path d="M3 6h18M3 12h18M3 18h18"></path>
+    </svg>
+  );
+}
+
+export function CloseIcon(props) {
+  return (
+    <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" {...props}>
+      <path d="M6 6l12 12M18 6L6 18"></path>
+    </svg>
+  );
+}
+
 export function ChevronDownIcon(props) {
   return (
     <svg className="icon chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" {...props}>

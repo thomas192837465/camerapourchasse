@@ -300,6 +300,14 @@ h1, h2, h3, h4, p {
   gap: 20px;
 }
 
+.mobile-menu-toggle {
+  display: none;
+}
+
+.mobile-nav {
+  display: none;
+}
+
 .icon-btn {
   position: relative;
   background: none;
@@ -2994,6 +3002,57 @@ h1, h2, h3, h4, p {
 
 @media (max-width: 960px) {
   .main-nav { display: none; }
+  .mobile-menu-toggle { display: inline-flex; }
+
+  .mobile-nav {
+    display: flex;
+    flex-direction: column;
+    padding: 4px 24px 20px;
+    border-top: 1px solid var(--border);
+    background: var(--card);
+  }
+
+  .mobile-nav-link {
+    padding: 14px 0;
+    font-weight: 600;
+    color: var(--ink);
+    border-bottom: 1px solid var(--border);
+  }
+
+  .mobile-nav-group {
+    border-bottom: 1px solid var(--border);
+  }
+
+  .mobile-nav-group summary {
+    padding: 14px 0;
+    font-weight: 600;
+    color: var(--ink);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    cursor: pointer;
+    list-style: none;
+  }
+
+  .mobile-nav-group summary::-webkit-details-marker {
+    display: none;
+  }
+
+  .mobile-nav-group[open] summary .icon {
+    transform: rotate(180deg);
+  }
+
+  .mobile-nav-sublinks {
+    display: flex;
+    flex-direction: column;
+    padding: 0 0 14px 12px;
+    gap: 12px;
+  }
+
+  .mobile-nav-sublinks a {
+    color: var(--ink-soft);
+    font-size: 0.92rem;
+  }
   .categories-grid { grid-template-columns: repeat(2, 1fr); }
   .product-grid { grid-template-columns: repeat(2, 1fr); }
   .search-layout { grid-template-columns: 1fr; }
