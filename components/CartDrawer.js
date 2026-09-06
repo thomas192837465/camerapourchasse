@@ -46,7 +46,7 @@ export default function CartDrawer() {
   return (
     <>
       <div className={`cart-drawer-overlay ${drawerOpen ? "open" : ""}`} onClick={closeDrawer} aria-hidden="true" />
-      <aside className={`cart-drawer ${drawerOpen ? "open" : ""}`} aria-hidden={!drawerOpen}>
+      <aside className={`cart-drawer ${drawerOpen ? "open" : ""}`} inert={!drawerOpen}>
         <div className="cart-drawer-header">
           <h2>Mon panier</h2>
           <button type="button" className="icon-btn" onClick={closeDrawer} aria-label="Fermer">
