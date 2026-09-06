@@ -1,11 +1,16 @@
 import { getPublishedProducts } from "@/lib/products";
 import { getCategories } from "@/lib/categories";
+import { getPublishedPosts } from "@/lib/posts";
 
 export default async function sitemap() {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
-  const [products, categories] = await Promise.all([getPublishedProducts({}), getCategories()]);
+  const [products, categories, posts] = await Promise.all([
+    getPublishedProducts({}),
+    getCategories(),
+    getPublishedPosts(),
+  ]);
 
-  const staticRoutes = ["", "/produits", "/mentions-legales", "/cgv"].map((path) => ({
+  const staticRoutes = ["", "/produits", "/blog", "/livraison", "/notre-histoire", "/mentions-legales", "/cgv"].map((path) => ({
     url: `${base}${path}`,
     lastModified: new Date(),
   }));
@@ -20,5 +25,10 @@ export default async function sitemap() {
     lastModified: p.updatedAt ? new Date(p.updatedAt.seconds ? p.updatedAt.seconds * 1000 : p.updatedAt) : new Date(),
   }));
 
-  return [...staticRoutes, ...categoryRoutes, ...productRoutes];
+  const postRoutes = posts.map((p) => ({
+    url: `${base}/blog/${p.slug}`,
+    lastModified: p.updatedAt ? new Date(p.updatedAt) : new Date(),
+  }));
+
+  return [...staticRoutes, ...categoryRoutes, ...productRoutes, ...postRoutes];
 }

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { slugify } from "@/lib/products";
 import { TrashIcon } from "@/components/Icons";
 import SingleImageField from "./SingleImageField";
-import CategoryBlocksEditor from "./CategoryBlocksEditor";
+import ContentBlocksEditor from "./ContentBlocksEditor";
 
 const emptyCategory = {
   name: "",
@@ -105,7 +105,7 @@ export default function CategoryForm({ initialCategory, onSubmit, onDelete }) {
           l'ordre voulu (déplaçables avec les flèches) : titres, paragraphes (gras et liens possibles), photos,
           tableaux et FAQ (avec balisage FAQPage pour Google et les IA).
         </p>
-        <CategoryBlocksEditor blocks={category.blocks} onChange={(blocks) => set("blocks", blocks)} />
+        <ContentBlocksEditor blocks={category.blocks} onChange={(blocks) => set("blocks", blocks)} />
       </div>
 
       <div className="admin-card">

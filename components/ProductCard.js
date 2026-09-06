@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { CameraIcon, StarRating } from "./Icons";
+import { CameraIcon } from "./Icons";
+import TrustRating from "./TrustRating";
 import { useCart } from "@/lib/cart-context";
 
 export default function ProductCard({ product }) {
@@ -42,7 +43,7 @@ export default function ProductCard({ product }) {
         <h3>
           <Link href={`/produits/${product.categoryId}/${product.slug}`}>{product.name}</Link>
         </h3>
-        <StarRating average={product.rating?.average} count={product.rating?.count} />
+        <TrustRating average={product.rating?.average || 0} count={product.rating?.count || 0} size="sm" />
         <div className="price">
           €{product.price.toFixed(2).replace(".", ",")}
           {product.compareAtPrice ? (

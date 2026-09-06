@@ -29,29 +29,19 @@ export default function Footer({ content }) {
           <p>{content.footerDescription}</p>
         </div>
 
-        <div>
-          <h4>Produits</h4>
-          <ul>
-            <li><Link href="/produits/cameras-4g">Caméras 4G</Link></li>
-            <li><Link href="/produits/vision-nocturne">Vision Nocturne</Link></li>
-            <li><Link href="/produits/accessoires">Accessoires</Link></li>
-          </ul>
-        </div>
-        <div>
-          <h4>Guide & Support</h4>
-          <ul>
-            <li><Link href="#">Comment choisir sa caméra</Link></li>
-            <li><Link href="#">Livraison</Link></li>
-            <li><Link href="#">Garantie</Link></li>
-            <li><Link href="#">Contact</Link></li>
-          </ul>
-        </div>
-        <div>
-          <h4>À propos</h4>
-          <ul>
-            <li><Link href="#">Notre histoire</Link></li>
-            <li><Link href="#">Blog</Link></li>
-          </ul>
+        <div className="footer-dynamic-columns">
+          {(content.footerColumns || []).map((col) => (
+            <div key={col.id}>
+              <h4>{col.title}</h4>
+              <ul>
+                {col.links.map((link) => (
+                  <li key={link.id}>
+                    <Link href={link.href || "#"}>{link.label}</Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
         </div>
         <div>
           <h4>Légal</h4>

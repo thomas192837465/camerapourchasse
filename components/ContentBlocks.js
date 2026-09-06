@@ -1,17 +1,17 @@
 import Image from "next/image";
 import { renderRichText } from "@/lib/richText";
 
-// Rendu des blocs de contenu libres d'une page catégorie (titres, paragraphes, photos,
-// tableaux, FAQ), dans l'ordre choisi dans l'admin.
-export default function CategoryContentBlocks({ blocks }) {
+// Rendu des blocs de contenu libres (titres, paragraphes, photos, tableaux, FAQ), dans l'ordre
+// choisi dans l'admin — utilisé aussi bien sur les pages catégorie que sur les fiches produit.
+export default function ContentBlocks({ blocks }) {
   if (!blocks?.length) return null;
 
   return (
-    <section className="section category-content">
+    <section className="section content-blocks">
       {blocks.map((block) => {
         if (block.type === "heading") {
           return block.text ? (
-            <h2 className="reco-title category-content-heading" key={block.id}>
+            <h2 id={block.id} className="reco-title content-blocks-heading" key={block.id}>
               {block.text}
             </h2>
           ) : null;
@@ -19,7 +19,7 @@ export default function CategoryContentBlocks({ blocks }) {
 
         if (block.type === "subheading") {
           return block.text ? (
-            <h3 className="category-content-subheading" key={block.id}>
+            <h3 id={block.id} className="content-blocks-subheading" key={block.id}>
               {block.text}
             </h3>
           ) : null;
@@ -28,7 +28,7 @@ export default function CategoryContentBlocks({ blocks }) {
         if (block.type === "paragraph") {
           return block.text ? (
             <p
-              className="category-content-paragraph"
+              className="content-blocks-paragraph"
               key={block.id}
               dangerouslySetInnerHTML={{ __html: renderRichText(block.text) }}
             />
@@ -37,8 +37,8 @@ export default function CategoryContentBlocks({ blocks }) {
 
         if (block.type === "image") {
           return block.image?.url ? (
-            <figure className="category-content-figure" key={block.id}>
-              <div className="category-content-image">
+            <figure className="content-blocks-figure" key={block.id}>
+              <div className="content-blocks-image">
                 <Image
                   src={block.image.url}
                   alt={block.image.alt || ""}
@@ -56,15 +56,15 @@ export default function CategoryContentBlocks({ blocks }) {
           const rows = (block.rows || []).filter((r) => r.label || r.value);
           if (!rows.length) return null;
           return (
-            <div className="category-content-table-wrap" key={block.id}>
-              {block.title ? <h2 className="reco-title category-content-heading">{block.title}</h2> : null}
+            <div className="content-blocks-table-wrap" key={block.id}>
+              {block.title ? <h2 className="reco-title content-blocks-heading">{block.title}</h2> : null}
               {block.intro ? (
                 <p
-                  className="category-content-paragraph"
+                  className="content-blocks-paragraph"
                   dangerouslySetInnerHTML={{ __html: renderRichText(block.intro) }}
                 />
               ) : null}
-              <table className="category-content-table">
+              <table className="content-blocks-table">
                 <tbody>
                   {rows.map((row, i) => (
                     <tr key={i}>

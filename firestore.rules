@@ -55,5 +55,11 @@ service cloud.firestore {
       allow read: if true;
       allow write: if isAdmin();
     }
+
+    // Articles de blog : lecture publique des articles publiés, brouillons visibles par l'admin uniquement.
+    match /posts/{postId} {
+      allow read: if resource.data.status == 'published' || isAdmin();
+      allow write: if isAdmin();
+    }
   }
 }

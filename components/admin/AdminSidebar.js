@@ -13,6 +13,7 @@ const LINKS = [
       { href: "/admin/products", label: "Produits" },
       { href: "/admin/shopify-products", label: "Produits Shopify" },
       { href: "/admin/categories", label: "Catégories" },
+      { href: "/admin/blog", label: "Blog" },
       { href: "/admin/orders", label: "Commandes" },
     ],
   },

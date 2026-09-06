@@ -25,7 +25,7 @@ function makeBlock(type) {
   return { id, type, ...extra };
 }
 
-export default function CategoryBlocksEditor({ blocks, onChange }) {
+export default function ContentBlocksEditor({ blocks, onChange }) {
   function update(index, patch) {
     onChange(blocks.map((b, i) => (i === index ? { ...b, ...patch } : b)));
   }

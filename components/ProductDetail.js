@@ -1,10 +1,12 @@
 import Link from "next/link";
 import ProductInteractive from "./ProductInteractive";
 import ProductCarousel from "./ProductCarousel";
+import ContentBlocks from "./ContentBlocks";
 
 export default function ProductDetail({ product, category, related, siteName, siteUrl = "" }) {
   const productUrl = `${siteUrl}/produits/${product.categoryId}/${product.slug}`;
   const faq = (product.faq || []).filter((f) => f.question && f.answer);
+  const validReviews = (product.reviews || []).filter((r) => r.name && r.text);
   const featuredImage = product.seo?.featuredImage?.url;
   const galleryImages = (product.images || []).filter((i) => i.url).map((i) => i.url);
   const jsonLdImages = featuredImage ? [featuredImage, ...galleryImages.filter((u) => u !== featuredImage)] : galleryImages;
@@ -32,6 +34,14 @@ export default function ProductDetail({ product, category, related, siteName, si
           ratingValue: product.rating.average,
           reviewCount: product.rating.count,
         }
+      : undefined,
+    review: validReviews.length
+      ? validReviews.map((r) => ({
+          "@type": "Review",
+          author: { "@type": "Person", name: r.name },
+          reviewRating: { "@type": "Rating", ratingValue: r.rating || 0, bestRating: 5 },
+          reviewBody: r.text,
+        }))
       : undefined,
   };
 
@@ -88,6 +98,8 @@ export default function ProductDetail({ product, category, related, siteName, si
       </nav>
 
       <ProductInteractive product={product} />
+
+      <ContentBlocks blocks={product.blocks} />
 
       {faq.length ? (
         <section className="section" style={{ paddingTop: 0 }}>

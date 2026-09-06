@@ -5,6 +5,8 @@ import { getSettings, saveSettings } from "@/lib/settings";
 import { defaultContent } from "@/lib/defaults";
 import SingleImageField from "@/components/admin/SingleImageField";
 import IconPicker from "@/components/admin/IconPicker";
+import FooterColumnsEditor from "@/components/admin/FooterColumnsEditor";
+import ContentBlocksEditor from "@/components/admin/ContentBlocksEditor";
 import { TrashIcon } from "@/components/Icons";
 
 export default function ContentSettingsPage() {
@@ -157,6 +159,24 @@ export default function ContentSettingsPage() {
       </div>
 
       <div className="admin-card">
+        <h2>Section "Expertise & Confiance" (E-E-A-T)</h2>
+        <p className="form-hint" style={{ marginBottom: 10 }}>
+          Signaux de confiance attendus par Google et les IA sur une page marchande (expérience, expertise, autorité,
+          confiance). Les textes entre [crochets] sont des exemples à remplacer par vos vraies informations —
+          n'affichez rien que vous ne puissiez justifier.
+        </p>
+        <div className="form-field">
+          <label>Titre de la section</label>
+          <input value={content.eeatTitle} onChange={(e) => set("eeatTitle", e.target.value)} />
+        </div>
+        <div className="form-field">
+          <label>Sous-titre</label>
+          <textarea rows={2} value={content.eeatSubtitle} onChange={(e) => set("eeatSubtitle", e.target.value)} />
+        </div>
+        <IconTextList field="eeatPoints" />
+      </div>
+
+      <div className="admin-card">
         <h2>Grille de catégories</h2>
         <div className="form-field">
           <label>Titre de la section (visible sur la page, utile pour le SEO)</label>
@@ -190,6 +210,32 @@ export default function ContentSettingsPage() {
           <label>Titre du bloc newsletter</label>
           <input value={content.newsletterTitle} onChange={(e) => set("newsletterTitle", e.target.value)} />
         </div>
+      </div>
+
+      <div className="admin-card">
+        <h2>Colonnes de liens du pied de page</h2>
+        <p className="form-hint" style={{ marginBottom: 10 }}>
+          La colonne "Légal" (Mentions légales / CGV) est ajoutée automatiquement et ne se modifie pas ici.
+        </p>
+        <FooterColumnsEditor columns={content.footerColumns} onChange={(footerColumns) => set("footerColumns", footerColumns)} />
+      </div>
+
+      <div className="admin-card">
+        <h2>Page "Livraison"</h2>
+        <p className="form-hint" style={{ marginBottom: 10 }}>
+          Visible sur /livraison. Les textes entre [crochets] sont des exemples : remplacez-les par vos vraies
+          informations avant publication.
+        </p>
+        <ContentBlocksEditor blocks={content.livraisonBlocks} onChange={(blocks) => set("livraisonBlocks", blocks)} />
+      </div>
+
+      <div className="admin-card">
+        <h2>Page "Notre histoire"</h2>
+        <p className="form-hint" style={{ marginBottom: 10 }}>
+          Visible sur /notre-histoire. Les textes entre [crochets] sont des exemples : remplacez-les par vos vraies
+          informations avant publication.
+        </p>
+        <ContentBlocksEditor blocks={content.histoireBlocks} onChange={(blocks) => set("histoireBlocks", blocks)} />
       </div>
 
       <button className="btn btn-primary" onClick={handleSave} disabled={saving}>

@@ -2,7 +2,7 @@ import Link from "next/link";
 import Filters from "./Filters";
 import ResultsView from "./ResultsView";
 import SearchBar from "./SearchBar";
-import CategoryContentBlocks from "./CategoryContentBlocks";
+import ContentBlocks from "./ContentBlocks";
 
 export default function ProductListing({ categories, products, filterOptions, selectedCategorySlugs, title, category, siteUrl = "" }) {
   const faqItems = (category?.blocks || [])
@@ -64,7 +64,7 @@ export default function ProductListing({ categories, products, filterOptions, se
         <ResultsView products={products} />
       </div>
 
-      <CategoryContentBlocks blocks={category?.blocks} />
+      <ContentBlocks blocks={category?.blocks} />
     </main>
   );
 }

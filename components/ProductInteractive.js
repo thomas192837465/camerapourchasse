@@ -2,10 +2,12 @@
 
 import { useState } from "react";
 import Image from "next/image";
-import { CameraIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, StarRating } from "./Icons";
+import { CameraIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon } from "./Icons";
 import { useCart } from "@/lib/cart-context";
 import QtyStepper from "./QtyStepper";
 import Tabs from "./Tabs";
+import TrustRating from "./TrustRating";
+import ReviewsList from "./ReviewsList";
 
 const VISIBLE_THUMBS = 3;
 
@@ -108,8 +110,7 @@ export default function ProductInteractive({ product }) {
         <h1 className="pd-title">{product.name}</h1>
 
         <div className="pd-rating">
-          <StarRating average={product.rating?.average} />
-          <strong>{(product.rating?.average || 0).toFixed(1)}/5</strong> · {product.rating?.count || 0} avis
+          <TrustRating average={product.rating?.average || 0} count={product.rating?.count || 0} />
         </div>
 
         <div className="pd-price">
@@ -185,13 +186,7 @@ export default function ProductInteractive({ product }) {
             {
               key: "avis",
               label: "Avis Clients",
-              content: product.rating?.count ? (
-                <p>
-                  {product.rating.count} avis, note moyenne {(product.rating.average || 0).toFixed(1)}/5.
-                </p>
-              ) : (
-                <p>Aucun avis pour le moment. Soyez le premier à donner votre avis sur ce produit.</p>
-              ),
+              content: <ReviewsList reviews={product.reviews} rating={product.rating} />,
             },
           ]}
         />

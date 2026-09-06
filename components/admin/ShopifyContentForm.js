@@ -4,8 +4,11 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ImageUploader from "./ImageUploader";
 import SingleImageField from "./SingleImageField";
+import ReviewsEditor from "./ReviewsEditor";
+import ContentBlocksEditor from "./ContentBlocksEditor";
 import { TrashIcon } from "@/components/Icons";
 import { emptyShopifyContent } from "@/lib/shopifyContent";
+import { slugify } from "@/lib/products";
 
 export default function ShopifyContentForm({ shopifyProduct, initialContent, categories, generalSettings, onSubmit }) {
   const router = useRouter();
@@ -102,6 +105,18 @@ export default function ShopifyContentForm({ shopifyProduct, initialContent, cat
               Mettre en avant ("Meilleures Ventes")
             </label>
           </div>
+          <div className="form-field full">
+            <label>Slug (URL) — laisser vide pour garder celui de Shopify ("{shopifyProduct.handle}")</label>
+            <input
+              value={content.customSlug}
+              placeholder={shopifyProduct.handle}
+              onChange={(e) => set("customSlug", slugify(e.target.value))}
+            />
+            <span className="form-hint">
+              /produits/{content.categoryId || "..."}/{content.customSlug || shopifyProduct.handle} — doit être unique
+              parmi tous vos produits.
+            </span>
+          </div>
         </div>
       </div>
 
@@ -192,6 +207,20 @@ export default function ShopifyContentForm({ shopifyProduct, initialContent, cat
         <button type="button" className="add-row-btn" onClick={() => addListItem("faq", { question: "", answer: "" })}>
           + Ajouter une question
         </button>
+      </div>
+
+      <div className="admin-card">
+        <h2>Avis clients</h2>
+        <ReviewsEditor reviews={content.reviews} onChange={(reviews) => set("reviews", reviews)} />
+      </div>
+
+      <div className="admin-card">
+        <h2>Contenu additionnel (SEO)</h2>
+        <p className="form-hint" style={{ marginBottom: 10 }}>
+          Affiché sur la fiche produit sous la fiche technique. Ajoutez des blocs dans l'ordre voulu : titres,
+          paragraphes (gras et liens possibles), photos, tableaux et FAQ.
+        </p>
+        <ContentBlocksEditor blocks={content.blocks} onChange={(blocks) => set("blocks", blocks)} />
       </div>
 
       <div className="admin-card">
