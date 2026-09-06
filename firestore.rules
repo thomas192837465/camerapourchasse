@@ -27,10 +27,12 @@ service cloud.firestore {
     }
 
     // Commandes : création publique (checkout), lecture unitaire publique (confirmation, via l'ID
-    // aléatoire de la commande), liste et modification réservées à l'admin.
+    // aléatoire de la commande). Liste : admin, ou un client connecté pour SES PROPRES commandes
+    // uniquement (l'espace "Mon compte" interroge toujours avec un filtre where("userId", "==", uid),
+    // condition nécessaire pour que cette règle soit vérifiable par Firestore). Modification admin uniquement.
     match /orders/{orderId} {
       allow get: if true;
-      allow list: if isAdmin();
+      allow list: if isAdmin() || (request.auth != null && resource.data.userId == request.auth.uid);
       allow create: if true;
       allow update, delete: if isAdmin();
     }

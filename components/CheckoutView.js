@@ -1,11 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useCart } from "@/lib/cart-context";
 import { createOrder } from "@/lib/orders";
 import { firebaseEnabled } from "@/lib/firebase";
+import { useAuth } from "@/lib/auth";
 
 const emptyForm = {
   name: "",
@@ -19,10 +20,20 @@ const emptyForm = {
 
 export default function CheckoutView() {
   const { items, total, clear } = useCart();
+  const { user } = useAuth();
   const router = useRouter();
   const [form, setForm] = useState(emptyForm);
   const [error, setError] = useState("");
   const [submitting, setSubmitting] = useState(false);
+
+  useEffect(() => {
+    if (!user) return;
+    setForm((f) => ({
+      ...f,
+      name: f.name || user.displayName || "",
+      email: f.email || user.email || "",
+    }));
+  }, [user]);
 
   if (!items.length) {
     return (
@@ -65,6 +76,7 @@ export default function CheckoutView() {
           variant: it.variant,
         })),
         total,
+        userId: user?.uid,
       });
       clear();
       router.push(`/commande/confirmation/${orderId}`);

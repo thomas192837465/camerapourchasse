@@ -63,7 +63,7 @@ export default function Header({ content, categories = [], navItems = [] }) {
               {count}
             </span>
           </button>
-          <Link href="/admin" className="icon-btn" aria-label="Compte">
+          <Link href="/compte" className="icon-btn" aria-label="Compte">
             <UserIcon />
           </Link>
         </div>
