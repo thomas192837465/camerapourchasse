@@ -93,7 +93,15 @@ export default function ContentSettingsPage() {
 
       <div className="admin-card">
         <h2>Logo (en-tête & pied de page)</h2>
-        <div className="form-grid">
+        <div className="form-field">
+          <label>Image du logo (facultative — sans image, un pictogramme caméra générique est utilisé)</label>
+          <SingleImageField
+            value={content.logoImage}
+            onChange={(img) => set("logoImage", img)}
+            altPlaceholder="Texte alternatif (SEO)"
+          />
+        </div>
+        <div className="form-grid" style={{ marginTop: 10 }}>
           <div className="form-field">
             <label>Ligne 1</label>
             <input value={content.logoLine1} onChange={(e) => set("logoLine1", e.target.value)} />

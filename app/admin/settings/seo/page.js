@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getSettings, saveSettings } from "@/lib/settings";
 import { defaultSeo } from "@/lib/defaults";
+import SingleImageField from "@/components/admin/SingleImageField";
 
 export default function SeoSettingsPage() {
   const [seo, setSeo] = useState(defaultSeo);
@@ -60,6 +61,17 @@ export default function SeoSettingsPage() {
         <div className="form-field">
           <label>Image de partage par défaut (URL Open Graph)</label>
           <input value={seo.ogImage} onChange={(e) => set("ogImage", e.target.value)} />
+        </div>
+        <div className="form-field">
+          <label>Favicon (icône affichée dans l'onglet du navigateur et par Google)</label>
+          <p className="form-hint" style={{ marginBottom: 8 }}>
+            Format carré recommandé (ex : 512×512 px). Sans image, un favicon par défaut aux couleurs du site est
+            utilisé.
+          </p>
+          <SingleImageField
+            value={{ url: seo.favicon, alt: "" }}
+            onChange={(img) => set("favicon", img.url)}
+          />
         </div>
       </div>
 

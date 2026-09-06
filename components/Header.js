@@ -12,7 +12,12 @@ export default function Header({ content, categories = [], navItems = [] }) {
       <div className="container">
         <Link href="/" className="logo">
           <span className="logo-mark">
-            <LogoMarkIcon />
+            {content.logoImage?.url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={content.logoImage.url} alt={content.logoImage.alt || ""} />
+            ) : (
+              <LogoMarkIcon />
+            )}
           </span>
           <span className="logo-text">
             <span className="line1">{content.logoLine1}</span>

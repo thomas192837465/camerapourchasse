@@ -19,7 +19,12 @@ export default function Footer({ content }) {
         <div className="footer-brand">
           <div className="logo">
             <span className="logo-mark" style={{ background: "rgba(255,255,255,0.1)" }}>
-              <LogoMarkIcon />
+              {content.logoImage?.url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={content.logoImage.url} alt={content.logoImage.alt || ""} />
+              ) : (
+                <LogoMarkIcon />
+              )}
             </span>
             <span className="logo-text">
               <span className="line1" style={{ color: "#fff" }}>{content.logoLine1}</span>
