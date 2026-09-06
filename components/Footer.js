@@ -3,6 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import { LogoMarkIcon } from "./Icons";
+import { cloudinaryTransform } from "@/lib/cloudinaryUrl";
 
 export default function Footer({ content }) {
   const [subscribed, setSubscribed] = useState(false);
@@ -21,7 +22,7 @@ export default function Footer({ content }) {
             <span className="logo-mark" style={{ background: "rgba(255,255,255,0.1)" }}>
               {content.logoImage?.url ? (
                 // eslint-disable-next-line @next/next/no-img-element
-                <img src={content.logoImage.url} alt={content.logoImage.alt || ""} />
+                <img src={cloudinaryTransform(content.logoImage.url, "w_120,q_auto,f_auto")} alt={content.logoImage.alt || ""} />
               ) : (
                 <LogoMarkIcon />
               )}

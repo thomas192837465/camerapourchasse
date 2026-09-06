@@ -1,4 +1,5 @@
 import TrustRating from "./TrustRating";
+import { cloudinaryTransform } from "@/lib/cloudinaryUrl";
 
 export default function ReviewsList({ reviews, rating }) {
   const valid = (reviews || []).filter((r) => r.name && r.text);
@@ -12,7 +13,7 @@ export default function ReviewsList({ reviews, rating }) {
           {valid.map((r, i) => (
             <div className="review" key={r.id || i}>
               {r.avatar?.url ? (
-                <img className="review-avatar-img" src={r.avatar.url} alt="" />
+                <img className="review-avatar-img" src={cloudinaryTransform(r.avatar.url, "w_100,q_auto,f_auto")} alt="" />
               ) : (
                 <span className="avatar">{r.name.slice(0, 2).toUpperCase()}</span>
               )}
@@ -27,7 +28,12 @@ export default function ReviewsList({ reviews, rating }) {
                     {r.photos
                       .filter((p) => p.url)
                       .map((p, pi) => (
-                        <img className="review-photo" src={p.url} alt={p.alt || ""} key={pi} />
+                        <img
+                          className="review-photo"
+                          src={cloudinaryTransform(p.url, "w_150,q_auto,f_auto")}
+                          alt={p.alt || ""}
+                          key={pi}
+                        />
                       ))}
                   </div>
                 ) : null}

@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { LogoMarkIcon, CartIcon, UserIcon, ChevronDownIcon } from "./Icons";
 import { useCart } from "@/lib/cart-context";
+import { cloudinaryTransform } from "@/lib/cloudinaryUrl";
 
 export default function Header({ content, categories = [], navItems = [] }) {
   const { count, openDrawer } = useCart();
@@ -14,7 +15,7 @@ export default function Header({ content, categories = [], navItems = [] }) {
           <span className="logo-mark">
             {content.logoImage?.url ? (
               // eslint-disable-next-line @next/next/no-img-element
-              <img src={content.logoImage.url} alt={content.logoImage.alt || ""} />
+              <img src={cloudinaryTransform(content.logoImage.url, "w_120,q_auto,f_auto")} alt={content.logoImage.alt || ""} />
             ) : (
               <LogoMarkIcon />
             )}

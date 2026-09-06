@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { cloudinaryTransform } from "@/lib/cloudinaryUrl";
 
 /**
  * Fond décoratif flou derrière la photo du hero : fait défiler les photos des produits
@@ -24,7 +25,7 @@ export default function HeroCameraBackdrop({ images }) {
       {images.map((img, i) => (
         <img
           key={img.url}
-          src={img.url}
+          src={cloudinaryTransform(img.url, "w_500,q_auto,f_auto")}
           alt=""
           className={`hero-camera-backdrop-img${i === index ? " is-active" : ""}`}
         />
