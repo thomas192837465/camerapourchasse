@@ -44,6 +44,7 @@ export default async function CategoryOrLegacyProductPage({ params, searchParams
         selectedCategorySlugs={[category.slug]}
         title={category.name}
         category={category}
+        siteUrl={process.env.NEXT_PUBLIC_SITE_URL || ""}
       />
     );
   }
