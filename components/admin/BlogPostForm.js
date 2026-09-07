@@ -1,21 +1,28 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import SingleImageField from "./SingleImageField";
 import ContentBlocksEditor from "./ContentBlocksEditor";
+import RelatedProductsField from "./RelatedProductsField";
+import RelatedPostsField from "./RelatedPostsField";
 import { slugify } from "@/lib/products";
+import { getBlogCategories } from "@/lib/blogCategories";
 import { TrashIcon } from "@/components/Icons";
 
 const emptyPost = {
   title: "",
   slug: "",
   excerpt: "",
+  category: "",
   author: "",
   publishedAt: new Date().toISOString().slice(0, 10),
   status: "draft",
   coverImage: { url: "", alt: "" },
   blocks: [],
+  relatedProductSlugs: [],
+  relatedPostIds: [],
   seo: { metaTitle: "", metaDescription: "", featuredImage: { url: "", alt: "" } },
 };
 
@@ -25,6 +32,18 @@ export default function BlogPostForm({ initialPost, onSubmit, onDelete }) {
   const [slugTouched, setSlugTouched] = useState(Boolean(initialPost?.slug));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    getBlogCategories().then(setCategories);
+  }, []);
+
+  // Garde la catégorie existante visible dans la liste même si elle a été renommée/supprimée
+  // depuis la gestion des catégories, pour ne jamais effacer silencieusement la valeur enregistrée.
+  const categoryOptions =
+    post.category && !categories.some((c) => c.name === post.category)
+      ? [...categories, { id: "current", name: post.category }]
+      : categories;
 
   function set(field, value) {
     setPost((p) => ({ ...p, [field]: value }));
@@ -86,6 +105,20 @@ export default function BlogPostForm({ initialPost, onSubmit, onDelete }) {
             <input value={post.author} onChange={(e) => set("author", e.target.value)} />
           </div>
           <div className="form-field">
+            <label>Catégorie</label>
+            <select value={post.category} onChange={(e) => set("category", e.target.value)}>
+              <option value="">Aucune</option>
+              {categoryOptions.map((c) => (
+                <option key={c.id} value={c.name}>
+                  {c.name}
+                </option>
+              ))}
+            </select>
+            <span className="form-hint">
+              <Link href="/admin/blog/categories">Gérer les catégories</Link>
+            </span>
+          </div>
+          <div className="form-field">
             <label>Date de publication</label>
             <input type="date" value={post.publishedAt} onChange={(e) => set("publishedAt", e.target.value)} />
           </div>
@@ -112,6 +145,30 @@ export default function BlogPostForm({ initialPost, onSubmit, onDelete }) {
           l'article.
         </p>
         <ContentBlocksEditor blocks={post.blocks} onChange={(blocks) => set("blocks", blocks)} />
+      </div>
+
+      <div className="admin-card">
+        <h2>Produits recommandés</h2>
+        <p className="form-hint" style={{ marginBottom: 10 }}>
+          Affichés dans la barre latérale de l'article, avec leur photo, note et prix réels.
+        </p>
+        <RelatedProductsField
+          value={post.relatedProductSlugs}
+          onChange={(slugs) => set("relatedProductSlugs", slugs)}
+        />
+      </div>
+
+      <div className="admin-card">
+        <h2>Articles liés</h2>
+        <p className="form-hint" style={{ marginBottom: 10 }}>
+          Affichés dans la section "Articles similaires" en bas de l'article. Si rien n'est choisi, le site affiche
+          automatiquement les articles de la même catégorie.
+        </p>
+        <RelatedPostsField
+          value={post.relatedPostIds}
+          onChange={(ids) => set("relatedPostIds", ids)}
+          excludeId={post.id}
+        />
       </div>
 
       <div className="admin-card">

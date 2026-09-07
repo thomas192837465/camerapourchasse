@@ -1,10 +1,22 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
-import { getPostBySlug, formatPostDate } from "@/lib/posts";
+import {
+  getPostBySlug,
+  getPublishedPosts,
+  formatPostDate,
+  estimateReadingTime,
+  getRelatedPosts,
+  getManualRelatedPosts,
+} from "@/lib/posts";
+import { getProductsBySlugs } from "@/lib/products";
 import { getSettings } from "@/lib/settings";
 import ContentBlocks from "@/components/ContentBlocks";
 import BlogToc from "@/components/BlogToc";
+import BlogCard from "@/components/BlogCard";
+import BlogRelatedProducts from "@/components/BlogRelatedProducts";
+import BlogAboutBox from "@/components/BlogAboutBox";
+import { CalendarIcon, ClockIcon, UserIcon } from "@/components/Icons";
 
 export const revalidate = 60;
 
@@ -33,10 +45,18 @@ export default async function BlogPostPage({ params }) {
   const post = await getPostBySlug(slug);
   if (!post) notFound();
 
-  const seo = await getSettings("seo");
+  const [seo, content, allPosts, relatedProducts] = await Promise.all([
+    getSettings("seo"),
+    getSettings("content"),
+    getPublishedPosts(),
+    getProductsBySlugs(post.relatedProductSlugs),
+  ]);
+
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "";
   const postUrl = `${siteUrl}/blog/${post.slug}`;
   const image = post.seo?.featuredImage?.url || post.coverImage?.url;
+  const readingTime = estimateReadingTime(post.blocks);
+  const relatedPosts = getManualRelatedPosts(allPosts, post.relatedPostIds) || getRelatedPosts(allPosts, post, 3);
 
   const jsonLd = {
     "@context": "https://schema.org",
@@ -62,42 +82,73 @@ export default async function BlogPostPage({ params }) {
   };
 
   return (
-    <main className="container">
+    <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
 
-      <nav className="breadcrumb">
-        <Link href="/">Accueil</Link>
-        <span className="sep">/</span>
-        <Link href="/blog">Blog</Link>
-        <span className="sep">/</span>
-        <span className="current">{post.title}</span>
-      </nav>
+      <div className="container">
+        <nav className="breadcrumb">
+          <Link href="/">Accueil</Link>
+          <span className="sep">/</span>
+          <Link href="/blog">Blog</Link>
+          <span className="sep">/</span>
+          <span className="current">{post.title}</span>
+        </nav>
+      </div>
 
-      <article className="blog-article">
-        <h1 className="listing-title">{post.title}</h1>
-        <p className="blog-article-meta">
-          {post.author ? <span>{post.author}</span> : null}
-          {post.publishedAt ? <span>{formatPostDate(post.publishedAt)}</span> : null}
-        </p>
+      <main className="container blog-layout">
+        <article className="blog-main blog-article">
+          {post.category ? <span className="blog-category-badge">{post.category}</span> : null}
+          <h1 className="listing-title">{post.title}</h1>
+          <p className="blog-article-meta">
+            {post.publishedAt ? (
+              <span>
+                <CalendarIcon /> {formatPostDate(post.publishedAt)}
+              </span>
+            ) : null}
+            <span>
+              <ClockIcon /> {readingTime} min de lecture
+            </span>
+            {post.author ? (
+              <span>
+                <UserIcon /> Par {post.author}
+              </span>
+            ) : null}
+          </p>
 
-        {post.coverImage?.url ? (
-          <div className="blog-cover">
-            <Image
-              src={post.coverImage.url}
-              alt={post.coverImage.alt || post.title}
-              fill
-              sizes="(max-width: 960px) 100vw, 900px"
-              style={{ objectFit: "cover" }}
-              priority
-            />
-          </div>
-        ) : null}
+          {post.coverImage?.url ? (
+            <div className="blog-cover">
+              <Image
+                src={post.coverImage.url}
+                alt={post.coverImage.alt || post.title}
+                fill
+                sizes="(max-width: 960px) 100vw, 800px"
+                style={{ objectFit: "cover" }}
+                priority
+              />
+            </div>
+          ) : null}
 
-        <BlogToc blocks={post.blocks} />
+          <ContentBlocks blocks={post.blocks} />
 
-        <ContentBlocks blocks={post.blocks} />
-      </article>
-    </main>
+          {relatedPosts.length ? (
+            <section className="blog-related-articles">
+              <h2 className="reco-title">Articles similaires</h2>
+              <div className="blog-grid">
+                {relatedPosts.map((p) => (
+                  <BlogCard key={p.id} post={p} />
+                ))}
+              </div>
+            </section>
+          ) : null}
+        </article>
+
+        <aside className="blog-sidebar">
+          <BlogToc blocks={post.blocks} />
+          <BlogRelatedProducts products={relatedProducts} />
+          <BlogAboutBox title={content.blogAboutTitle} text={content.blogAboutText} />
+        </aside>
+      </main>
+    </>
   );
 }

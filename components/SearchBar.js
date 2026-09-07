@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { SearchIcon } from "./Icons";
 
-export default function SearchBar() {
+export default function SearchBar({ placeholder = "Rechercher une caméra de chasse 4G" }) {
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -25,7 +25,7 @@ export default function SearchBar() {
         type="text"
         value={value}
         onChange={(e) => setValue(e.target.value)}
-        placeholder="Rechercher une caméra de chasse 4G"
+        placeholder={placeholder}
       />
       <button className="search-submit" type="submit" aria-label="Rechercher">
         <SearchIcon />

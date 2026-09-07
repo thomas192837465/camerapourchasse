@@ -56,6 +56,24 @@ export function CartIcon(props) {
   );
 }
 
+export function CalendarIcon(props) {
+  return (
+    <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...props}>
+      <rect x="3" y="5" width="18" height="16" rx="2"></rect>
+      <path d="M16 3v4M8 3v4M3 10h18"></path>
+    </svg>
+  );
+}
+
+export function ClockIcon(props) {
+  return (
+    <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...props}>
+      <circle cx="12" cy="12" r="9"></circle>
+      <path d="M12 7v5l3 3"></path>
+    </svg>
+  );
+}
+
 export function UserIcon(props) {
   return (
     <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...props}>

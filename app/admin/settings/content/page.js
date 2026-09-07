@@ -246,6 +246,31 @@ export default function ContentSettingsPage() {
         <ContentBlocksEditor blocks={content.histoireBlocks} onChange={(blocks) => set("histoireBlocks", blocks)} />
       </div>
 
+      <div className="admin-card">
+        <h2>Page "Blog"</h2>
+        <div className="form-field">
+          <label>Titre du bandeau</label>
+          <input value={content.blogPageTitle} onChange={(e) => set("blogPageTitle", e.target.value)} />
+        </div>
+        <div className="form-field">
+          <label>Sous-titre du bandeau</label>
+          <textarea rows={2} value={content.blogPageSubtitle} onChange={(e) => set("blogPageSubtitle", e.target.value)} />
+        </div>
+        <p className="form-hint">
+          La catégorie de chaque article (affichée en badge et listée avec son nombre d'articles dans la barre
+          latérale) se règle sur chaque article, dans Blog → modifier l'article.
+        </p>
+        <div className="form-field">
+          <label>Encart "à propos" (barre latérale d'un article) — titre</label>
+          <input value={content.blogAboutTitle} onChange={(e) => set("blogAboutTitle", e.target.value)} />
+        </div>
+        <div className="form-field">
+          <label>Encart "à propos" — texte</label>
+          <textarea rows={2} value={content.blogAboutText} onChange={(e) => set("blogAboutText", e.target.value)} />
+        </div>
+        <p className="form-hint">Cet encart renvoie vers la page "Notre histoire".</p>
+      </div>
+
       <button className="btn btn-primary" onClick={handleSave} disabled={saving}>
         {saving ? "Enregistrement…" : saved ? "Enregistré ✓" : "Enregistrer"}
       </button>

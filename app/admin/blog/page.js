@@ -21,9 +21,14 @@ export default function AdminBlogPage() {
           <h1>Blog</h1>
           <p>{loading ? "Chargement…" : `${posts.length} article(s)`} — alimente automatiquement /blog et le bloc "derniers articles" du pied de page.</p>
         </div>
-        <Link href="/admin/blog/new" className="btn btn-primary">
-          + Nouvel article
-        </Link>
+        <div style={{ display: "flex", gap: 10 }}>
+          <Link href="/admin/blog/categories" className="btn btn-outline">
+            Gérer les catégories
+          </Link>
+          <Link href="/admin/blog/new" className="btn btn-primary">
+            + Nouvel article
+          </Link>
+        </div>
       </div>
 
       <div className="admin-card">
