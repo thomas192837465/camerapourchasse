@@ -1095,6 +1095,10 @@ h1, h2, h3, h4, p {
   display: flex;
   flex-direction: column;
   gap: 20px;
+  position: sticky;
+  top: 96px;
+  max-height: calc(100vh - 112px);
+  overflow-y: auto;
 }
 
 .blog-sidebar-card {
@@ -3461,6 +3465,7 @@ h1, h2, h3, h4, p {
   .eeat-grid { grid-template-columns: repeat(2, 1fr); }
   .blog-grid { grid-template-columns: 1fr; }
   .blog-layout { grid-template-columns: 1fr; padding: 28px 20px 48px; gap: 28px; }
+  .blog-sidebar { position: static; max-height: none; overflow-y: visible; }
   .blog-card-featured { flex-direction: column; }
   .blog-card-featured .blog-card-thumb { flex: none; aspect-ratio: 16 / 10; }
   .blog-hero-band { padding: 32px 0 36px; }
