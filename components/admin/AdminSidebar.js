@@ -14,6 +14,7 @@ const LINKS = [
       { href: "/admin/shopify-products", label: "Produits Shopify" },
       { href: "/admin/categories", label: "Catégories" },
       { href: "/admin/blog", label: "Blog" },
+      { href: "/admin/cart-activity", label: "Activité du panier" },
       { href: "/admin/orders", label: "Commandes" },
     ],
   },

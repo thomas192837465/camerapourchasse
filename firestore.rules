@@ -63,5 +63,20 @@ service cloud.firestore {
       allow read: if resource.data.status == 'published' || isAdmin();
       allow write: if isAdmin();
     }
+
+    // Catégories de blog (liste gérée dans l'admin) : lecture publique (barre latérale de /blog,
+    // sélecteur de catégorie sur chaque article), écriture admin uniquement.
+    match /blogCategories/{categoryId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Activité panier : journal des ajouts au panier pour le suivi temps réel de l'admin.
+    // Écriture publique (un visiteur, connecté ou non, doit pouvoir enregistrer son propre ajout),
+    // lecture réservée à l'admin — ce n'est pas une donnée destinée aux visiteurs du site.
+    match /cartActivity/{eventId} {
+      allow create: if true;
+      allow read, delete: if isAdmin();
+    }
   }
 }
