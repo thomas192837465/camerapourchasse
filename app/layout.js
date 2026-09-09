@@ -20,6 +20,7 @@ const DEFAULT_FAVICON = `data:image/svg+xml,${encodeURIComponent(DEFAULT_FAVICON
 export async function generateMetadata() {
   const seo = await getSettings("seo");
   return {
+    metadataBase: new URL(process.env.NEXT_PUBLIC_SITE_URL || "https://www.wildtrail.fr"),
     title: {
       default: seo.siteTitle,
       template: seo.titleTemplate,
