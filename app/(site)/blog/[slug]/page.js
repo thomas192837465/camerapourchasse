@@ -11,6 +11,7 @@ import {
 } from "@/lib/posts";
 import { getProductsBySlugs } from "@/lib/products";
 import { getSettings } from "@/lib/settings";
+import { buildFaqJsonLd } from "@/lib/schema";
 import ContentBlocks from "@/components/ContentBlocks";
 import BlogToc from "@/components/BlogToc";
 import BlogCard from "@/components/BlogCard";
@@ -81,10 +82,15 @@ export default async function BlogPostPage({ params }) {
     ],
   };
 
+  const faqJsonLd = buildFaqJsonLd(post.blocks);
+
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      {faqJsonLd ? (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      ) : null}
 
       <div className="container">
         <nav className="breadcrumb">

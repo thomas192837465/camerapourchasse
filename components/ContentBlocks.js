@@ -86,7 +86,7 @@ export default function ContentBlocks({ blocks }) {
               {items.map((item, i) => (
                 <details className="faq-item" key={i}>
                   <summary>{item.question}</summary>
-                  <p>{item.answer}</p>
+                  <p dangerouslySetInnerHTML={{ __html: renderRichText(item.answer) }} />
                 </details>
               ))}
             </div>

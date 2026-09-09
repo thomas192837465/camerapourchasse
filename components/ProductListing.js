@@ -3,13 +3,9 @@ import Filters from "./Filters";
 import ResultsView from "./ResultsView";
 import SearchBar from "./SearchBar";
 import ContentBlocks from "./ContentBlocks";
+import { buildFaqJsonLd } from "@/lib/schema";
 
 export default function ProductListing({ categories, products, filterOptions, selectedCategorySlugs, title, category, siteUrl = "" }) {
-  const faqItems = (category?.blocks || [])
-    .filter((b) => b.type === "faq")
-    .flatMap((b) => b.items || [])
-    .filter((f) => f.question && f.answer);
-
   const breadcrumbJsonLd = category
     ? {
         "@context": "https://schema.org",
@@ -22,17 +18,7 @@ export default function ProductListing({ categories, products, filterOptions, se
       }
     : null;
 
-  const faqJsonLd = faqItems.length
-    ? {
-        "@context": "https://schema.org",
-        "@type": "FAQPage",
-        mainEntity: faqItems.map((f) => ({
-          "@type": "Question",
-          name: f.question,
-          acceptedAnswer: { "@type": "Answer", text: f.answer },
-        })),
-      }
-    : null;
+  const faqJsonLd = buildFaqJsonLd(category?.blocks);
 
   return (
     <main className="container">
