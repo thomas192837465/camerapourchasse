@@ -67,6 +67,16 @@ export default async function BlogIndexPage({ searchParams }) {
 
       <main className="container blog-layout">
         <div className="blog-main">
+          {!search && content.blogPageIntro
+            ? content.blogPageIntro
+                .split("\n\n")
+                .map((para, i) => (
+                  <p className="blog-page-intro" key={i}>
+                    {para}
+                  </p>
+                ))
+            : null}
+
           {search ? (
             <p className="blog-search-status">
               Résultats pour « {search} » ({filtered.length})

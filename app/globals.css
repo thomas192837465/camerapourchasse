@@ -1089,6 +1089,13 @@ h1, h2, h3, h4, p {
   margin-bottom: 16px;
 }
 
+.blog-page-intro {
+  font-size: 0.95rem;
+  color: var(--ink-soft);
+  line-height: 1.6;
+  margin-bottom: 16px;
+}
+
 /* ----- Barre latérale ----- */
 
 .blog-sidebar {

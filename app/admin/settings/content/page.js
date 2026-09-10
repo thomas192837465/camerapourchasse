@@ -256,6 +256,10 @@ export default function ContentSettingsPage() {
           <label>Sous-titre du bandeau</label>
           <textarea rows={2} value={content.blogPageSubtitle} onChange={(e) => set("blogPageSubtitle", e.target.value)} />
         </div>
+        <div className="form-field">
+          <label>Chapô (texte d'intro affiché sous le bandeau, hors recherche)</label>
+          <textarea rows={4} value={content.blogPageIntro} onChange={(e) => set("blogPageIntro", e.target.value)} />
+        </div>
         <p className="form-hint">
           La catégorie de chaque article (affichée en badge et listée avec son nombre d'articles dans la barre
           latérale) se règle sur chaque article, dans Blog → modifier l'article.
