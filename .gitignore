@@ -13,6 +13,9 @@
 .env.local
 .env.*.local
 
+# secrets
+firebase-service-account.json
+
 # misc
 .DS_Store
 *.log

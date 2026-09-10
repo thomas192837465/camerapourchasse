@@ -2,6 +2,10 @@ import { getSettings } from "@/lib/settings";
 import { pageMetadata } from "@/lib/metadata";
 import LegalField from "@/components/LegalField";
 
+// Sans ça, Next.js peut figer cette page au moment du build sur Vercel : une mise à jour des
+// coordonnées légales depuis l'admin n'apparaîtrait qu'après un nouveau déploiement.
+export const revalidate = 60;
+
 export function generateMetadata() {
   return pageMetadata("/cgv", {
     title: "Conditions Générales de Vente",
