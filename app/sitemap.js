@@ -15,7 +15,17 @@ export default async function sitemap() {
     getPublishedPosts(),
   ]);
 
-  const staticRoutes = ["", "/produits", "/blog", "/livraison", "/notre-histoire", "/mentions-legales", "/cgv"].map((path) => ({
+  const staticRoutes = [
+    "",
+    "/produits",
+    "/produits/piege-photo",
+    "/produits/camera-de-chasse-sans-abonnement",
+    "/blog",
+    "/livraison",
+    "/notre-histoire",
+    "/mentions-legales",
+    "/cgv",
+  ].map((path) => ({
     url: `${base}${path}`,
     lastModified: new Date(),
   }));
