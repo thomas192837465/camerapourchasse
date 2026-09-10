@@ -1,7 +1,7 @@
 import { getSettings } from "@/lib/settings";
 import { getCategories } from "@/lib/categories";
 import { getPublishedProducts } from "@/lib/products";
-import { computeRating } from "@/lib/reviews";
+import { pageMetadata } from "@/lib/metadata";
 import Hero from "@/components/Hero";
 import TechPromise from "@/components/TechPromise";
 import EeatSection from "@/components/EeatSection";
@@ -12,6 +12,19 @@ import TrustBadges from "@/components/TrustBadges";
 // Sans ça, Next.js peut figer cette page au moment du build sur Vercel : un produit ou un
 // article publié ensuite depuis l'admin n'apparaîtrait qu'après un nouveau déploiement.
 export const revalidate = 60;
+
+export async function generateMetadata() {
+  const seo = await getSettings("seo");
+  // Pas de `title` ici : le layout racine fournit déjà `default` (seo.siteTitle) pour la page
+  // d'accueil — en fixer un ici le ferait passer par le gabarit de titre ("%s | WildTrail"),
+  // ce qu'on ne veut que pour les pages profondes.
+  const meta = pageMetadata("/", {
+    description: seo.defaultMetaDescription,
+    images: seo.ogImage ? [seo.ogImage] : undefined,
+  });
+  meta.openGraph.title = seo.siteTitle;
+  return meta;
+}
 
 export default async function HomePage() {
   const [content, categories, allProducts, seo, legal] = await Promise.all([
@@ -29,11 +42,12 @@ export default async function HomePage() {
     .filter(Boolean);
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "";
-  const siteRating = computeRating(allProducts.flatMap((p) => p.reviews || []));
 
   // Version machine-readable des signaux de confiance affichés dans la section "Expertise &
   // Confiance" — uniquement des faits réels (coordonnées saisies dans l'admin, note calculée à
   // partir des vrais avis) : jamais de champ inventé pour remplir le schema.
+  // Pas d'aggregateRating ici : Google ne retient pas les notes auto-déclarées par l'entreprise
+  // elle-même à ce niveau — seules celles portées par chaque Product (déjà en place) sont valides.
   const organizationJsonLd = {
     "@context": "https://schema.org",
     "@type": "Organization",
@@ -43,13 +57,6 @@ export default async function HomePage() {
     email: legal.email || undefined,
     telephone: legal.phone || undefined,
     address: legal.address || undefined,
-    aggregateRating: siteRating.count
-      ? {
-          "@type": "AggregateRating",
-          ratingValue: siteRating.average,
-          reviewCount: siteRating.count,
-        }
-      : undefined,
   };
 
   return (

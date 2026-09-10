@@ -1,10 +1,13 @@
 import { getSettings } from "@/lib/settings";
+import { pageMetadata } from "@/lib/metadata";
 import LegalField from "@/components/LegalField";
 
-export const metadata = {
-  title: "Conditions Générales de Vente",
-  description: "Conditions générales de vente du site.",
-};
+export function generateMetadata() {
+  return pageMetadata("/cgv", {
+    title: "Conditions Générales de Vente",
+    description: "Conditions générales de vente du site.",
+  });
+}
 
 export default async function CgvPage() {
   const legal = await getSettings("legal");

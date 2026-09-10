@@ -1,10 +1,13 @@
 import { getSettings } from "@/lib/settings";
+import { pageMetadata } from "@/lib/metadata";
 import LegalField from "@/components/LegalField";
 
-export const metadata = {
-  title: "Mentions légales",
-  description: "Mentions légales du site.",
-};
+export function generateMetadata() {
+  return pageMetadata("/mentions-legales", {
+    title: "Mentions légales",
+    description: "Mentions légales du site.",
+  });
+}
 
 export default async function MentionsLegalesPage() {
   const legal = await getSettings("legal");

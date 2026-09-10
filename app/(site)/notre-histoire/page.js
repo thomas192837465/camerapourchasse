@@ -2,15 +2,15 @@ import Link from "next/link";
 import { getSettings } from "@/lib/settings";
 import ContentBlocks from "@/components/ContentBlocks";
 import { buildFaqJsonLd } from "@/lib/schema";
+import { pageMetadata } from "@/lib/metadata";
 
 export const revalidate = 60;
 
 export async function generateMetadata() {
-  return {
+  return pageMetadata("/notre-histoire", {
     title: "Notre histoire",
     description: "L'histoire et la passion derrière la marque.",
-    alternates: { canonical: "/notre-histoire" },
-  };
+  });
 }
 
 export default async function HistoirePage() {

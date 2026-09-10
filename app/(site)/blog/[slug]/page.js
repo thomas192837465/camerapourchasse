@@ -12,6 +12,7 @@ import {
 import { getProductsBySlugs } from "@/lib/products";
 import { getSettings } from "@/lib/settings";
 import { buildFaqJsonLd } from "@/lib/schema";
+import { pageMetadata } from "@/lib/metadata";
 import ContentBlocks from "@/components/ContentBlocks";
 import BlogToc from "@/components/BlogToc";
 import BlogCard from "@/components/BlogCard";
@@ -28,17 +29,12 @@ export async function generateMetadata({ params }) {
 
   const image = post.seo?.featuredImage?.url || post.coverImage?.url;
 
-  return {
+  return pageMetadata(`/blog/${post.slug}`, {
     title: post.seo?.metaTitle || post.title,
     description: post.seo?.metaDescription || post.excerpt,
-    alternates: { canonical: `/blog/${post.slug}` },
-    openGraph: {
-      title: post.seo?.metaTitle || post.title,
-      description: post.seo?.metaDescription || post.excerpt,
-      images: image ? [image] : [],
-      type: "article",
-    },
-  };
+    images: image ? [image] : undefined,
+    type: "article",
+  });
 }
 
 export default async function BlogPostPage({ params }) {

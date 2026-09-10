@@ -2,6 +2,7 @@ import { notFound, permanentRedirect } from "next/navigation";
 import { getCategoryBySlug, getCategories } from "@/lib/categories";
 import { getProductBySlug, getPublishedProducts } from "@/lib/products";
 import { getSettings } from "@/lib/settings";
+import { pageMetadata } from "@/lib/metadata";
 import ProductListing from "@/components/ProductListing";
 
 // URL canonique d'une catégorie : /produits/{slug}. Si le segment ne correspond à aucune
@@ -11,13 +12,13 @@ export async function generateMetadata({ params }) {
   const { categorie } = await params;
   const category = await getCategoryBySlug(categorie);
   if (!category) return {};
-  return {
+  return pageMetadata(`/produits/${category.slug}`, {
     title: category.seo?.metaTitle || category.name,
     description:
       category.seo?.metaDescription ||
       `Découvrez notre sélection ${category.name} : caméras de chasse HD, discrètes et performantes.`,
-    alternates: { canonical: `/produits/${category.slug}` },
-  };
+    images: category.image?.url ? [category.image.url] : undefined,
+  });
 }
 
 export default async function CategoryOrLegacyProductPage({ params, searchParams }) {

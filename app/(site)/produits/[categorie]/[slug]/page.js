@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { getProductBySlug, getRelatedProducts } from "@/lib/products";
 import { getCategoryBySlug } from "@/lib/categories";
 import { getSettings } from "@/lib/settings";
+import { pageMetadata } from "@/lib/metadata";
 import ProductDetail from "@/components/ProductDetail";
 
 export const revalidate = 60;
@@ -16,16 +17,11 @@ export async function generateMetadata({ params }) {
   const galleryImages = product.images?.filter((i) => i.url).map((i) => i.url) || [];
   const ogImages = featuredImage ? [featuredImage, ...galleryImages.filter((u) => u !== featuredImage)] : galleryImages;
 
-  return {
+  return pageMetadata(`/produits/${product.categoryId}/${product.slug}`, {
     title: product.seo?.metaTitle || product.name,
     description: product.seo?.metaDescription || product.shortDescription || product.description?.slice(0, 155),
-    alternates: { canonical: `/produits/${product.categoryId}/${product.slug}` },
-    openGraph: {
-      title: product.seo?.metaTitle || product.name,
-      description: product.seo?.metaDescription || product.shortDescription,
-      images: ogImages,
-    },
-  };
+    images: ogImages,
+  });
 }
 
 export default async function ProductPage({ params }) {

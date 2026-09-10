@@ -13,7 +13,11 @@ export default function ReviewsList({ reviews, rating }) {
           {valid.map((r, i) => (
             <div className="review" key={r.id || i}>
               {r.avatar?.url ? (
-                <img className="review-avatar-img" src={cloudinaryTransform(r.avatar.url, "w_100,q_auto,f_auto")} alt="" />
+                <img
+                  className="review-avatar-img"
+                  src={cloudinaryTransform(r.avatar.url, "w_100,q_auto,f_auto")}
+                  alt={`Photo de profil de ${r.name}`}
+                />
               ) : (
                 <span className="avatar">{r.name.slice(0, 2).toUpperCase()}</span>
               )}
@@ -31,7 +35,7 @@ export default function ReviewsList({ reviews, rating }) {
                         <img
                           className="review-photo"
                           src={cloudinaryTransform(p.url, "w_150,q_auto,f_auto")}
-                          alt={p.alt || ""}
+                          alt={p.alt || `Photo envoyée par ${r.name} avec son avis`}
                           key={pi}
                         />
                       ))}

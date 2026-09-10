@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getPublishedPosts, getCategoryCounts } from "@/lib/posts";
 import { getSettings } from "@/lib/settings";
+import { pageMetadata } from "@/lib/metadata";
 import BlogCard from "@/components/BlogCard";
 import BlogSidebar from "@/components/BlogSidebar";
 
@@ -11,11 +12,10 @@ const PAGE_SIZE = 5;
 export const revalidate = 60;
 
 export async function generateMetadata() {
-  return {
+  return pageMetadata("/blog", {
     title: "Blog",
     description: "Conseils, guides et actualités sur les caméras de chasse : autonomie, installation, réglementation.",
-    alternates: { canonical: "/blog" },
-  };
+  });
 }
 
 export default async function BlogIndexPage({ searchParams }) {
