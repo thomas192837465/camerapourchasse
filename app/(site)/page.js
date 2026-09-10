@@ -2,12 +2,14 @@ import { getSettings } from "@/lib/settings";
 import { getCategories } from "@/lib/categories";
 import { getPublishedProducts } from "@/lib/products";
 import { pageMetadata } from "@/lib/metadata";
+import { buildFaqJsonLd } from "@/lib/schema";
 import Hero from "@/components/Hero";
 import TechPromise from "@/components/TechPromise";
 import EeatSection from "@/components/EeatSection";
 import CategoryGrid from "@/components/CategoryGrid";
 import ProductGrid from "@/components/ProductGrid";
 import TrustBadges from "@/components/TrustBadges";
+import ContentBlocks from "@/components/ContentBlocks";
 
 // Sans ça, Next.js peut figer cette page au moment du build sur Vercel : un produit ou un
 // article publié ensuite depuis l'admin n'apparaîtrait qu'après un nouveau déploiement.
@@ -15,15 +17,12 @@ export const revalidate = 60;
 
 export async function generateMetadata() {
   const seo = await getSettings("seo");
-  // Pas de `title` ici : le layout racine fournit déjà `default` (seo.siteTitle) pour la page
-  // d'accueil — en fixer un ici le ferait passer par le gabarit de titre ("%s | WildTrail"),
-  // ce qu'on ne veut que pour les pages profondes.
-  const meta = pageMetadata("/", {
-    description: seo.defaultMetaDescription,
+  return pageMetadata("/", {
+    title: "Caméra de chasse 4G et solaire sans abonnement",
+    description:
+      "Caméras de chasse 4G, solaires et connectées au téléphone. Vision nocturne no-glow, déclenchement en 0,2 s, garantie 2 ans, SAV en France. Livraison 24/48 h.",
     images: seo.ogImage ? [seo.ogImage] : undefined,
   });
-  meta.openGraph.title = seo.siteTitle;
-  return meta;
 }
 
 export default async function HomePage() {
@@ -59,9 +58,14 @@ export default async function HomePage() {
     address: legal.address || undefined,
   };
 
+  const faqJsonLd = buildFaqJsonLd(content.homeBlocks);
+
   return (
     <main>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }} />
+      {faqJsonLd ? (
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
+      ) : null}
 
       <Hero content={content} images={heroBackdropImages} />
 
@@ -85,6 +89,10 @@ export default async function HomePage() {
       </div>
 
       <TrustBadges items={content.trustBadges} />
+
+      <div className="container">
+        <ContentBlocks blocks={content.homeBlocks} />
+      </div>
     </main>
   );
 }

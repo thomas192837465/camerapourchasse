@@ -25,9 +25,9 @@ export async function generateMetadata({ searchParams }) {
   }
 
   return pageMetadata("/produits", {
-    title: q ? `Résultats pour "${q}"` : "Toutes nos caméras de chasse",
+    title: q ? `Résultats pour "${q}"` : "Toutes nos caméras de chasse — prix et modèles",
     description:
-      "Parcourez notre catalogue de caméras de chasse : 4G, vision nocturne, haute résolution et accessoires.",
+      "Comparez les 5 caméras de chasse WildTrail : 4G, solaire, Wi-Fi. De 79 à 90 €, sans abonnement obligatoire, garantie 2 ans et SAV en France.",
   });
 }
 
@@ -38,10 +38,11 @@ export default async function ProductsPage({ searchParams }) {
   const maxPrice = sp?.max ? Number(sp.max) : undefined;
   const search = sp?.q || "";
 
-  const [categories, products, filterOptions] = await Promise.all([
+  const [categories, products, filterOptions, content] = await Promise.all([
     getCategories(),
     getPublishedProducts({ categoryIds, tags, maxPrice, search }),
     getSettings("filters"),
+    getSettings("content"),
   ]);
 
   return (
@@ -51,6 +52,8 @@ export default async function ProductsPage({ searchParams }) {
       filterOptions={filterOptions}
       selectedCategorySlugs={categoryIds}
       title={search ? `Résultats pour "${search}"` : "Toutes nos caméras de chasse"}
+      introBlocks={content.produitsIntroBlocks}
+      pricingBlocks={content.produitsPricingBlocks}
     />
   );
 }

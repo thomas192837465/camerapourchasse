@@ -3,9 +3,20 @@ import Filters from "./Filters";
 import ResultsView from "./ResultsView";
 import SearchBar from "./SearchBar";
 import ContentBlocks from "./ContentBlocks";
+import ProductComparisonTable from "./ProductComparisonTable";
 import { buildFaqJsonLd } from "@/lib/schema";
 
-export default function ProductListing({ categories, products, filterOptions, selectedCategorySlugs, title, category, siteUrl = "" }) {
+export default function ProductListing({
+  categories,
+  products,
+  filterOptions,
+  selectedCategorySlugs,
+  title,
+  category,
+  siteUrl = "",
+  introBlocks,
+  pricingBlocks,
+}) {
   const breadcrumbJsonLd = category
     ? {
         "@context": "https://schema.org",
@@ -18,7 +29,9 @@ export default function ProductListing({ categories, products, filterOptions, se
       }
     : null;
 
-  const faqJsonLd = buildFaqJsonLd(category?.blocks);
+  // Sur la fiche catégorie, la FAQ vient des blocs de la catégorie ; sur le catalogue racine,
+  // des deux blocs de contenu SEO ajoutés autour du tableau comparatif.
+  const faqJsonLd = category ? buildFaqJsonLd(category.blocks) : buildFaqJsonLd([...(introBlocks || []), ...(pricingBlocks || [])]);
 
   return (
     <main className="container">
@@ -50,7 +63,15 @@ export default function ProductListing({ categories, products, filterOptions, se
         <ResultsView products={products} />
       </div>
 
-      <ContentBlocks blocks={category?.blocks} />
+      {category ? (
+        <ContentBlocks blocks={category.blocks} />
+      ) : (
+        <>
+          <ContentBlocks blocks={introBlocks} />
+          {(introBlocks || pricingBlocks) ? <ProductComparisonTable /> : null}
+          <ContentBlocks blocks={pricingBlocks} />
+        </>
+      )}
     </main>
   );
 }
