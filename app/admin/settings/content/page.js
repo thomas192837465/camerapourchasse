@@ -7,6 +7,7 @@ import SingleImageField from "@/components/admin/SingleImageField";
 import IconPicker from "@/components/admin/IconPicker";
 import FooterColumnsEditor from "@/components/admin/FooterColumnsEditor";
 import ContentBlocksEditor from "@/components/admin/ContentBlocksEditor";
+import TestimonialsEditor from "@/components/admin/TestimonialsEditor";
 import { TrashIcon } from "@/components/Icons";
 
 export default function ContentSettingsPage() {
@@ -206,6 +207,34 @@ export default function ContentSettingsPage() {
       <div className="admin-card">
         <h2>Bandeau de réassurance (livraison, garantie...)</h2>
         <IconTextList field="trustBadges" />
+      </div>
+
+      <div className="admin-card">
+        <h2>Section "Ils nous ont fait confiance" (témoignages)</h2>
+        <p className="form-hint" style={{ marginBottom: 10 }}>
+          Affichée sur la page d'accueil sous forme de carrousel. La section reste masquée tant
+          qu'aucun témoignage n'a été ajouté — n'ajoutez que des avis réels de vos clients.
+        </p>
+        <div className="form-grid">
+          <div className="form-field">
+            <label>Titre de la section</label>
+            <input value={content.testimonialsTitle} onChange={(e) => set("testimonialsTitle", e.target.value)} />
+          </div>
+          <div className="form-field">
+            <label>Note moyenne affichée (sur 5)</label>
+            <input
+              type="number"
+              min="0"
+              max="5"
+              step="0.1"
+              value={content.testimonialsRating}
+              onChange={(e) => set("testimonialsRating", Number(e.target.value))}
+            />
+          </div>
+        </div>
+        <div style={{ marginTop: 14 }}>
+          <TestimonialsEditor testimonials={content.testimonials} onChange={(testimonials) => set("testimonials", testimonials)} />
+        </div>
       </div>
 
       <div className="admin-card">

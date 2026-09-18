@@ -9,6 +9,7 @@ import EeatSection from "@/components/EeatSection";
 import CategoryGrid from "@/components/CategoryGrid";
 import ProductGrid from "@/components/ProductGrid";
 import TrustBadges from "@/components/TrustBadges";
+import TestimonialsSection from "@/components/TestimonialsSection";
 import ContentBlocks from "@/components/ContentBlocks";
 
 // Sans ça, Next.js peut figer cette page au moment du build sur Vercel : un produit ou un
@@ -89,6 +90,12 @@ export default async function HomePage() {
       </div>
 
       <TrustBadges items={content.trustBadges} />
+
+      <TestimonialsSection
+        title={content.testimonialsTitle}
+        rating={content.testimonialsRating}
+        testimonials={content.testimonials}
+      />
 
       <div className="container">
         <ContentBlocks blocks={content.homeBlocks} />
