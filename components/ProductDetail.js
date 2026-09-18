@@ -2,8 +2,9 @@ import Link from "next/link";
 import ProductInteractive from "./ProductInteractive";
 import ProductCarousel from "./ProductCarousel";
 import ContentBlocks from "./ContentBlocks";
+import TestimonialsSection from "./TestimonialsSection";
 
-export default function ProductDetail({ product, category, related, siteName, siteUrl = "", bundle }) {
+export default function ProductDetail({ product, category, related, siteName, siteUrl = "", bundle, testimonials }) {
   const productUrl = `${siteUrl}/produits/${product.categoryId}/${product.slug}`;
   const faq = (product.faq || []).filter((f) => f.question && f.answer);
   const validReviews = (product.reviews || []).filter((r) => r.name && r.text);
@@ -76,51 +77,55 @@ export default function ProductDetail({ product, category, related, siteName, si
     : null;
 
   return (
-    <main className="container">
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
-      {faqJsonLd ? (
-        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
-      ) : null}
-
-      <nav className="breadcrumb">
-        <Link href="/">Accueil</Link>
-        <span className="sep">/</span>
-        <Link href="/produits">Produits</Link>
-        {category ? (
-          <>
-            <span className="sep">/</span>
-            <Link href={`/produits/${category.slug}`}>{category.name}</Link>
-          </>
+    <>
+      <main className="container">
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+        {faqJsonLd ? (
+          <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
         ) : null}
-        <span className="sep">/</span>
-        <span className="current">{product.name}</span>
-      </nav>
 
-      <ProductInteractive product={product} bundle={bundle} />
+        <nav className="breadcrumb">
+          <Link href="/">Accueil</Link>
+          <span className="sep">/</span>
+          <Link href="/produits">Produits</Link>
+          {category ? (
+            <>
+              <span className="sep">/</span>
+              <Link href={`/produits/${category.slug}`}>{category.name}</Link>
+            </>
+          ) : null}
+          <span className="sep">/</span>
+          <span className="current">{product.name}</span>
+        </nav>
 
-      <ContentBlocks blocks={product.blocks} />
+        <ProductInteractive product={product} bundle={bundle} />
 
-      {faq.length ? (
-        <section className="section" style={{ paddingTop: 0 }}>
-          <h2 className="reco-title">Questions fréquentes</h2>
-          <div className="faq-list">
-            {faq.map((f, i) => (
-              <details className="faq-item" key={i}>
-                <summary>{f.question}</summary>
-                <p>{f.answer}</p>
-              </details>
-            ))}
-          </div>
-        </section>
-      ) : null}
+        <ContentBlocks blocks={product.blocks} />
 
-      {related.length ? (
-        <section className="section" style={{ paddingTop: 0 }}>
-          <h2 className="reco-title">Vous pourriez aimer</h2>
-          <ProductCarousel products={related} />
-        </section>
-      ) : null}
-    </main>
+        {faq.length ? (
+          <section className="section" style={{ paddingTop: 0 }}>
+            <h2 className="reco-title">Questions fréquentes</h2>
+            <div className="faq-list">
+              {faq.map((f, i) => (
+                <details className="faq-item" key={i}>
+                  <summary>{f.question}</summary>
+                  <p>{f.answer}</p>
+                </details>
+              ))}
+            </div>
+          </section>
+        ) : null}
+
+        {related.length ? (
+          <section className="section" style={{ paddingTop: 0 }}>
+            <h2 className="reco-title">Vous pourriez aimer</h2>
+            <ProductCarousel products={related} />
+          </section>
+        ) : null}
+      </main>
+
+      <TestimonialsSection title={testimonials?.title} rating={testimonials?.rating} testimonials={testimonials?.items} />
+    </>
   );
 }

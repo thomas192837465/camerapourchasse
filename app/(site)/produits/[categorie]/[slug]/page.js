@@ -36,10 +36,11 @@ export default async function ProductPage({ params }) {
     redirect(`/produits/${product.categoryId}/${slug}`);
   }
 
-  const [category, related, seo, bundle] = await Promise.all([
+  const [category, related, seo, content, bundle] = await Promise.all([
     getCategoryBySlug(product.categoryId),
     getRelatedProducts(product.categoryId, product.id, 24),
     getSettings("seo"),
+    getSettings("content"),
     getBundledVariant(product.pack),
   ]);
 
@@ -53,6 +54,11 @@ export default async function ProductPage({ params }) {
       siteName={seo.siteTitle}
       siteUrl={siteUrl}
       bundle={bundle}
+      testimonials={{
+        title: content.testimonialsTitle,
+        rating: content.testimonialsRating,
+        items: content.testimonials,
+      }}
     />
   );
 }
