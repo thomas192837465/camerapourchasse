@@ -20,7 +20,7 @@ export default function ProductInteractive({ product, bundle }) {
   // Pack croisé avec un autre produit Shopify (ex : caméra + carte SD vendue séparément) : prend
   // le pas sur le sélecteur de variantes "classique" ci-dessous, qui reste utile pour un produit
   // ayant plusieurs vraies variantes Shopify (couleur, capacité...) sans pack.
-  const hasBundle = product.source === "shopify" && Boolean(bundle);
+  const hasBundle = product.source === "shopify" && Boolean(bundle) && bundle.variants?.length > 0;
   const [selectedBundleVariantId, setSelectedBundleVariantId] = useState(bundle?.defaultVariantId || null);
   const selectedBundleVariant = hasBundle ? bundle.variants.find((v) => v.id === selectedBundleVariantId) : null;
 
