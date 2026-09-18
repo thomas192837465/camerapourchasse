@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { StarIcon, ChevronLeftIcon, ChevronRightIcon, CheckIcon } from "./Icons";
 import { cloudinaryTransform } from "@/lib/cloudinaryUrl";
@@ -63,7 +63,25 @@ function TestimonialCard({ item }) {
 // présentés en carrousel horizontal (même mécanique que ProductCarousel).
 export default function TestimonialsSection({ title, rating, testimonials }) {
   const trackRef = useRef(null);
+  const [paused, setPaused] = useState(false);
   const valid = (testimonials || []).filter((t) => t.name && t.text);
+
+  // Défilement automatique du carrousel, mis en pause au survol pour laisser le temps de lire.
+  useEffect(() => {
+    if (paused || valid.length < 2) return;
+    const id = setInterval(() => {
+      const track = trackRef.current;
+      if (!track) return;
+      const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
+      if (atEnd) {
+        track.scrollTo({ left: 0, behavior: "smooth" });
+      } else {
+        const cardWidth = track.firstChild?.offsetWidth || 280;
+        track.scrollBy({ left: cardWidth + 20, behavior: "smooth" });
+      }
+    }, 4000);
+    return () => clearInterval(id);
+  }, [paused, valid.length]);
 
   if (!valid.length) return null;
 
@@ -93,7 +111,7 @@ export default function TestimonialsSection({ title, rating, testimonials }) {
           </div>
         ) : null}
 
-        <div className="carousel">
+        <div className="carousel" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
           <button
             type="button"
             className="carousel-nav prev"
