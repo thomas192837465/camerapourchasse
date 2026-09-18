@@ -9,6 +9,7 @@ import Tabs from "./Tabs";
 import TrustRating from "./TrustRating";
 import ReviewsList from "./ReviewsList";
 import ProductPackSelector from "./ProductPackSelector";
+import FaIcon from "./FaIcon";
 
 const VISIBLE_THUMBS = 3;
 
@@ -20,32 +21,53 @@ export default function ProductInteractive({ product, bundle }) {
   // le pas sur le sélecteur de variantes "classique" ci-dessous, qui reste utile pour un produit
   // ayant plusieurs vraies variantes Shopify (couleur, capacité...) sans pack.
   const hasBundle = product.source === "shopify" && Boolean(bundle);
-  const bundleOptions = hasBundle
-    ? [
-        {
-          id: "solo",
-          title: product.pack?.soloTitle || product.name,
-          price: product.price,
-          compareAtPrice: product.compareAtPrice || 0,
-          availableForSale: product.stock > 0,
-          subtitle: product.pack?.soloSubtitle || "",
-          items: [{ icon: "camera", label: `1× ${product.name}` }],
-        },
-        {
-          id: "pack",
-          title: product.pack?.packTitle || `Pack avec ${bundle.name}`,
-          price: product.price + bundle.price,
-          compareAtPrice: (product.compareAtPrice || product.price) + (bundle.compareAtPrice || bundle.price),
-          availableForSale: product.stock > 0 && bundle.availableForSale,
-          subtitle: product.pack?.packSubtitle || "",
-          badge: product.pack?.packBadge || "",
-          items: [
-            { icon: "camera", label: `1× ${product.name}` },
-            { icon: "sdcard", label: `1× ${bundle.name}` },
-          ],
-        },
-      ]
-    : null;
+  const [selectedBundleVariantId, setSelectedBundleVariantId] = useState(bundle?.defaultVariantId || null);
+  const selectedBundleVariant = hasBundle ? bundle.variants.find((v) => v.id === selectedBundleVariantId) : null;
+
+  const bundleOptions =
+    hasBundle && selectedBundleVariant
+      ? [
+          {
+            id: "solo",
+            title: product.pack?.soloTitle || product.name,
+            price: product.price,
+            compareAtPrice: product.compareAtPrice || 0,
+            availableForSale: product.stock > 0,
+            subtitle: product.pack?.soloSubtitle || "",
+            items: [{ icon: "camera", label: `1× ${product.name}` }],
+          },
+          {
+            id: "pack",
+            title: product.pack?.packTitle || `Pack avec ${bundle.name}`,
+            price: product.price + selectedBundleVariant.price,
+            compareAtPrice:
+              (product.compareAtPrice || product.price) + (selectedBundleVariant.compareAtPrice || selectedBundleVariant.price),
+            availableForSale: product.stock > 0 && selectedBundleVariant.availableForSale,
+            subtitle: product.pack?.packSubtitle || "",
+            badge: product.pack?.packBadge || "",
+            items: [{ icon: "camera", label: `1× ${product.name}` }],
+            extra:
+              bundle.variants.length > 1 ? (
+                <select
+                  value={selectedBundleVariantId}
+                  onChange={(e) => setSelectedBundleVariantId(e.target.value)}
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  {bundle.variants.map((v) => (
+                    <option key={v.id} value={v.id} disabled={!v.availableForSale}>
+                      {bundle.name} — {v.label} ({v.price.toFixed(2).replace(".", ",")}€
+                      {v.availableForSale ? "" : ", rupture de stock"})
+                    </option>
+                  ))}
+                </select>
+              ) : (
+                <span className="pack-option-item">
+                  <FaIcon name="sdcard" /> 1× {bundle.name} — {selectedBundleVariant.label}
+                </span>
+              ),
+          },
+        ]
+      : null;
 
   const isMultiVariant = product.source === "shopify" && !hasBundle && (product.variants?.length || 0) > 1;
   const [variant, setVariant] = useState(!hasBundle && !isMultiVariant ? product.variants?.[0]?.name || "" : "");
@@ -58,7 +80,7 @@ export default function ProductInteractive({ product, bundle }) {
   const { addItem } = useCart();
   const [added, setAdded] = useState(false);
 
-  const selectedBundleOption = hasBundle ? bundleOptions.find((o) => o.id === selectedOptionId) : null;
+  const selectedBundleOption = hasBundle ? bundleOptions?.find((o) => o.id === selectedOptionId) : null;
   const selectedVariant = isMultiVariant ? product.variants.find((v) => v.id === selectedOptionId) : null;
   const displayPrice = selectedBundleOption ? selectedBundleOption.price : selectedVariant ? selectedVariant.price : product.price;
 
@@ -91,18 +113,19 @@ export default function ProductInteractive({ product, bundle }) {
     );
 
     // Pack sélectionné : la carte SD (ou tout autre produit bundlé) est un vrai produit Shopify à
-    // part entière, ajoutée comme une SECONDE ligne de panier — pour que la commande Shopify
-    // finale ait deux lignes distinctes, chacune fournie et suivie séparément (voir DSers).
-    if (hasBundle && selectedOptionId === "pack") {
+    // part entière, ajoutée comme une SECONDE ligne de panier avec la capacité choisie — pour que
+    // la commande Shopify finale ait deux lignes distinctes, chacune fournie et suivie
+    // séparément (voir DSers).
+    if (hasBundle && selectedOptionId === "pack" && selectedBundleVariant) {
       addItem(
         {
           productId: bundle.productId,
-          name: bundle.name,
-          price: bundle.price,
+          name: `${bundle.name} — ${selectedBundleVariant.label}`,
+          price: selectedBundleVariant.price,
           image: bundle.image || "",
           variant: "",
           source: "shopify",
-          shopifyVariantId: bundle.variantId,
+          shopifyVariantId: selectedBundleVariant.id,
         },
         qty
       );
@@ -175,7 +198,7 @@ export default function ProductInteractive({ product, bundle }) {
           <TrustRating average={product.rating?.average || 0} count={product.rating?.count || 0} />
         </div>
 
-        {!hasBundle ? (
+        {!hasBundle || !bundleOptions ? (
           <div className="pd-price">
             €{product.price.toFixed(2).replace(".", ",")}
             {product.compareAtPrice ? (
@@ -196,7 +219,7 @@ export default function ProductInteractive({ product, bundle }) {
           </ul>
         ) : null}
 
-        {hasBundle ? (
+        {hasBundle && bundleOptions ? (
           <ProductPackSelector
             variants={bundleOptions}
             selectedId={selectedOptionId}

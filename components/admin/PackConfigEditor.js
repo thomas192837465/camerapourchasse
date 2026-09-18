@@ -72,7 +72,7 @@ export default function PackConfigEditor({ value, onChange, excludeProductId }) 
 
             {bundledProduct?.variants?.length > 1 ? (
               <div className="form-field">
-                <label>Variante à inclure (ex : capacité de la carte SD)</label>
+                <label>Variante présélectionnée (le client peut en choisir une autre, ex : une autre capacité)</label>
                 <select value={pack.bundledVariantId} onChange={(e) => set({ bundledVariantId: e.target.value })}>
                   <option value="">— Choisir —</option>
                   {bundledProduct.variants.map((v) => (

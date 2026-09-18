@@ -4,9 +4,11 @@ function formatPrice(value) {
   return `${Number(value).toFixed(2).replace(".", ",")}€`;
 }
 
-// Sélecteur "formule" pour les produits Shopify à plusieurs variantes (ex : "Caméra seule" /
-// "Pack Prêt à filmer" avec carte SD) — chaque carte affiche son propre prix, son économie
-// réelle et sa liste d'articles inclus, réglés par variante dans l'admin (ShopifyContentForm).
+// Sélecteur "formule" pour les produits Shopify vendus avec un pack (ex : "Caméra seule" / "Pack
+// Prêt à filmer" avec carte SD) — chaque carte affiche son propre prix, son économie réelle et sa
+// liste d'articles inclus. Un <label> (pas un <button>) enveloppe chaque carte pour pouvoir
+// contenir un contrôle interactif (ex : le choix de la capacité de la carte SD via `extra`) sans
+// imbrication invalide.
 export default function ProductPackSelector({ variants, selectedId, onSelect }) {
   return (
     <div className="pack-selector" role="radiogroup">
@@ -15,15 +17,19 @@ export default function ProductPackSelector({ variants, selectedId, onSelect }) 
         const savings = v.compareAtPrice > v.price ? v.compareAtPrice - v.price : 0;
 
         return (
-          <button
-            type="button"
+          <label
             key={v.id}
-            role="radio"
-            aria-checked={selected}
-            disabled={!v.availableForSale}
             className={`pack-option${selected ? " selected" : ""}${!v.availableForSale ? " disabled" : ""}`}
-            onClick={() => onSelect(v.id)}
           >
+            <input
+              type="radio"
+              name="pack-option"
+              className="pack-option-input"
+              checked={selected}
+              disabled={!v.availableForSale}
+              onChange={() => onSelect(v.id)}
+            />
+
             {v.badge ? <span className="pack-option-badge">{v.badge}</span> : null}
 
             <span className={`pack-option-radio${selected ? " checked" : ""}`} aria-hidden="true" />
@@ -40,6 +46,7 @@ export default function ProductPackSelector({ variants, selectedId, onSelect }) 
                   ))}
                 </span>
               ) : null}
+              {selected && v.extra ? <span className="pack-option-extra">{v.extra}</span> : null}
             </span>
 
             <span className="pack-option-price">
@@ -50,7 +57,7 @@ export default function ProductPackSelector({ variants, selectedId, onSelect }) 
               {savings > 0 ? <span className="pack-option-savings">Économie réelle : {formatPrice(savings)}</span> : null}
               <span className="pack-option-stock">{v.availableForSale ? "Disponible" : "Rupture de stock"}</span>
             </span>
-          </button>
+          </label>
         );
       })}
     </div>
