@@ -8,16 +8,25 @@ import QtyStepper from "./QtyStepper";
 import Tabs from "./Tabs";
 import TrustRating from "./TrustRating";
 import ReviewsList from "./ReviewsList";
+import ProductPackSelector from "./ProductPackSelector";
 
 const VISIBLE_THUMBS = 3;
 
 export default function ProductInteractive({ product }) {
   const images = (product.images || []).filter((img) => img.url);
   const [activeImage, setActiveImage] = useState(0);
-  const [variant, setVariant] = useState(product.variants?.[0]?.name || "");
+  const isPack = product.source === "shopify" && (product.variants?.length || 0) > 1;
+  const [variant, setVariant] = useState(!isPack ? product.variants?.[0]?.name || "" : "");
+  const [selectedVariantId, setSelectedVariantId] = useState(() => {
+    if (!isPack) return null;
+    return (product.variants.find((v) => v.availableForSale) || product.variants[0]).id;
+  });
   const [qty, setQty] = useState(1);
   const { addItem } = useCart();
   const [added, setAdded] = useState(false);
+
+  const selectedVariant = isPack ? product.variants.find((v) => v.id === selectedVariantId) : null;
+  const displayPrice = selectedVariant ? selectedVariant.price : product.price;
 
   function showPrev() {
     setActiveImage((i) => (i - 1 + images.length) % images.length);
@@ -37,12 +46,12 @@ export default function ProductInteractive({ product }) {
     addItem(
       {
         productId: product.id,
-        name: product.name,
-        price: product.price,
+        name: selectedVariant ? `${product.name} — ${selectedVariant.title}` : product.name,
+        price: displayPrice,
         image: images[0]?.url || "",
         variant,
         source: product.source,
-        shopifyVariantId: product.shopifyVariantId,
+        shopifyVariantId: selectedVariant ? selectedVariant.id : product.shopifyVariantId,
       },
       qty
     );
@@ -113,14 +122,16 @@ export default function ProductInteractive({ product }) {
           <TrustRating average={product.rating?.average || 0} count={product.rating?.count || 0} />
         </div>
 
-        <div className="pd-price">
-          €{product.price.toFixed(2).replace(".", ",")}
-          {product.compareAtPrice ? (
-            <span className="compare" style={{ fontSize: "1.1rem", marginLeft: 10 }}>
-              €{product.compareAtPrice.toFixed(2).replace(".", ",")}
-            </span>
-          ) : null}
-        </div>
+        {!isPack ? (
+          <div className="pd-price">
+            €{product.price.toFixed(2).replace(".", ",")}
+            {product.compareAtPrice ? (
+              <span className="compare" style={{ fontSize: "1.1rem", marginLeft: 10 }}>
+                €{product.compareAtPrice.toFixed(2).replace(".", ",")}
+              </span>
+            ) : null}
+          </div>
+        ) : null}
 
         {product.features?.length ? (
           <ul className="pd-features">
@@ -132,7 +143,13 @@ export default function ProductInteractive({ product }) {
           </ul>
         ) : null}
 
-        {product.variants?.length ? (
+        {isPack ? (
+          <ProductPackSelector
+            variants={product.variants}
+            selectedId={selectedVariantId}
+            onSelect={setSelectedVariantId}
+          />
+        ) : product.variants?.length ? (
           <>
             <p className="pd-variant-label">
               Variante : <em>{variant}</em>

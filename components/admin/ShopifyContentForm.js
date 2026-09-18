@@ -6,6 +6,7 @@ import ImageUploader from "./ImageUploader";
 import SingleImageField from "./SingleImageField";
 import ReviewsEditor from "./ReviewsEditor";
 import ContentBlocksEditor from "./ContentBlocksEditor";
+import VariantInfoEditor from "./VariantInfoEditor";
 import { TrashIcon } from "@/components/Icons";
 import { emptyShopifyContent } from "@/lib/shopifyContent";
 import { slugify } from "@/lib/products";
@@ -55,6 +56,7 @@ export default function ShopifyContentForm({ shopifyProduct, initialContent, cat
   }
 
   const price = Number(shopifyProduct.priceRange.minVariantPrice.amount);
+  const variantNodes = shopifyProduct.variants?.nodes || [];
 
   return (
     <form onSubmit={handleSubmit}>
@@ -119,6 +121,22 @@ export default function ShopifyContentForm({ shopifyProduct, initialContent, cat
           </div>
         </div>
       </div>
+
+      {variantNodes.length > 1 ? (
+        <div className="admin-card">
+          <h2>Formules (variantes Shopify)</h2>
+          <p className="form-hint" style={{ marginBottom: 10 }}>
+            Ce produit a plusieurs variantes sur Shopify (ex : "Caméra seule" / "Pack avec carte SD") — la fiche
+            produit affiche un sélecteur avec le prix réel de chacune. Nom et prix viennent de Shopify ; le reste se
+            règle ici.
+          </p>
+          <VariantInfoEditor
+            variants={variantNodes}
+            value={content.variantInfo}
+            onChange={(variantInfo) => set("variantInfo", variantInfo)}
+          />
+        </div>
+      ) : null}
 
       <div className="admin-card">
         <h2>Photos du produit</h2>
