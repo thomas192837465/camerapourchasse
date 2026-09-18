@@ -10,6 +10,7 @@ import TrustRating from "./TrustRating";
 import ReviewsList from "./ReviewsList";
 import ProductPackSelector from "./ProductPackSelector";
 import FaIcon from "./FaIcon";
+import { cloudinaryTransform } from "@/lib/cloudinaryUrl";
 
 const VISIBLE_THUMBS = 3;
 
@@ -24,6 +25,16 @@ export default function ProductInteractive({ product, bundle }) {
   const [selectedBundleVariantId, setSelectedBundleVariantId] = useState(bundle?.defaultVariantId || null);
   const selectedBundleVariant = hasBundle ? bundle.variants.find((v) => v.id === selectedBundleVariantId) : null;
 
+  const bundledImageNode = product.pack?.bundledImage?.url ? (
+    <img
+      className="pack-option-item-img"
+      src={cloudinaryTransform(product.pack.bundledImage.url, "w_60,h_60,c_fill,q_auto,f_auto")}
+      alt={product.pack.bundledImage.alt || ""}
+    />
+  ) : (
+    <FaIcon name="sdcard" />
+  );
+
   const bundleOptions =
     hasBundle && selectedBundleVariant
       ? [
@@ -34,7 +45,7 @@ export default function ProductInteractive({ product, bundle }) {
             compareAtPrice: product.compareAtPrice || 0,
             availableForSale: product.stock > 0,
             subtitle: product.pack?.soloSubtitle || "",
-            items: [{ icon: "camera", label: `1× ${product.name}` }],
+            items: [{ image: product.pack?.cameraImage, icon: "camera", label: `1× ${product.name}` }],
           },
           {
             id: "pack",
@@ -45,24 +56,28 @@ export default function ProductInteractive({ product, bundle }) {
             availableForSale: product.stock > 0 && selectedBundleVariant.availableForSale,
             subtitle: product.pack?.packSubtitle || "",
             badge: product.pack?.packBadge || "",
-            items: [{ icon: "camera", label: `1× ${product.name}` }],
+            items: [{ image: product.pack?.cameraImage, icon: "camera", label: `1× ${product.name}` }],
             extra:
               bundle.variants.length > 1 ? (
-                <select
-                  value={selectedBundleVariantId}
-                  onChange={(e) => setSelectedBundleVariantId(e.target.value)}
-                  onClick={(e) => e.stopPropagation()}
-                >
-                  {bundle.variants.map((v) => (
-                    <option key={v.id} value={v.id} disabled={!v.availableForSale}>
-                      {bundle.name} — {v.label} ({v.price.toFixed(2).replace(".", ",")}€
-                      {v.availableForSale ? "" : ", rupture de stock"})
-                    </option>
-                  ))}
-                </select>
+                <span className="pack-option-item">
+                  {bundledImageNode}
+                  <select
+                    value={selectedBundleVariantId}
+                    onChange={(e) => setSelectedBundleVariantId(e.target.value)}
+                    onClick={(e) => e.stopPropagation()}
+                  >
+                    {bundle.variants.map((v) => (
+                      <option key={v.id} value={v.id} disabled={!v.availableForSale}>
+                        {bundle.name} — {v.label} ({v.price.toFixed(2).replace(".", ",")}€
+                        {v.availableForSale ? "" : ", rupture de stock"})
+                      </option>
+                    ))}
+                  </select>
+                </span>
               ) : (
                 <span className="pack-option-item">
-                  <FaIcon name="sdcard" /> 1× {bundle.name} — {selectedBundleVariant.label}
+                  {bundledImageNode}
+                  1× {bundle.name} — {selectedBundleVariant.label}
                 </span>
               ),
           },

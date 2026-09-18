@@ -2146,7 +2146,24 @@ h1, h2, h3, h4, p {
 
 .pack-option-extra select {
   font-size: 0.85rem;
-  padding: 6px 10px;
+  padding: 8px 14px;
+  border: 1.5px solid var(--border);
+  border-radius: 999px;
+  background: #fff;
+  color: var(--ink);
+  cursor: pointer;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+
+.pack-option-extra select:hover {
+  border-color: var(--green-600);
+  background: var(--green-50);
+}
+
+.pack-option-extra select:focus {
+  outline: none;
+  border-color: var(--green-600);
+  box-shadow: 0 0 0 3px var(--green-100);
 }
 
 .pack-option.disabled {
@@ -2218,6 +2235,14 @@ h1, h2, h3, h4, p {
   width: 14px;
   height: 14px;
   color: var(--green-600);
+  flex-shrink: 0;
+}
+
+.pack-option-item-img {
+  width: 26px;
+  height: 26px;
+  border-radius: 6px;
+  object-fit: cover;
   flex-shrink: 0;
 }
 

@@ -1,4 +1,5 @@
 import FaIcon from "./FaIcon";
+import { cloudinaryTransform } from "@/lib/cloudinaryUrl";
 
 function formatPrice(value) {
   return `${Number(value).toFixed(2).replace(".", ",")}€`;
@@ -41,7 +42,16 @@ export default function ProductPackSelector({ variants, selectedId, onSelect }) 
                 <span className="pack-option-items">
                   {v.items.map((item, i) => (
                     <span className="pack-option-item" key={i}>
-                      <FaIcon name={item.icon} /> {item.label}
+                      {item.image?.url ? (
+                        <img
+                          className="pack-option-item-img"
+                          src={cloudinaryTransform(item.image.url, "w_60,h_60,c_fill,q_auto,f_auto")}
+                          alt={item.image.alt || ""}
+                        />
+                      ) : (
+                        <FaIcon name={item.icon} />
+                      )}
+                      {item.label}
                     </span>
                   ))}
                 </span>

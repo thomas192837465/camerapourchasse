@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import SingleImageField from "./SingleImageField";
 
 const EMPTY_PACK = {
   enabled: false,
@@ -8,6 +9,8 @@ const EMPTY_PACK = {
   bundledVariantId: "",
   soloTitle: "",
   soloSubtitle: "",
+  cameraImage: { url: "", alt: "" },
+  bundledImage: { url: "", alt: "" },
   packTitle: "",
   packSubtitle: "",
   packBadge: "",
@@ -89,6 +92,17 @@ export default function PackConfigEditor({ value, onChange, excludeProductId }) 
             Le prix du pack est calculé automatiquement (prix de cette fiche + prix du produit ajouté, tous deux
             réels Shopify) — rien à saisir à la main.
           </p>
+
+          <div className="form-grid">
+            <div className="form-field">
+              <label>Photo à côté de la caméra (remplace l'icône par défaut)</label>
+              <SingleImageField value={pack.cameraImage} onChange={(cameraImage) => set({ cameraImage })} />
+            </div>
+            <div className="form-field">
+              <label>Photo à côté du produit ajouté (ex : la carte SD)</label>
+              <SingleImageField value={pack.bundledImage} onChange={(bundledImage) => set({ bundledImage })} />
+            </div>
+          </div>
 
           <div className="form-grid">
             <div className="form-field">
