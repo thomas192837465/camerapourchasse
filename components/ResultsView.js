@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ProductGrid from "./ProductGrid";
 import { GridIcon, ListIcon } from "./Icons";
 
@@ -9,6 +9,13 @@ const PAGE_SIZE = 9;
 export default function ResultsView({ products }) {
   const [view, setView] = useState("grid");
   const [page, setPage] = useState(1);
+
+  // Sur mobile, la vue grille (2 colonnes serrées) est moins lisible que la liste — bascule le
+  // réglage par défaut uniquement au premier rendu client, pour ne jamais désynchroniser du HTML
+  // déjà envoyé par le serveur (qui ignore la largeur d'écran du visiteur).
+  useEffect(() => {
+    if (window.innerWidth <= 640) setView("list");
+  }, []);
 
   const pageCount = Math.max(1, Math.ceil(products.length / PAGE_SIZE));
   const currentPage = Math.min(page, pageCount);

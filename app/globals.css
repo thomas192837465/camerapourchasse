@@ -39,6 +39,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -47,6 +48,7 @@ body {
   color: var(--ink);
   background: var(--bg);
   -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
 }
 
 img {
@@ -1536,6 +1538,32 @@ h1, h2, h3, h4, p {
   color: var(--ink-soft);
 }
 
+.filters-more-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  width: 100%;
+  padding: 12px 0;
+  background: none;
+  border: none;
+  border-top: 1px solid var(--border);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--green-700);
+  cursor: pointer;
+}
+
+.filters-more-toggle:hover {
+  color: var(--green-800);
+}
+
+.filters-more-toggle .icon {
+  width: 14px;
+  height: 14px;
+  transition: transform 0.15s ease;
+}
+
 .filter-checkbox input {
   width: 16px;
   height: 16px;
@@ -1869,6 +1897,10 @@ h1, h2, h3, h4, p {
   align-items: start;
 }
 
+.product-detail > div {
+  min-width: 0;
+}
+
 .gallery-main {
   aspect-ratio: 4 / 3.1;
   border-radius: var(--radius-lg);
@@ -2114,6 +2146,7 @@ h1, h2, h3, h4, p {
   align-items: center;
   gap: 14px;
   width: 100%;
+  min-width: 0;
   padding: 16px 18px;
   background: var(--card);
   border: 1.5px solid var(--border);
@@ -2142,6 +2175,7 @@ h1, h2, h3, h4, p {
 
 .pack-option-extra {
   margin-top: 8px;
+  min-width: 0;
 }
 
 .pack-option-extra select {
@@ -2153,6 +2187,11 @@ h1, h2, h3, h4, p {
   color: var(--ink);
   cursor: pointer;
   transition: border-color 0.15s ease, background 0.15s ease;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .pack-option-extra select:hover {
@@ -2221,6 +2260,7 @@ h1, h2, h3, h4, p {
   flex-direction: column;
   gap: 6px;
   margin-top: 6px;
+  min-width: 0;
 }
 
 .pack-option-item {
@@ -2229,6 +2269,7 @@ h1, h2, h3, h4, p {
   gap: 8px;
   font-size: 0.83rem;
   color: var(--ink-soft);
+  min-width: 0;
 }
 
 .pack-option-item .icon {
@@ -2329,6 +2370,22 @@ h1, h2, h3, h4, p {
 .pd-buy-row .btn-primary {
   flex: 1;
   padding: 13px 20px;
+}
+
+.pd-delivery-estimate {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: -6px 0 18px;
+  font-size: 0.85rem;
+  color: var(--ink-soft);
+}
+
+.pd-delivery-estimate .icon {
+  width: 15px;
+  height: 15px;
+  color: var(--green-600);
+  flex-shrink: 0;
 }
 
 /* ---------- Tabs ---------- */

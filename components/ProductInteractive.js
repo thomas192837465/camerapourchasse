@@ -10,6 +10,7 @@ import TrustRating from "./TrustRating";
 import ReviewsList from "./ReviewsList";
 import ProductPackSelector from "./ProductPackSelector";
 import FaIcon from "./FaIcon";
+import DeliveryEstimate from "./DeliveryEstimate";
 import { cloudinaryTransform } from "@/lib/cloudinaryUrl";
 
 const VISIBLE_THUMBS = 3;
@@ -265,6 +266,8 @@ export default function ProductInteractive({ product, bundle }) {
             {added ? "Ajouté ✓" : "Ajouter au Panier"}
           </button>
         </div>
+
+        <DeliveryEstimate />
 
         <Tabs
           tabs={[

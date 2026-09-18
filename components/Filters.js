@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import { ChevronDownIcon } from "./Icons";
 
@@ -7,6 +8,8 @@ export default function Filters({ categories, options, selectedCategorySlugs }) 
   const RESOLUTION_OPTIONS = options?.resolutionOptions || [];
   const VISION_OPTIONS = options?.visionOptions || [];
   const RANGE_OPTIONS = options?.rangeOptions || [];
+  const hasMoreFilters = Boolean(RESOLUTION_OPTIONS.length || VISION_OPTIONS.length || RANGE_OPTIONS.length);
+  const [showMore, setShowMore] = useState(false);
   const router = useRouter();
   const pathname = usePathname();
   const searchParams = useSearchParams();
@@ -99,64 +102,75 @@ export default function Filters({ categories, options, selectedCategorySlugs }) 
         </div>
       </details>
 
-      {RESOLUTION_OPTIONS.length ? (
-        <details className="filter-group" open>
-          <summary>
-            Résolution <ChevronDownIcon />
-          </summary>
-          <div className="filter-body">
-            {RESOLUTION_OPTIONS.map((opt) => (
-              <label className="filter-checkbox" key={opt}>
-                <input
-                  type="checkbox"
-                  checked={selectedTags.includes(opt)}
-                  onChange={() => toggleListParam("tags", opt, selectedTags)}
-                />
-                {opt}
-              </label>
-            ))}
-          </div>
-        </details>
+      {hasMoreFilters ? (
+        <button type="button" className="filters-more-toggle" onClick={() => setShowMore((v) => !v)}>
+          {showMore ? "Voir moins de filtres" : "Voir plus de filtres"}
+          <ChevronDownIcon style={{ transform: showMore ? "rotate(180deg)" : "none" }} />
+        </button>
       ) : null}
 
-      {VISION_OPTIONS.length ? (
-        <details className="filter-group" open>
-          <summary>
-            Vision de Nuit <ChevronDownIcon />
-          </summary>
-          <div className="filter-body">
-            {VISION_OPTIONS.map((opt) => (
-              <label className="filter-checkbox" key={opt}>
-                <input
-                  type="checkbox"
-                  checked={selectedTags.includes(opt)}
-                  onChange={() => toggleListParam("tags", opt, selectedTags)}
-                />
-                {opt}
-              </label>
-            ))}
-          </div>
-        </details>
-      ) : null}
+      {showMore ? (
+        <>
+          {RESOLUTION_OPTIONS.length ? (
+            <details className="filter-group" open>
+              <summary>
+                Résolution <ChevronDownIcon />
+              </summary>
+              <div className="filter-body">
+                {RESOLUTION_OPTIONS.map((opt) => (
+                  <label className="filter-checkbox" key={opt}>
+                    <input
+                      type="checkbox"
+                      checked={selectedTags.includes(opt)}
+                      onChange={() => toggleListParam("tags", opt, selectedTags)}
+                    />
+                    {opt}
+                  </label>
+                ))}
+              </div>
+            </details>
+          ) : null}
 
-      {RANGE_OPTIONS.length ? (
-        <details className="filter-group" open>
-          <summary>
-            Portée <ChevronDownIcon />
-          </summary>
-          <div className="filter-body">
-            {RANGE_OPTIONS.map((opt) => (
-              <label className="filter-checkbox" key={opt}>
-                <input
-                  type="checkbox"
-                  checked={selectedTags.includes(opt)}
-                  onChange={() => toggleListParam("tags", opt, selectedTags)}
-                />
-                {opt}
-              </label>
-            ))}
-          </div>
-        </details>
+          {VISION_OPTIONS.length ? (
+            <details className="filter-group" open>
+              <summary>
+                Vision de Nuit <ChevronDownIcon />
+              </summary>
+              <div className="filter-body">
+                {VISION_OPTIONS.map((opt) => (
+                  <label className="filter-checkbox" key={opt}>
+                    <input
+                      type="checkbox"
+                      checked={selectedTags.includes(opt)}
+                      onChange={() => toggleListParam("tags", opt, selectedTags)}
+                    />
+                    {opt}
+                  </label>
+                ))}
+              </div>
+            </details>
+          ) : null}
+
+          {RANGE_OPTIONS.length ? (
+            <details className="filter-group" open>
+              <summary>
+                Portée <ChevronDownIcon />
+              </summary>
+              <div className="filter-body">
+                {RANGE_OPTIONS.map((opt) => (
+                  <label className="filter-checkbox" key={opt}>
+                    <input
+                      type="checkbox"
+                      checked={selectedTags.includes(opt)}
+                      onChange={() => toggleListParam("tags", opt, selectedTags)}
+                    />
+                    {opt}
+                  </label>
+                ))}
+              </div>
+            </details>
+          ) : null}
+        </>
       ) : null}
     </aside>
   );
