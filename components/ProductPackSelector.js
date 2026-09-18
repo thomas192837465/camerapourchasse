@@ -56,7 +56,7 @@ export default function ProductPackSelector({ variants, selectedId, onSelect }) 
                   ))}
                 </span>
               ) : null}
-              {selected && v.extra ? <span className="pack-option-extra">{v.extra}</span> : null}
+              {v.extra ? <span className="pack-option-extra">{v.extra}</span> : null}
             </span>
 
             <span className="pack-option-price">
