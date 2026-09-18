@@ -55,7 +55,7 @@ function TestimonialCard({ item }) {
           href={`/produits/${item.product.categoryId}/${item.product.slug}`}
           className="testimonial-verified"
         >
-          <CheckIcon /> Achat vérifié — {item.product.name}
+          <CheckIcon /> Achat vérifié
         </Link>
       ) : null}
     </div>
