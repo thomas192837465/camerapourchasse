@@ -31,7 +31,15 @@ export default function TestimonialsEditor({ testimonials, onChange }) {
   function add() {
     onChange([
       ...testimonials,
-      { id: `temoignage-${Date.now()}`, name: "", rating: 5, title: "", text: "", image: { url: "", alt: "" } },
+      {
+        id: `temoignage-${Date.now()}`,
+        name: "",
+        rating: 5,
+        title: "",
+        text: "",
+        avatar: { url: "", alt: "" },
+        image: { url: "", alt: "" },
+      },
     ]);
   }
 
@@ -62,6 +70,11 @@ export default function TestimonialsEditor({ testimonials, onChange }) {
           </div>
 
           <div className="form-field" style={{ marginTop: 10 }}>
+            <label>Photo de profil (optionnelle — sinon initiales du nom)</label>
+            <SingleImageField value={item.avatar} onChange={(avatar) => update(i, { avatar })} />
+          </div>
+
+          <div className="form-field" style={{ marginTop: 10 }}>
             <label>Titre court (ex : "Alertes reçues rapidement")</label>
             <input value={item.title} onChange={(e) => update(i, { title: e.target.value })} />
           </div>
@@ -72,7 +85,7 @@ export default function TestimonialsEditor({ testimonials, onChange }) {
           </div>
 
           <div className="form-field" style={{ marginTop: 10 }}>
-            <label>Photo (optionnelle — ex : capture envoyée par le client)</label>
+            <label>Photo jointe (optionnelle — ex : capture d'écran envoyée par le client)</label>
             <SingleImageField value={item.image} onChange={(image) => update(i, { image })} />
           </div>
         </div>

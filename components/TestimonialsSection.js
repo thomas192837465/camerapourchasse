@@ -37,7 +37,18 @@ function TestimonialCard({ item }) {
           alt={item.image.alt || `Photo envoyée par ${item.name}`}
         />
       ) : null}
-      <strong className="testimonial-name">{item.name}</strong>
+      <div className="testimonial-author">
+        {item.avatar?.url ? (
+          <img
+            className="review-avatar-img"
+            src={cloudinaryTransform(item.avatar.url, "w_100,q_auto,f_auto")}
+            alt={item.avatar.alt || `Photo de profil de ${item.name}`}
+          />
+        ) : (
+          <span className="avatar">{item.name.slice(0, 2).toUpperCase()}</span>
+        )}
+        <strong className="testimonial-name">{item.name}</strong>
+      </div>
     </div>
   );
 }
