@@ -12,21 +12,55 @@ import ProductPackSelector from "./ProductPackSelector";
 
 const VISIBLE_THUMBS = 3;
 
-export default function ProductInteractive({ product }) {
+export default function ProductInteractive({ product, bundle }) {
   const images = (product.images || []).filter((img) => img.url);
   const [activeImage, setActiveImage] = useState(0);
-  const isPack = product.source === "shopify" && (product.variants?.length || 0) > 1;
-  const [variant, setVariant] = useState(!isPack ? product.variants?.[0]?.name || "" : "");
-  const [selectedVariantId, setSelectedVariantId] = useState(() => {
-    if (!isPack) return null;
+
+  // Pack croisé avec un autre produit Shopify (ex : caméra + carte SD vendue séparément) : prend
+  // le pas sur le sélecteur de variantes "classique" ci-dessous, qui reste utile pour un produit
+  // ayant plusieurs vraies variantes Shopify (couleur, capacité...) sans pack.
+  const hasBundle = product.source === "shopify" && Boolean(bundle);
+  const bundleOptions = hasBundle
+    ? [
+        {
+          id: "solo",
+          title: product.pack?.soloTitle || product.name,
+          price: product.price,
+          compareAtPrice: product.compareAtPrice || 0,
+          availableForSale: product.stock > 0,
+          subtitle: product.pack?.soloSubtitle || "",
+          items: [{ icon: "camera", label: `1× ${product.name}` }],
+        },
+        {
+          id: "pack",
+          title: product.pack?.packTitle || `Pack avec ${bundle.name}`,
+          price: product.price + bundle.price,
+          compareAtPrice: (product.compareAtPrice || product.price) + (bundle.compareAtPrice || bundle.price),
+          availableForSale: product.stock > 0 && bundle.availableForSale,
+          subtitle: product.pack?.packSubtitle || "",
+          badge: product.pack?.packBadge || "",
+          items: [
+            { icon: "camera", label: `1× ${product.name}` },
+            { icon: "sdcard", label: `1× ${bundle.name}` },
+          ],
+        },
+      ]
+    : null;
+
+  const isMultiVariant = product.source === "shopify" && !hasBundle && (product.variants?.length || 0) > 1;
+  const [variant, setVariant] = useState(!hasBundle && !isMultiVariant ? product.variants?.[0]?.name || "" : "");
+  const [selectedOptionId, setSelectedOptionId] = useState(() => {
+    if (hasBundle) return "solo";
+    if (!isMultiVariant) return null;
     return (product.variants.find((v) => v.availableForSale) || product.variants[0]).id;
   });
   const [qty, setQty] = useState(1);
   const { addItem } = useCart();
   const [added, setAdded] = useState(false);
 
-  const selectedVariant = isPack ? product.variants.find((v) => v.id === selectedVariantId) : null;
-  const displayPrice = selectedVariant ? selectedVariant.price : product.price;
+  const selectedBundleOption = hasBundle ? bundleOptions.find((o) => o.id === selectedOptionId) : null;
+  const selectedVariant = isMultiVariant ? product.variants.find((v) => v.id === selectedOptionId) : null;
+  const displayPrice = selectedBundleOption ? selectedBundleOption.price : selectedVariant ? selectedVariant.price : product.price;
 
   function showPrev() {
     setActiveImage((i) => (i - 1 + images.length) % images.length);
@@ -47,7 +81,7 @@ export default function ProductInteractive({ product }) {
       {
         productId: product.id,
         name: selectedVariant ? `${product.name} — ${selectedVariant.title}` : product.name,
-        price: displayPrice,
+        price: hasBundle ? product.price : displayPrice,
         image: images[0]?.url || "",
         variant,
         source: product.source,
@@ -55,6 +89,25 @@ export default function ProductInteractive({ product }) {
       },
       qty
     );
+
+    // Pack sélectionné : la carte SD (ou tout autre produit bundlé) est un vrai produit Shopify à
+    // part entière, ajoutée comme une SECONDE ligne de panier — pour que la commande Shopify
+    // finale ait deux lignes distinctes, chacune fournie et suivie séparément (voir DSers).
+    if (hasBundle && selectedOptionId === "pack") {
+      addItem(
+        {
+          productId: bundle.productId,
+          name: bundle.name,
+          price: bundle.price,
+          image: bundle.image || "",
+          variant: "",
+          source: "shopify",
+          shopifyVariantId: bundle.variantId,
+        },
+        qty
+      );
+    }
+
     setAdded(true);
     setTimeout(() => setAdded(false), 2000);
   }
@@ -122,7 +175,7 @@ export default function ProductInteractive({ product }) {
           <TrustRating average={product.rating?.average || 0} count={product.rating?.count || 0} />
         </div>
 
-        {!isPack ? (
+        {!hasBundle ? (
           <div className="pd-price">
             €{product.price.toFixed(2).replace(".", ",")}
             {product.compareAtPrice ? (
@@ -143,13 +196,13 @@ export default function ProductInteractive({ product }) {
           </ul>
         ) : null}
 
-        {isPack ? (
+        {hasBundle ? (
           <ProductPackSelector
-            variants={product.variants}
-            selectedId={selectedVariantId}
-            onSelect={setSelectedVariantId}
+            variants={bundleOptions}
+            selectedId={selectedOptionId}
+            onSelect={setSelectedOptionId}
           />
-        ) : product.variants?.length ? (
+        ) : product.source !== "shopify" && product.variants?.length ? (
           <>
             <p className="pd-variant-label">
               Variante : <em>{variant}</em>

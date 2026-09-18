@@ -3,7 +3,7 @@ import ProductInteractive from "./ProductInteractive";
 import ProductCarousel from "./ProductCarousel";
 import ContentBlocks from "./ContentBlocks";
 
-export default function ProductDetail({ product, category, related, siteName, siteUrl = "" }) {
+export default function ProductDetail({ product, category, related, siteName, siteUrl = "", bundle }) {
   const productUrl = `${siteUrl}/produits/${product.categoryId}/${product.slug}`;
   const faq = (product.faq || []).filter((f) => f.question && f.answer);
   const validReviews = (product.reviews || []).filter((r) => r.name && r.text);
@@ -97,7 +97,7 @@ export default function ProductDetail({ product, category, related, siteName, si
         <span className="current">{product.name}</span>
       </nav>
 
-      <ProductInteractive product={product} />
+      <ProductInteractive product={product} bundle={bundle} />
 
       <ContentBlocks blocks={product.blocks} />
 

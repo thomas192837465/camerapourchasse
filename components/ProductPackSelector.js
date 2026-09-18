@@ -20,7 +20,8 @@ export default function ProductPackSelector({ variants, selectedId, onSelect }) 
             key={v.id}
             role="radio"
             aria-checked={selected}
-            className={`pack-option${selected ? " selected" : ""}`}
+            disabled={!v.availableForSale}
+            className={`pack-option${selected ? " selected" : ""}${!v.availableForSale ? " disabled" : ""}`}
             onClick={() => onSelect(v.id)}
           >
             {v.badge ? <span className="pack-option-badge">{v.badge}</span> : null}

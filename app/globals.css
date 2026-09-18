@@ -2128,6 +2128,11 @@ h1, h2, h3, h4, p {
   background: var(--green-50);
 }
 
+.pack-option.disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
 .pack-option-badge {
   position: absolute;
   top: -11px;

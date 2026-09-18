@@ -1,5 +1,5 @@
 import { notFound, redirect } from "next/navigation";
-import { getProductBySlug, getRelatedProducts } from "@/lib/products";
+import { getProductBySlug, getRelatedProducts, getBundledVariant } from "@/lib/products";
 import { getCategoryBySlug } from "@/lib/categories";
 import { getSettings } from "@/lib/settings";
 import { pageMetadata } from "@/lib/metadata";
@@ -36,10 +36,11 @@ export default async function ProductPage({ params }) {
     redirect(`/produits/${product.categoryId}/${slug}`);
   }
 
-  const [category, related, seo] = await Promise.all([
+  const [category, related, seo, bundle] = await Promise.all([
     getCategoryBySlug(product.categoryId),
     getRelatedProducts(product.categoryId, product.id, 24),
     getSettings("seo"),
+    getBundledVariant(product.pack),
   ]);
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "";
@@ -51,6 +52,7 @@ export default async function ProductPage({ params }) {
       related={related}
       siteName={seo.siteTitle}
       siteUrl={siteUrl}
+      bundle={bundle}
     />
   );
 }
