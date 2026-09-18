@@ -1,0 +1,1685 @@
+{
+  "genere_le": "2026-09-18",
+  "source": "WildTrail_Strategie_Blog_SEO.xlsx (onglet Calendrier éditorial + Mots-clés)",
+  "consignes_contenu": {
+    "longueur_cible_mots": "1800-2400 mots par article (hors FAQ)",
+    "nb_tableaux_minimum": 2,
+    "detail_tableaux": "Un tableau « critères / cas d'usage » généraliste sur le sujet, ET un tableau « sélection WildTrail » qui compare les modèles pertinents. Chaque tableau : au moins 5 lignes. Le format du site n'a que 2 colonnes (Libellé / Valeur) : chaque valeur doit donc combiner plusieurs informations utiles (ex. pour un modèle produit : connectivité + autonomie + cas d'usage + positionnement prix), jamais un mot isolé.",
+    "paragraphes_min_par_sous_titre": 2,
+    "sections_h2_secondaires_min": 2,
+    "exemples_sections_secondaires": [
+      "Les erreurs à éviter",
+      "Entretien / durée de vie",
+      "Aspects légaux si pertinent"
+    ],
+    "questions_faq_min": 5
+  },
+  "persona": {
+    "nom": "Julien Fontaine, « Le Traqueur Connecté »",
+    "age_situation": "43 ans, en couple, deux enfants. Vit en zone rurale (Bourgogne/Sologne type). Technicien de maintenance de profession, chasseur et passionné de nature depuis l'adolescence.",
+    "profil": "Chasseur régulier (grand gibier, battues et affûts) et gestionnaire d'un territoire de chasse associatif. Bricoleur, à l'aise avec la technologie sans être un expert IT. Suit plusieurs forums et groupes Facebook de chasseurs, regarde des vidéos YouTube de tests matériel avant d'acheter.",
+    "objectifs": [
+      "Suivre les déplacements et les horaires de passage du gibier sans être présent sur le terrain.",
+      "Sécuriser et surveiller son terrain, sa cabane ou son matériel contre le vol.",
+      "Gagner du temps : recevoir les photos directement sur son téléphone plutôt que de se déplacer relever la carte SD.",
+      "Faire un achat malin : bon rapport qualité-prix, matériel fiable qui dure plusieurs saisons.",
+      "Progresser techniquement (réglages, emplacement, autonomie) pour obtenir de meilleurs clichés."
+    ],
+    "freins_objections": [
+      "Peur de se tromper de modèle et de payer un abonnement caché (carte SIM, forfait data).",
+      "Craint que la caméra soit facilement repérée ou volée sur le terrain.",
+      "A déjà été déçu par du matériel bas de gamme (photos floues, batterie qui se vide vite).",
+      "Ne sait pas toujours ce que dit la loi sur l'installation d'une caméra en pleine nature.",
+      "Hésite entre les grandes enseignes généralistes (Decathlon, Amazon...) et un spécialiste comme WildTrail."
+    ],
+    "comportement_recherche": [
+      "Tape des requêtes très concrètes et comparatives (« meilleure caméra de chasse », « caméra de chasse 4G pas cher »).",
+      "Consulte les avis et comparatifs avant tout achat, lit les FAQ et les fiches techniques en détail.",
+      "Pose des questions pratiques de type « comment » et « où » (installation, emplacement, carte SIM).",
+      "De plus en plus, formule ses recherches comme des questions complètes à l'oral ou dans des assistants IA (« quelle est la meilleure caméra de chasse en 2026 ? »)."
+    ],
+    "ton_editorial": "Ton chaleureux, concret et complice, comme un conseil donné par un ami passionné et expérimenté sur le terrain — jamais condescendant, toujours pédagogue. Vocabulaire technique expliqué simplement, exemples de terrain réels (postes d'affût, coulées, points d'eau), anecdotes courtes en introduction. Chaque article doit répondre vite et clairement à la question posée (les 2-3 premières phrases doivent pouvoir être lues seules et rester compréhensibles, pour optimiser l'extraction par Google et les IA génératives), puis développer en profondeur pour le lecteur qui veut aller plus loin.",
+    "personas_secondaires": "Des audiences connexes émergent des données (propriétaires souhaitant surveiller un jardin/chantier, naturalistes/observateurs d'animaux). Elles sont adressées par les articles A21 et A22 avec un angle plus généraliste, sans dupliquer le persona principal."
+  },
+  "articles": [
+    {
+      "id": "A1",
+      "slug_prevu": "camera-de-chasse-le-guide-complet-2026-pour-bien-choisir-la-votre",
+      "mois": 1,
+      "priorite": "Haute",
+      "pilier": "Cœur de cible / Page pilier",
+      "categorie_blog": "Guide d'achat",
+      "titre_seo": "Caméra de chasse : le guide complet 2026 pour bien choisir la vôtre",
+      "mot_cle_principal": "caméra de chasse",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "camera de chasse",
+          "volume": 13900
+        },
+        {
+          "mot_cle": "camera chasse",
+          "volume": 5300
+        },
+        {
+          "mot_cle": "camera pour chasseur",
+          "volume": 3176
+        },
+        {
+          "mot_cle": "caméras de chasse",
+          "volume": 1400
+        },
+        {
+          "mot_cle": "camera.de chasse",
+          "volume": 1392
+        },
+        {
+          "mot_cle": "caméra de chasse",
+          "volume": 1392
+        },
+        {
+          "mot_cle": "camera animaux",
+          "volume": 909
+        },
+        {
+          "mot_cle": "camera de chasse connectee",
+          "volume": 720
+        }
+      ],
+      "type_contenu": "Guide pilier (page cluster)",
+      "intention": "Informationnelle + Commerciale",
+      "questions_paa": [
+        "Quelle est la meilleure caméra de chasse ?",
+        "Comment choisir une caméra de chasse ?",
+        "Comment fonctionne une caméra de chasse ?",
+        "Où placer caméra de chasse ?"
+      ],
+      "angle_editorial": "Julien débute ou renouvelle son matériel : cet article sert de hub qui répond à toutes ses questions de premier niveau (types de caméras, critères clés, budget) et renvoie vers tous les guides plus poussés du blog.",
+      "vous_aimerez_aussi_ids": [
+        "A4",
+        "A2",
+        "A12"
+      ],
+      "section_produit_instruction": "Tableau de synthèse des 5 modèles WildTrail (H20, H40, H80 solaires 4G ; C20 Wifi/Bluetooth ; C40 4G) avec CTA vers la boutique complète.",
+      "url_produit_suggeree": "https://wildtrail.fr/produits",
+      "meta_description": "Guide complet 2026 pour choisir sa caméra de chasse : types, critères, budget et conseils d'expert. Découvrez la sélection WildTrail.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Quelle est la meilleure caméra de chasse en 2026 ? Notre comparatif détaillé",
+        "Caméra de chasse pas chère ou haut de gamme : comment faire le bon choix sans se tromper ?",
+        "Vision nocturne et infrarouge : comment capturer le gibier de nuit avec sa caméra de chasse"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/quelle-est-la-meilleure-camera-de-chasse-en-2026-notre-comparatif-detaille",
+        "/blog/camera-de-chasse-pas-chere-ou-haut-de-gamme-comment-faire-le-bon-choix-sans-se-tromper",
+        "/blog/vision-nocturne-et-infrarouge-comment-capturer-le-gibier-de-nuit-avec-sa-camera-de-chasse"
+      ]
+    },
+    {
+      "id": "A2",
+      "slug_prevu": "camera-de-chasse-pas-chere-ou-haut-de-gamme-comment-faire-le-bon-choix-sans-se-tromper",
+      "mois": 1,
+      "priorite": "Moyenne",
+      "pilier": "Prix & budget",
+      "categorie_blog": "Prix & budget",
+      "titre_seo": "Caméra de chasse pas chère ou haut de gamme : comment faire le bon choix sans se tromper ?",
+      "mot_cle_principal": "caméra de chasse pas cher",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "caméra de chasse pas cher",
+          "volume": 140
+        },
+        {
+          "mot_cle": "camera pour la chasse pas cher",
+          "volume": 40
+        },
+        {
+          "mot_cle": "caméra de chasse 4g pas cher",
+          "volume": 20
+        },
+        {
+          "mot_cle": "camera de chasse pas cher",
+          "volume": 12
+        },
+        {
+          "mot_cle": "caméra de chasse prix",
+          "volume": 8
+        },
+        {
+          "mot_cle": "camera infrarouge de chasse pas cher",
+          "volume": 0
+        },
+        {
+          "mot_cle": "prix caméra de chasse",
+          "volume": 0
+        },
+        {
+          "mot_cle": "prix d'une caméra de chasse",
+          "volume": 0
+        }
+      ],
+      "type_contenu": "Guide comparatif budget",
+      "intention": "Commerciale",
+      "questions_paa": [
+        "prix caméra de chasse",
+        "Quel est le prix d'une GoPro ?",
+        "gopro decathlon prix"
+      ],
+      "angle_editorial": "Julien a un budget serré mais ne veut pas racheter une caméra dans 6 mois : on l'aide à distinguer le prix d'appel du vrai bon plan, avec une grille « à ne pas sacrifier / ce qui peut attendre » selon le budget.",
+      "vous_aimerez_aussi_ids": [
+        "A1",
+        "A19",
+        "A10"
+      ],
+      "section_produit_instruction": "Comparatif de prix des 5 modèles avec mise en avant du meilleur point d'entrée (C20, sans abonnement) et de la gamme solaire pour un investissement durable.",
+      "url_produit_suggeree": "https://wildtrail.fr/produits",
+      "meta_description": "Caméra de chasse pas chère ou premium ? Notre grille de choix par budget pour ne pas se tromper, avec la sélection WildTrail.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Caméra de chasse : le guide complet 2026 pour bien choisir la vôtre",
+        "Caméra de chasse Decathlon, Lidl, Amazon : bon plan ou fausse bonne idée face à un spécialiste ?",
+        "Batterie de caméra de chasse : lithium, rechargeable ou piles classiques, que choisir ?"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/camera-de-chasse-le-guide-complet-2026-pour-bien-choisir-la-votre",
+        "/blog/camera-de-chasse-decathlon-lidl-amazon-bon-plan-ou-fausse-bonne-idee-face-a-un-specialiste",
+        "/blog/batterie-de-camera-de-chasse-lithium-rechargeable-ou-piles-classiques-que-choisir"
+      ]
+    },
+    {
+      "id": "A3",
+      "slug_prevu": "camera-de-chasse-connectee-au-telephone-comment-ca-marche-et-pourquoi-l-adopter",
+      "mois": 1,
+      "priorite": "Haute",
+      "pilier": "Connectivité",
+      "categorie_blog": "Connectivité",
+      "titre_seo": "Caméra de chasse connectée au téléphone : comment ça marche et pourquoi l'adopter",
+      "mot_cle_principal": "caméra de chasse connectée au téléphone",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "caméra de chasse connectée au téléphone",
+          "volume": 1400
+        }
+      ],
+      "type_contenu": "Guide pratique + explicatif",
+      "intention": "Informationnelle + Transactionnelle",
+      "questions_paa": [
+        "Quel forfait pour caméra de chasse ?",
+        "Comment fonctionne caméra de chasse GSM ?",
+        "Quelle carte SIM pour caméra ?"
+      ],
+      "angle_editorial": "Julien en a assez de faire l'aller-retour jusqu'à sa caméra pour récupérer la carte SD : on lui montre comment les photos arrivent directement sur son téléphone, avec captures d'app à l'appui.",
+      "vous_aimerez_aussi_ids": [
+        "A5",
+        "A6",
+        "A7"
+      ],
+      "section_produit_instruction": "Démonstration de l'appli WildTrail + CTA vers la gamme connectée (C20, C40).",
+      "url_produit_suggeree": "https://wildtrail.fr/produits/cameras-de-chasse-connectees",
+      "meta_description": "Découvrez comment une caméra de chasse connectée envoie ses photos directement sur votre téléphone, sans vous déplacer sur le terrain.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Caméra de chasse 4G, GSM ou Wifi : quelle connectivité choisir selon votre terrain",
+        "Quelle carte SIM choisir pour votre caméra de chasse (Orange, SFR, Bouygues, sans abonnement) ?",
+        "Caméra de chasse sans abonnement : le guide pour rester 100% autonome"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/camera-de-chasse-4g-gsm-ou-wifi-quelle-connectivite-choisir-selon-votre-terrain",
+        "/blog/quelle-carte-sim-choisir-pour-votre-camera-de-chasse-orange-sfr-bouygues-sans-abonnement",
+        "/blog/camera-de-chasse-sans-abonnement-le-guide-pour-rester-100-autonome"
+      ]
+    },
+    {
+      "id": "A4",
+      "slug_prevu": "quelle-est-la-meilleure-camera-de-chasse-en-2026-notre-comparatif-detaille",
+      "mois": 1,
+      "priorite": "Haute",
+      "pilier": "Comparatif & guide d'achat",
+      "categorie_blog": "Guide d'achat",
+      "titre_seo": "Quelle est la meilleure caméra de chasse en 2026 ? Notre comparatif détaillé",
+      "mot_cle_principal": "meilleure caméra de chasse",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "meilleurs camera de chasse",
+          "volume": 369
+        },
+        {
+          "mot_cle": "meilleur camera de chasse",
+          "volume": 369
+        },
+        {
+          "mot_cle": "test camera de chasse",
+          "volume": 38
+        },
+        {
+          "mot_cle": "meilleur caméra de chasse",
+          "volume": 37
+        },
+        {
+          "mot_cle": "meilleure camera de chasse",
+          "volume": 37
+        },
+        {
+          "mot_cle": "meilleure caméra de chasse",
+          "volume": 37
+        },
+        {
+          "mot_cle": "quelle est la meilleure camera de chasse",
+          "volume": 23
+        },
+        {
+          "mot_cle": "caméra de chasse laquelle choisir",
+          "volume": 10
+        }
+      ],
+      "type_contenu": "Comparatif produit",
+      "intention": "Commerciale",
+      "questions_paa": [
+        "Quelle est la meilleure caméra de chasse ?",
+        "Quel est la meilleure caméra pour la chasse ?",
+        "Quelles sont les meilleures caméras de chasse ?"
+      ],
+      "angle_editorial": "Julien hésite entre plusieurs modèles avant la saison : comparatif clair en tableau (autonomie, connectivité, vision nocturne, prix) pour trancher en 5 minutes.",
+      "vous_aimerez_aussi_ids": [
+        "A1",
+        "A20",
+        "A19"
+      ],
+      "section_produit_instruction": "Tableau comparatif des 5 modèles avec une recommandation « meilleur choix global » (H80) et « meilleur rapport qualité-prix » (C20 ou H40) — à confirmer avec l'équipe produit.",
+      "url_produit_suggeree": "https://wildtrail.fr/produits",
+      "meta_description": "Quelle est la meilleure caméra de chasse en 2026 ? Comparatif détaillé (autonomie, 4G, vision nocturne) pour choisir sans hésiter.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Caméra de chasse : le guide complet 2026 pour bien choisir la vôtre",
+        "Bushnell, Spypoint, Browning, Apeman... : comparatif des grandes marques de caméras de chasse",
+        "Caméra de chasse Decathlon, Lidl, Amazon : bon plan ou fausse bonne idée face à un spécialiste ?"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/camera-de-chasse-le-guide-complet-2026-pour-bien-choisir-la-votre",
+        "/blog/bushnell-spypoint-browning-apeman-comparatif-des-grandes-marques-de-cameras-de-chasse",
+        "/blog/camera-de-chasse-decathlon-lidl-amazon-bon-plan-ou-fausse-bonne-idee-face-a-un-specialiste"
+      ]
+    },
+    {
+      "id": "A5",
+      "slug_prevu": "camera-de-chasse-4g-gsm-ou-wifi-quelle-connectivite-choisir-selon-votre-terrain",
+      "mois": 2,
+      "priorite": "Haute",
+      "pilier": "Connectivité",
+      "categorie_blog": "Connectivité",
+      "titre_seo": "Caméra de chasse 4G, GSM ou Wifi : quelle connectivité choisir selon votre terrain",
+      "mot_cle_principal": "caméra de chasse wifi",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "camera de chasse wifi",
+          "volume": 436
+        },
+        {
+          "mot_cle": "camera chasse wifi",
+          "volume": 236
+        },
+        {
+          "mot_cle": "caméra de chasse 4g",
+          "volume": 145
+        },
+        {
+          "mot_cle": "caméra de chasse bolyguard 4g",
+          "volume": 70
+        },
+        {
+          "mot_cle": "caméra de chasse wifi",
+          "volume": 44
+        },
+        {
+          "mot_cle": "bolyguard 4g caméra de chasse gsm 24mp 1080p",
+          "volume": 30
+        },
+        {
+          "mot_cle": "caméra chasse wifi",
+          "volume": 24
+        },
+        {
+          "mot_cle": "caméra chasse 4g",
+          "volume": 14
+        }
+      ],
+      "type_contenu": "Guide comparatif technique",
+      "intention": "Informationnelle + Commerciale",
+      "questions_paa": [
+        "comment fonctionne une caméra de chasse wifi",
+        "Quelle caméra 4G choisir ?",
+        "Quelle caméra de chasse Wifi choisir ?"
+      ],
+      "angle_editorial": "Julien ne capte pas toujours bien sur son terrain de chasse : on l'aide à choisir la techno selon la couverture réseau et l'usage (proche de la maison vs terrain isolé).",
+      "vous_aimerez_aussi_ids": [
+        "A3",
+        "A6",
+        "A7"
+      ],
+      "section_produit_instruction": "Comparatif C20 (Wifi/Bluetooth local, sans réseau mobile) vs H20/H40/H80/C40 (4G) selon la couverture réseau du terrain de chasse.",
+      "url_produit_suggeree": "https://wildtrail.fr/produits/cameras-de-chasse-connectees",
+      "meta_description": "4G, GSM ou Wifi : quelle connectivité choisir pour votre caméra de chasse selon votre terrain et la couverture réseau disponible.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Caméra de chasse connectée au téléphone : comment ça marche et pourquoi l'adopter",
+        "Quelle carte SIM choisir pour votre caméra de chasse (Orange, SFR, Bouygues, sans abonnement) ?",
+        "Caméra de chasse sans abonnement : le guide pour rester 100% autonome"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/camera-de-chasse-connectee-au-telephone-comment-ca-marche-et-pourquoi-l-adopter",
+        "/blog/quelle-carte-sim-choisir-pour-votre-camera-de-chasse-orange-sfr-bouygues-sans-abonnement",
+        "/blog/camera-de-chasse-sans-abonnement-le-guide-pour-rester-100-autonome"
+      ]
+    },
+    {
+      "id": "A6",
+      "slug_prevu": "quelle-carte-sim-choisir-pour-votre-camera-de-chasse-orange-sfr-bouygues-sans-abonnement",
+      "mois": 2,
+      "priorite": "Moyenne",
+      "pilier": "Connectivité",
+      "categorie_blog": "Connectivité",
+      "titre_seo": "Quelle carte SIM choisir pour votre caméra de chasse (Orange, SFR, Bouygues, sans abonnement) ?",
+      "mot_cle_principal": "carte sim pour caméra de chasse orange",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "carte sim pour caméra de chasse orange",
+          "volume": 90
+        },
+        {
+          "mot_cle": "carte sim sfr pour caméra de chasse",
+          "volume": 50
+        },
+        {
+          "mot_cle": "quelle carte sim pour caméra de chasse",
+          "volume": 20
+        },
+        {
+          "mot_cle": "caméra de chasse avec carte sim",
+          "volume": 13
+        },
+        {
+          "mot_cle": "carte sim pour caméra de chasse",
+          "volume": 13
+        },
+        {
+          "mot_cle": "quelle carte sim pour caméra de surveillance",
+          "volume": 10
+        },
+        {
+          "mot_cle": "Quelle carte SIM pour caméra ?",
+          "volume": 0
+        },
+        {
+          "mot_cle": "Quelle carte SIM pour caméra GSM ?",
+          "volume": 0
+        }
+      ],
+      "type_contenu": "Guide pratique",
+      "intention": "Informationnelle + Transactionnelle",
+      "questions_paa": [
+        "Quelle carte SIM pour caméra de chasse ?",
+        "Quel forfait pour caméra de chasse ?",
+        "Quelle carte SIM pour caméra GSM ?"
+      ],
+      "angle_editorial": "Julien s'est déjà fait avoir par un forfait mal adapté : comparatif des opérateurs et cartes M2M prépayées, avec conseils pour éviter les frais cachés.",
+      "vous_aimerez_aussi_ids": [
+        "A3",
+        "A5",
+        "A7"
+      ],
+      "section_produit_instruction": "CTA vers les modèles 4G (H20, H40, H80, C40) + rappel des opérateurs compatibles à vérifier sur chaque fiche produit.",
+      "url_produit_suggeree": "https://wildtrail.fr/produits/cameras-de-chasse-connectees",
+      "meta_description": "Orange, SFR, Bouygues, sans abonnement : quelle carte SIM choisir pour votre caméra de chasse ? Notre comparatif complet 2026.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Caméra de chasse connectée au téléphone : comment ça marche et pourquoi l'adopter",
+        "Caméra de chasse 4G, GSM ou Wifi : quelle connectivité choisir selon votre terrain",
+        "Caméra de chasse sans abonnement : le guide pour rester 100% autonome"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/camera-de-chasse-connectee-au-telephone-comment-ca-marche-et-pourquoi-l-adopter",
+        "/blog/camera-de-chasse-4g-gsm-ou-wifi-quelle-connectivite-choisir-selon-votre-terrain",
+        "/blog/camera-de-chasse-sans-abonnement-le-guide-pour-rester-100-autonome"
+      ]
+    },
+    {
+      "id": "A7",
+      "slug_prevu": "camera-de-chasse-sans-abonnement-le-guide-pour-rester-100-autonome",
+      "mois": 2,
+      "priorite": "Basse",
+      "pilier": "Connectivité",
+      "categorie_blog": "Connectivité",
+      "titre_seo": "Caméra de chasse sans abonnement : le guide pour rester 100% autonome",
+      "mot_cle_principal": "caméra de chasse sans abonnement",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "caméra de chasse sans abonnement",
+          "volume": 70
+        },
+        {
+          "mot_cle": "caméra de chasse 4g sans abonnement",
+          "volume": 16
+        }
+      ],
+      "type_contenu": "Guide comparatif",
+      "intention": "Informationnelle + Commerciale",
+      "questions_paa": [
+        "Quel forfait pour caméra de chasse ?"
+      ],
+      "angle_editorial": "Julien ne veut pas payer un forfait mensuel juste pour surveiller un coin de forêt : on lui présente les alternatives (carte SD classique, caméra Wifi locale) et leurs compromis.",
+      "vous_aimerez_aussi_ids": [
+        "A5",
+        "A6",
+        "A2"
+      ],
+      "section_produit_instruction": "CTA fort vers le WildTrail C20 : seul modèle Wifi + Bluetooth ne nécessitant aucun abonnement ni carte SIM.",
+      "url_produit_suggeree": "https://wildtrail.fr/produits/cameras-de-chasse-connectees/wildtrail-c20-camera-chasse-wifi-bluetooth",
+      "meta_description": "Caméra de chasse sans abonnement : les solutions pour surveiller votre terrain sans payer de forfait mensuel.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Caméra de chasse 4G, GSM ou Wifi : quelle connectivité choisir selon votre terrain",
+        "Quelle carte SIM choisir pour votre caméra de chasse (Orange, SFR, Bouygues, sans abonnement) ?",
+        "Caméra de chasse pas chère ou haut de gamme : comment faire le bon choix sans se tromper ?"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/camera-de-chasse-4g-gsm-ou-wifi-quelle-connectivite-choisir-selon-votre-terrain",
+        "/blog/quelle-carte-sim-choisir-pour-votre-camera-de-chasse-orange-sfr-bouygues-sans-abonnement",
+        "/blog/camera-de-chasse-pas-chere-ou-haut-de-gamme-comment-faire-le-bon-choix-sans-se-tromper"
+      ]
+    },
+    {
+      "id": "A8",
+      "slug_prevu": "alertes-sms-mms-bluetooth-ce-que-les-cameras-de-chasse-connectees-savent-vraiment-faire",
+      "mois": 2,
+      "priorite": "Basse",
+      "pilier": "Connectivité",
+      "categorie_blog": "Connectivité",
+      "titre_seo": "Alertes SMS, MMS, Bluetooth : ce que les caméras de chasse connectées savent vraiment faire",
+      "mot_cle_principal": "caméra de chasse bluetooth",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "caméra de chasse bluetooth",
+          "volume": 5
+        },
+        {
+          "mot_cle": "caméra de chasse wifi bluetooth",
+          "volume": 5
+        },
+        {
+          "mot_cle": "comparatif caméra de chasse gsm avec alerte sms mms",
+          "volume": 5
+        },
+        {
+          "mot_cle": "caméra de chasse gsm avec alerte sms mms",
+          "volume": 5
+        }
+      ],
+      "type_contenu": "Article explicatif fonctionnalités",
+      "intention": "Informationnelle",
+      "questions_paa": [
+        "Comment fonctionne une caméra avec une carte SIM ?"
+      ],
+      "angle_editorial": "Julien découvre des fonctions qu'il ne connaissait pas : on démystifie les alertes en temps réel et le transfert Bluetooth pour choisir selon son usage réel.",
+      "vous_aimerez_aussi_ids": [
+        "A3",
+        "A5",
+        "A1"
+      ],
+      "section_produit_instruction": "CTA vers le C20 (transfert Bluetooth local) et les modèles 4G (alertes à distance).",
+      "url_produit_suggeree": "https://wildtrail.fr/produits/cameras-de-chasse-connectees",
+      "meta_description": "Alertes SMS, MMS, Bluetooth : ce que savent vraiment faire les caméras de chasse connectées, expliqué simplement.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Caméra de chasse connectée au téléphone : comment ça marche et pourquoi l'adopter",
+        "Caméra de chasse 4G, GSM ou Wifi : quelle connectivité choisir selon votre terrain",
+        "Caméra de chasse : le guide complet 2026 pour bien choisir la vôtre"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/camera-de-chasse-connectee-au-telephone-comment-ca-marche-et-pourquoi-l-adopter",
+        "/blog/camera-de-chasse-4g-gsm-ou-wifi-quelle-connectivite-choisir-selon-votre-terrain",
+        "/blog/camera-de-chasse-le-guide-complet-2026-pour-bien-choisir-la-votre"
+      ]
+    },
+    {
+      "id": "A9",
+      "slug_prevu": "panneau-solaire-pour-camera-de-chasse-faut-il-investir-et-lequel-choisir",
+      "mois": 3,
+      "priorite": "Haute",
+      "pilier": "Alimentation & autonomie",
+      "categorie_blog": "Autonomie & alimentation",
+      "titre_seo": "Panneau solaire pour caméra de chasse : faut-il investir ? (et lequel choisir)",
+      "mot_cle_principal": "panneau solaire pour caméra de chasse",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "panneau solaire pour caméra de chasse",
+          "volume": 90
+        },
+        {
+          "mot_cle": "panneau solaire pour camera de chasse",
+          "volume": 90
+        },
+        {
+          "mot_cle": "panneau solaire 12v pour caméra de chasse",
+          "volume": 50
+        },
+        {
+          "mot_cle": "panneau solaire camera chasse",
+          "volume": 30
+        },
+        {
+          "mot_cle": "caméra de chasse avec panneau solaire",
+          "volume": 5
+        },
+        {
+          "mot_cle": "Quel est le panneau solaire le plus puissant ?",
+          "volume": 0
+        },
+        {
+          "mot_cle": "Quelle puissance de panneau solaire pour un bateau ?",
+          "volume": 0
+        },
+        {
+          "mot_cle": "Quelle surface de panneau solaire pour 9kw ?",
+          "volume": 0
+        }
+      ],
+      "type_contenu": "Guide d'achat + ROI",
+      "intention": "Informationnelle + Commerciale",
+      "questions_paa": [
+        "Comment fonctionne une caméra à vision nocturne ?"
+      ],
+      "angle_editorial": "Julien en a marre de changer les piles toutes les 3 semaines en pleine saison : calcul simple du gain d'autonomie et des cas où le panneau solaire se rentabilise vraiment.",
+      "vous_aimerez_aussi_ids": [
+        "A10",
+        "A11",
+        "A1"
+      ],
+      "section_produit_instruction": "CTA vers la gamme solaire H20/H40/H80 : panneau solaire déjà intégré, pas d'accessoire séparé à ajouter.",
+      "url_produit_suggeree": "https://wildtrail.fr/produits/camera-de-chasse-solaire",
+      "meta_description": "Panneau solaire pour caméra de chasse : est-ce rentable ? Calcul d'autonomie et conseils pour bien choisir le vôtre.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Batterie de caméra de chasse : lithium, rechargeable ou piles classiques, que choisir ?",
+        "Caméra de chasse solaire : notre avis et nos conseils d'installation pour une autonomie totale",
+        "Caméra de chasse : le guide complet 2026 pour bien choisir la vôtre"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/batterie-de-camera-de-chasse-lithium-rechargeable-ou-piles-classiques-que-choisir",
+        "/blog/camera-de-chasse-solaire-notre-avis-et-nos-conseils-d-installation-pour-une-autonomie-totale",
+        "/blog/camera-de-chasse-le-guide-complet-2026-pour-bien-choisir-la-votre"
+      ]
+    },
+    {
+      "id": "A10",
+      "slug_prevu": "batterie-de-camera-de-chasse-lithium-rechargeable-ou-piles-classiques-que-choisir",
+      "mois": 3,
+      "priorite": "Moyenne",
+      "pilier": "Alimentation & autonomie",
+      "categorie_blog": "Autonomie & alimentation",
+      "titre_seo": "Batterie de caméra de chasse : lithium, rechargeable ou piles classiques, que choisir ?",
+      "mot_cle_principal": "batterie pour caméra de chasse",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "batterie pour caméra de chasse",
+          "volume": 70
+        },
+        {
+          "mot_cle": "camera de chasse rechargeable",
+          "volume": 50
+        },
+        {
+          "mot_cle": "camera de chasse avec batterie rechargeable",
+          "volume": 45
+        },
+        {
+          "mot_cle": "camera de chasse batterie lithium",
+          "volume": 45
+        },
+        {
+          "mot_cle": "camera de chasse avec batterie",
+          "volume": 20
+        },
+        {
+          "mot_cle": "chargeur solaire pour caméra de chasse",
+          "volume": 20
+        },
+        {
+          "mot_cle": "camera chasse avec batterie",
+          "volume": 10
+        },
+        {
+          "mot_cle": "caméra de chasse avec batterie rechargeable",
+          "volume": 5
+        }
+      ],
+      "type_contenu": "Guide comparatif technique",
+      "intention": "Informationnelle + Commerciale",
+      "questions_paa": [],
+      "angle_editorial": "Julien veut arrêter de gaspiller des piles jetables : comparatif autonomie/coût/tenue au froid entre lithium, rechargeable et piles alcalines classiques.",
+      "vous_aimerez_aussi_ids": [
+        "A9",
+        "A11",
+        "A2"
+      ],
+      "section_produit_instruction": "Mention des batteries rechargeables intégrées aux modèles WildTrail ; CTA vers la gamme solaire pour l'autonomie maximale.",
+      "url_produit_suggeree": "https://wildtrail.fr/produits/camera-de-chasse-solaire",
+      "meta_description": "Lithium, rechargeable ou piles classiques : quelle batterie choisir pour votre caméra de chasse ? Comparatif autonomie et coût.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Panneau solaire pour caméra de chasse : faut-il investir ? (et lequel choisir)",
+        "Caméra de chasse solaire : notre avis et nos conseils d'installation pour une autonomie totale",
+        "Caméra de chasse pas chère ou haut de gamme : comment faire le bon choix sans se tromper ?"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/panneau-solaire-pour-camera-de-chasse-faut-il-investir-et-lequel-choisir",
+        "/blog/camera-de-chasse-solaire-notre-avis-et-nos-conseils-d-installation-pour-une-autonomie-totale",
+        "/blog/camera-de-chasse-pas-chere-ou-haut-de-gamme-comment-faire-le-bon-choix-sans-se-tromper"
+      ]
+    },
+    {
+      "id": "A11",
+      "slug_prevu": "camera-de-chasse-solaire-notre-avis-et-nos-conseils-d-installation-pour-une-autonomie-totale",
+      "mois": 3,
+      "priorite": "Moyenne",
+      "pilier": "Alimentation & autonomie",
+      "categorie_blog": "Autonomie & alimentation",
+      "titre_seo": "Caméra de chasse solaire : notre avis et nos conseils d'installation pour une autonomie totale",
+      "mot_cle_principal": "camera chasse solaire",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "camera de chasse solaire",
+          "volume": 655
+        },
+        {
+          "mot_cle": "camera chasse solaire",
+          "volume": 236
+        },
+        {
+          "mot_cle": "caméra de chasse solaire",
+          "volume": 65
+        },
+        {
+          "mot_cle": "caméra de chasse 4g solaire",
+          "volume": 6
+        }
+      ],
+      "type_contenu": "Avis + tutoriel",
+      "intention": "Commerciale + Informationnelle",
+      "questions_paa": [],
+      "angle_editorial": "Julien hésite à franchir le pas du tout-solaire : retour d'expérience terrain, orientation du panneau, saisons à privilégier.",
+      "vous_aimerez_aussi_ids": [
+        "A9",
+        "A10",
+        "A15"
+      ],
+      "section_produit_instruction": "CTA vers le WildTrail H80 (haut de gamme solaire) et le H40, avec conseils d'installation du panneau intégré.",
+      "url_produit_suggeree": "https://wildtrail.fr/produits/camera-de-chasse-solaire",
+      "meta_description": "Caméra de chasse solaire : notre avis terrain et nos conseils d'installation pour une autonomie totale toute la saison.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Panneau solaire pour caméra de chasse : faut-il investir ? (et lequel choisir)",
+        "Batterie de caméra de chasse : lithium, rechargeable ou piles classiques, que choisir ?",
+        "Où et comment installer sa caméra de chasse pour maximiser ses résultats"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/panneau-solaire-pour-camera-de-chasse-faut-il-investir-et-lequel-choisir",
+        "/blog/batterie-de-camera-de-chasse-lithium-rechargeable-ou-piles-classiques-que-choisir",
+        "/blog/ou-et-comment-installer-sa-camera-de-chasse-pour-maximiser-ses-resultats"
+      ]
+    },
+    {
+      "id": "A12",
+      "slug_prevu": "vision-nocturne-et-infrarouge-comment-capturer-le-gibier-de-nuit-avec-sa-camera-de-chasse",
+      "mois": 4,
+      "priorite": "Haute",
+      "pilier": "Vision nocturne & infrarouge",
+      "categorie_blog": "Image & vision nocturne",
+      "titre_seo": "Vision nocturne et infrarouge : comment capturer le gibier de nuit avec sa caméra de chasse",
+      "mot_cle_principal": "camera de chasse nocturne",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "caméra animaux nocturne",
+          "volume": 480
+        },
+        {
+          "mot_cle": "camera de chasse nocturne",
+          "volume": 162
+        },
+        {
+          "mot_cle": "camera infrarouge animaux",
+          "volume": 155
+        },
+        {
+          "mot_cle": "camera infrarouge exterieur animaux",
+          "volume": 70
+        },
+        {
+          "mot_cle": "mini camera nocturne",
+          "volume": 50
+        },
+        {
+          "mot_cle": "caméra infrarouge extérieur animaux",
+          "volume": 40
+        },
+        {
+          "mot_cle": "caméra nocturne animaux",
+          "volume": 40
+        },
+        {
+          "mot_cle": "caméra chasse nocturne",
+          "volume": 37
+        }
+      ],
+      "type_contenu": "Guide technique",
+      "intention": "Informationnelle + Commerciale",
+      "questions_paa": [
+        "Comment fonctionne une caméra à vision nocturne ?",
+        "Quelle caméra pour filmer la nuit ?",
+        "Quelle caméra vision nocturne choisir ?",
+        "Comment filmer les animaux la nuit ?"
+      ],
+      "angle_editorial": "Julien veut enfin des photos nettes de nuit et pas juste des flashs blancs qui font fuir le gibier : explication simple de l'infrarouge « no-glow » et « low-glow ».",
+      "vous_aimerez_aussi_ids": [
+        "A13",
+        "A1",
+        "A15"
+      ],
+      "section_produit_instruction": "CTA vers les fiches produits détaillant la portée infrarouge de chaque modèle (à vérifier/compléter côté fiches produit).",
+      "url_produit_suggeree": "https://wildtrail.fr/produits",
+      "meta_description": "Vision nocturne et infrarouge : comment capturer le gibier de nuit sans l'effaroucher. Guide technique complet.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Caméra infrarouge invisible pour animaux : le guide pour ne jamais effaroucher le gibier",
+        "Caméra de chasse : le guide complet 2026 pour bien choisir la vôtre",
+        "Où et comment installer sa caméra de chasse pour maximiser ses résultats"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/camera-infrarouge-invisible-pour-animaux-le-guide-pour-ne-jamais-effaroucher-le-gibier",
+        "/blog/camera-de-chasse-le-guide-complet-2026-pour-bien-choisir-la-votre",
+        "/blog/ou-et-comment-installer-sa-camera-de-chasse-pour-maximiser-ses-resultats"
+      ]
+    },
+    {
+      "id": "A13",
+      "slug_prevu": "camera-infrarouge-invisible-pour-animaux-le-guide-pour-ne-jamais-effaroucher-le-gibier",
+      "mois": 4,
+      "priorite": "Basse",
+      "pilier": "Vision nocturne & infrarouge",
+      "categorie_blog": "Image & vision nocturne",
+      "titre_seo": "Caméra infrarouge invisible pour animaux : le guide pour ne jamais effaroucher le gibier",
+      "mot_cle_principal": "caméra de chasse infrarouge invisible",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "camera de chasse led noir invisible",
+          "volume": 64
+        },
+        {
+          "mot_cle": "camera de chasse led invisible",
+          "volume": 10
+        },
+        {
+          "mot_cle": "caméra de chasse infrarouge invisible",
+          "volume": 6
+        },
+        {
+          "mot_cle": "caméra de chasse led noir invisible",
+          "volume": 6
+        },
+        {
+          "mot_cle": "camera de chasse infrarouge invisible",
+          "volume": 5
+        }
+      ],
+      "type_contenu": "Guide technique approfondi",
+      "intention": "Informationnelle",
+      "questions_paa": [],
+      "angle_editorial": "Julien a remarqué que le gibier évite sa caméra depuis quelques semaines : explication de l'effet du flash visible et solution avec l'IR invisible.",
+      "vous_aimerez_aussi_ids": [
+        "A12",
+        "A16",
+        "A1"
+      ],
+      "section_produit_instruction": "CTA vers les fiches produits en valorisant la technologie infrarouge « invisible » si elle est confirmée sur les modèles concernés (à vérifier avant publication).",
+      "url_produit_suggeree": "https://wildtrail.fr/produits",
+      "meta_description": "Caméra infrarouge invisible : pourquoi elle ne fait jamais fuir le gibier, contrairement aux flashs classiques.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Vision nocturne et infrarouge : comment capturer le gibier de nuit avec sa caméra de chasse",
+        "Camoufler sa caméra de chasse : nos techniques pour qu'elle se fonde dans le décor",
+        "Caméra de chasse : le guide complet 2026 pour bien choisir la vôtre"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/vision-nocturne-et-infrarouge-comment-capturer-le-gibier-de-nuit-avec-sa-camera-de-chasse",
+        "/blog/camoufler-sa-camera-de-chasse-nos-techniques-pour-qu-elle-se-fonde-dans-le-decor",
+        "/blog/camera-de-chasse-le-guide-complet-2026-pour-bien-choisir-la-votre"
+      ]
+    },
+    {
+      "id": "A14",
+      "slug_prevu": "resolution-et-qualite-d-image-d-une-camera-de-chasse-la-4k-est-elle-vraiment-utile",
+      "mois": 4,
+      "priorite": "Basse",
+      "pilier": "Qualité d'image",
+      "categorie_blog": "Image & vision nocturne",
+      "titre_seo": "Résolution et qualité d'image d'une caméra de chasse : la 4K est-elle vraiment utile ?",
+      "mot_cle_principal": "caméra de chasse 4k",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "caméra de chasse 4k",
+          "volume": 6
+        }
+      ],
+      "type_contenu": "Article explicatif / comparatif technique",
+      "intention": "Informationnelle + Commerciale",
+      "questions_paa": [],
+      "angle_editorial": "Julien voit des fiches produits qui annoncent des mégapixels impressionnants et veut comprendre ce qui compte vraiment (capteur vs interpolation logicielle) avant de se faire avoir.",
+      "vous_aimerez_aussi_ids": [
+        "A12",
+        "A4",
+        "A1"
+      ],
+      "section_produit_instruction": "Comparatif de la résolution réelle (capteur) déclarée par chaque modèle WildTrail.",
+      "url_produit_suggeree": "https://wildtrail.fr/produits",
+      "meta_description": "4K, mégapixels : la résolution d'une caméra de chasse compte-t-elle vraiment ? Ce qu'il faut savoir avant d'acheter.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Vision nocturne et infrarouge : comment capturer le gibier de nuit avec sa caméra de chasse",
+        "Quelle est la meilleure caméra de chasse en 2026 ? Notre comparatif détaillé",
+        "Caméra de chasse : le guide complet 2026 pour bien choisir la vôtre"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/vision-nocturne-et-infrarouge-comment-capturer-le-gibier-de-nuit-avec-sa-camera-de-chasse",
+        "/blog/quelle-est-la-meilleure-camera-de-chasse-en-2026-notre-comparatif-detaille",
+        "/blog/camera-de-chasse-le-guide-complet-2026-pour-bien-choisir-la-votre"
+      ]
+    },
+    {
+      "id": "A15",
+      "slug_prevu": "ou-et-comment-installer-sa-camera-de-chasse-pour-maximiser-ses-resultats",
+      "mois": 5,
+      "priorite": "Haute",
+      "pilier": "Installation & terrain",
+      "categorie_blog": "Installation & terrain",
+      "titre_seo": "Où et comment installer sa caméra de chasse pour maximiser ses résultats",
+      "mot_cle_principal": "où placer caméra de chasse",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "Où placer caméra de chasse ?",
+          "volume": 0
+        },
+        {
+          "mot_cle": "Comment installer une caméra de chasse ?",
+          "volume": 0
+        },
+        {
+          "mot_cle": "Où Peut-on installer une caméra de surveillance ?",
+          "volume": 0
+        },
+        {
+          "mot_cle": "Comment installer une caméra de surveillance sans fil extérieur ?",
+          "volume": 0
+        },
+        {
+          "mot_cle": "Puis-je installer une caméra devant chez moi ?",
+          "volume": 0
+        },
+        {
+          "mot_cle": "Comment installer une caméra de surveillance wifi sans fil extérieure ?",
+          "volume": 0
+        },
+        {
+          "mot_cle": "Où installer Caméra de surveillance extérieur ?",
+          "volume": 0
+        },
+        {
+          "mot_cle": "Comment installer une caméra de surveillance wifi extérieur ?",
+          "volume": 0
+        }
+      ],
+      "type_contenu": "Tutoriel terrain",
+      "intention": "Informationnelle",
+      "questions_paa": [
+        "Où placer caméra de chasse ?",
+        "Comment installer une caméra de chasse ?",
+        "Comment positionner une caméra de chasse ?",
+        "Comment régler sa caméra de chasse ?"
+      ],
+      "angle_editorial": "Julien a installé sa caméra n'importe où par le passé et n'a eu que des photos de branches : checklist hauteur, angle, orientation au soleil, coulées et points d'eau.",
+      "vous_aimerez_aussi_ids": [
+        "A16",
+        "A12",
+        "A11"
+      ],
+      "section_produit_instruction": "CTA générique vers la boutique + renvoi vers le hub blog pour approfondir l'installation.",
+      "url_produit_suggeree": "https://wildtrail.fr/produits",
+      "meta_description": "Où et comment installer sa caméra de chasse pour de meilleurs résultats : hauteur, angle, coulées et points d'eau.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Camoufler sa caméra de chasse : nos techniques pour qu'elle se fonde dans le décor",
+        "Vision nocturne et infrarouge : comment capturer le gibier de nuit avec sa caméra de chasse",
+        "Caméra de chasse solaire : notre avis et nos conseils d'installation pour une autonomie totale"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/camoufler-sa-camera-de-chasse-nos-techniques-pour-qu-elle-se-fonde-dans-le-decor",
+        "/blog/vision-nocturne-et-infrarouge-comment-capturer-le-gibier-de-nuit-avec-sa-camera-de-chasse",
+        "/blog/camera-de-chasse-solaire-notre-avis-et-nos-conseils-d-installation-pour-une-autonomie-totale"
+      ]
+    },
+    {
+      "id": "A16",
+      "slug_prevu": "camoufler-sa-camera-de-chasse-nos-techniques-pour-qu-elle-se-fonde-dans-le-decor",
+      "mois": 5,
+      "priorite": "Moyenne",
+      "pilier": "Installation & terrain",
+      "categorie_blog": "Installation & terrain",
+      "titre_seo": "Camoufler sa caméra de chasse : nos techniques pour qu'elle se fonde dans le décor",
+      "mot_cle_principal": "camera camouflage",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "camera camouflage",
+          "volume": 191
+        },
+        {
+          "mot_cle": "camouflage camera surveillance",
+          "volume": 45
+        },
+        {
+          "mot_cle": "comment cacher une caméra de chasse",
+          "volume": 20
+        },
+        {
+          "mot_cle": "caméra camouflage",
+          "volume": 19
+        },
+        {
+          "mot_cle": "camouflage caméra surveillance",
+          "volume": 5
+        },
+        {
+          "mot_cle": "Comment camoufler caméra de chasse ?",
+          "volume": 0
+        },
+        {
+          "mot_cle": "Comment cacher une caméra de surveillance extérieur ?",
+          "volume": 0
+        },
+        {
+          "mot_cle": "Comment cacher sa caméra de surveillance ?",
+          "volume": 0
+        }
+      ],
+      "type_contenu": "Tutoriel pratique",
+      "intention": "Informationnelle + Commerciale",
+      "questions_paa": [
+        "Comment camoufler caméra de chasse ?"
+      ],
+      "angle_editorial": "Julien veut éviter que le gibier — ou d'autres promeneurs — repèrent sa caméra : techniques de camouflage naturel et housses dédiées.",
+      "vous_aimerez_aussi_ids": [
+        "A15",
+        "A18",
+        "A13"
+      ],
+      "section_produit_instruction": "CTA générique vers la boutique (aucun accessoire de camouflage dédié identifié sur le site à ce jour — opportunité de gamme à envisager).",
+      "url_produit_suggeree": "https://wildtrail.fr/produits",
+      "meta_description": "Camoufler sa caméra de chasse : nos techniques naturelles et housses dédiées pour qu'elle se fonde dans le décor.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Où et comment installer sa caméra de chasse pour maximiser ses résultats",
+        "Comment protéger sa caméra de chasse du vol et savoir si elle a été détectée",
+        "Caméra infrarouge invisible pour animaux : le guide pour ne jamais effaroucher le gibier"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/ou-et-comment-installer-sa-camera-de-chasse-pour-maximiser-ses-resultats",
+        "/blog/comment-proteger-sa-camera-de-chasse-du-vol-et-savoir-si-elle-a-ete-detectee",
+        "/blog/camera-infrarouge-invisible-pour-animaux-le-guide-pour-ne-jamais-effaroucher-le-gibier"
+      ]
+    },
+    {
+      "id": "A17",
+      "slug_prevu": "camera-de-chasse-et-legislation-ce-que-dit-la-loi-en-france-avant-d-installer-la-votre",
+      "mois": 5,
+      "priorite": "Moyenne",
+      "pilier": "Légal & sécurité",
+      "categorie_blog": "Légal & sécurité",
+      "titre_seo": "Caméra de chasse et législation : ce que dit la loi en France avant d'installer la vôtre",
+      "mot_cle_principal": "législation caméra de chasse",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "législation caméra de chasse",
+          "volume": 20
+        },
+        {
+          "mot_cle": "Comment savoir si la caméra de mon voisin film chez moi ?",
+          "volume": 0
+        }
+      ],
+      "type_contenu": "Article informatif juridique",
+      "intention": "Informationnelle",
+      "questions_paa": [
+        "Puis-je installer une caméra devant chez moi ?",
+        "Où Peut-on installer une caméra de surveillance ?",
+        "Qui peut regarder les caméras de surveillance ?"
+      ],
+      "angle_editorial": "Julien ne veut pas d'ennuis avec un voisin ou un promeneur filmé par erreur : rappel clair (sans jargon juridique) des règles RGPD et de voisinage à connaître, avec incitation à vérifier auprès d'un professionnel du droit pour son cas précis.",
+      "vous_aimerez_aussi_ids": [
+        "A15",
+        "A18",
+        "A1"
+      ],
+      "section_produit_instruction": "CTA doux (pas de vente forcée) vers la boutique ; contenu de confiance qui peut aussi renvoyer vers les Mentions légales du site pour rassurer.",
+      "url_produit_suggeree": "https://wildtrail.fr/produits",
+      "meta_description": "Caméra de chasse et loi en France : ce qu'il faut savoir sur le voisinage et la vie privée avant d'installer la vôtre.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Où et comment installer sa caméra de chasse pour maximiser ses résultats",
+        "Comment protéger sa caméra de chasse du vol et savoir si elle a été détectée",
+        "Caméra de chasse : le guide complet 2026 pour bien choisir la vôtre"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/ou-et-comment-installer-sa-camera-de-chasse-pour-maximiser-ses-resultats",
+        "/blog/comment-proteger-sa-camera-de-chasse-du-vol-et-savoir-si-elle-a-ete-detectee",
+        "/blog/camera-de-chasse-le-guide-complet-2026-pour-bien-choisir-la-votre"
+      ]
+    },
+    {
+      "id": "A18",
+      "slug_prevu": "comment-proteger-sa-camera-de-chasse-du-vol-et-savoir-si-elle-a-ete-detectee",
+      "mois": 5,
+      "priorite": "Moyenne",
+      "pilier": "Installation & terrain",
+      "categorie_blog": "Installation & terrain",
+      "titre_seo": "Comment protéger sa caméra de chasse du vol et savoir si elle a été détectée",
+      "mot_cle_principal": "caméra à déclenchement automatique",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "camera detection animaux",
+          "volume": 140
+        },
+        {
+          "mot_cle": "caméra à déclenchement automatique",
+          "volume": 70
+        },
+        {
+          "mot_cle": "appareil photo déclenchement automatique",
+          "volume": 50
+        },
+        {
+          "mot_cle": "comment détecter une caméra de chasse",
+          "volume": 30
+        },
+        {
+          "mot_cle": "camera a declenchement automatique",
+          "volume": 10
+        },
+        {
+          "mot_cle": "Comment contourner une caméra de surveillance ?",
+          "volume": 0
+        },
+        {
+          "mot_cle": "Comment detecter un caméra caché ?",
+          "volume": 0
+        },
+        {
+          "mot_cle": "Comment detecter une caméra de chasse ?",
+          "volume": 0
+        }
+      ],
+      "type_contenu": "Guide pratique + sécurité",
+      "intention": "Informationnelle + Commerciale",
+      "questions_paa": [
+        "Comment savoir si il y a une caméra ?",
+        "comment détecter une caméra de chasse"
+      ],
+      "angle_editorial": "Julien s'est déjà fait voler une caméra en plein territoire : cadenas, câbles antivol, emplacement discret — tout ce qu'il aurait aimé savoir avant.",
+      "vous_aimerez_aussi_ids": [
+        "A16",
+        "A15",
+        "A17"
+      ],
+      "section_produit_instruction": "CTA générique vers la boutique en valorisant la discrétion des boîtiers (à vérifier sur fiche produit) — opportunité d'ajouter des accessoires antivol au catalogue.",
+      "url_produit_suggeree": "https://wildtrail.fr/produits",
+      "meta_description": "Comment protéger sa caméra de chasse du vol et détecter si elle a été repérée : nos conseils terrain.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Camoufler sa caméra de chasse : nos techniques pour qu'elle se fonde dans le décor",
+        "Où et comment installer sa caméra de chasse pour maximiser ses résultats",
+        "Caméra de chasse et législation : ce que dit la loi en France avant d'installer la vôtre"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/camoufler-sa-camera-de-chasse-nos-techniques-pour-qu-elle-se-fonde-dans-le-decor",
+        "/blog/ou-et-comment-installer-sa-camera-de-chasse-pour-maximiser-ses-resultats",
+        "/blog/camera-de-chasse-et-legislation-ce-que-dit-la-loi-en-france-avant-d-installer-la-votre"
+      ]
+    },
+    {
+      "id": "A19",
+      "slug_prevu": "camera-de-chasse-decathlon-lidl-amazon-bon-plan-ou-fausse-bonne-idee-face-a-un-specialiste",
+      "mois": 6,
+      "priorite": "Haute",
+      "pilier": "Grande distribution / positionnement",
+      "categorie_blog": "Comparatifs & marques",
+      "titre_seo": "Caméra de chasse Decathlon, Lidl, Amazon : bon plan ou fausse bonne idée face à un spécialiste ?",
+      "mot_cle_principal": "camera de chasse decathlon",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "camera de chasse amazon",
+          "volume": 800
+        },
+        {
+          "mot_cle": "caméra de chasse gamm vert",
+          "volume": 390
+        },
+        {
+          "mot_cle": "camera de chasse boulanger",
+          "volume": 236
+        },
+        {
+          "mot_cle": "camera aldi",
+          "volume": 155
+        },
+        {
+          "mot_cle": "amazon camera de chasse",
+          "volume": 155
+        },
+        {
+          "mot_cle": "camera de chasse aldi",
+          "volume": 100
+        },
+        {
+          "mot_cle": "caméra de chasse amazon",
+          "volume": 80
+        },
+        {
+          "mot_cle": "piège photographique aldi",
+          "volume": 70
+        }
+      ],
+      "type_contenu": "Comparatif de positionnement",
+      "intention": "Commerciale",
+      "questions_paa": [
+        "gopro decathlon prix"
+      ],
+      "angle_editorial": "Julien a vu une caméra à petit prix chez une grande enseigne et se demande si ça vaut le coup : comparatif honnête (garantie, SAV spécialisé, conseils) entre le généraliste et le spécialiste chasse.",
+      "vous_aimerez_aussi_ids": [
+        "A4",
+        "A2",
+        "A20"
+      ],
+      "section_produit_instruction": "CTA vers le C20 et le H40 (entrée de gamme) en argument face aux enseignes généralistes, avec mise en avant du SAV spécialisé WildTrail.",
+      "url_produit_suggeree": "https://wildtrail.fr/produits",
+      "meta_description": "Caméra de chasse Decathlon, Lidl, Amazon : bon plan ou fausse économie face à un spécialiste ? Comparatif honnête.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Quelle est la meilleure caméra de chasse en 2026 ? Notre comparatif détaillé",
+        "Caméra de chasse pas chère ou haut de gamme : comment faire le bon choix sans se tromper ?",
+        "Bushnell, Spypoint, Browning, Apeman... : comparatif des grandes marques de caméras de chasse"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/quelle-est-la-meilleure-camera-de-chasse-en-2026-notre-comparatif-detaille",
+        "/blog/camera-de-chasse-pas-chere-ou-haut-de-gamme-comment-faire-le-bon-choix-sans-se-tromper",
+        "/blog/bushnell-spypoint-browning-apeman-comparatif-des-grandes-marques-de-cameras-de-chasse"
+      ]
+    },
+    {
+      "id": "A20",
+      "slug_prevu": "bushnell-spypoint-browning-apeman-comparatif-des-grandes-marques-de-cameras-de-chasse",
+      "mois": 6,
+      "priorite": "Haute",
+      "pilier": "Marques concurrentes",
+      "categorie_blog": "Comparatifs & marques",
+      "titre_seo": "Bushnell, Spypoint, Browning, Apeman... : comparatif des grandes marques de caméras de chasse",
+      "mot_cle_principal": "camera de chasse spypoint",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "camera de chasse spypoint",
+          "volume": 355
+        },
+        {
+          "mot_cle": "camera bushnell",
+          "volume": 170
+        },
+        {
+          "mot_cle": "bushnell camera",
+          "volume": 170
+        },
+        {
+          "mot_cle": "solognac bg500",
+          "volume": 140
+        },
+        {
+          "mot_cle": "camera de chasse bushnell",
+          "volume": 100
+        },
+        {
+          "mot_cle": "camera de chasse num'axes",
+          "volume": 82
+        },
+        {
+          "mot_cle": "caméra de chasse solognac",
+          "volume": 70
+        },
+        {
+          "mot_cle": "apeman caméra de chasse 20mp 1080p",
+          "volume": 70
+        }
+      ],
+      "type_contenu": "Comparatif marques",
+      "intention": "Commerciale",
+      "questions_paa": [],
+      "angle_editorial": "Julien compare les marques qu'il voit revenir sur les forums : tableau neutre des forces et faiblesses de chaque marque, pour positionner objectivement l'offre WildTrail.",
+      "vous_aimerez_aussi_ids": [
+        "A4",
+        "A19",
+        "A1"
+      ],
+      "section_produit_instruction": "Tableau comparatif intégrant les 5 modèles WildTrail face aux marques citées (Bushnell, Spypoint, Browning...).",
+      "url_produit_suggeree": "https://wildtrail.fr/produits",
+      "meta_description": "Bushnell, Spypoint, Browning, Apeman : comparatif objectif des grandes marques de caméras de chasse en 2026.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Quelle est la meilleure caméra de chasse en 2026 ? Notre comparatif détaillé",
+        "Caméra de chasse Decathlon, Lidl, Amazon : bon plan ou fausse bonne idée face à un spécialiste ?",
+        "Caméra de chasse : le guide complet 2026 pour bien choisir la vôtre"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/quelle-est-la-meilleure-camera-de-chasse-en-2026-notre-comparatif-detaille",
+        "/blog/camera-de-chasse-decathlon-lidl-amazon-bon-plan-ou-fausse-bonne-idee-face-a-un-specialiste",
+        "/blog/camera-de-chasse-le-guide-complet-2026-pour-bien-choisir-la-votre"
+      ]
+    },
+    {
+      "id": "A21",
+      "slug_prevu": "camera-de-chasse-ou-camera-de-surveillance-nature-quelles-differences-et-pour-quel-usage",
+      "mois": 6,
+      "priorite": "Moyenne",
+      "pilier": "Usages connexes",
+      "categorie_blog": "Usages connexes",
+      "titre_seo": "Caméra de chasse ou caméra de surveillance nature : quelles différences et pour quel usage ?",
+      "mot_cle_principal": "caméra de surveillance animaux",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "caméra surveillance animaux extérieur",
+          "volume": 210
+        },
+        {
+          "mot_cle": "caméra de surveillance animaux",
+          "volume": 210
+        },
+        {
+          "mot_cle": "camera de surveillance de chasse",
+          "volume": 195
+        },
+        {
+          "mot_cle": "camera surveillance chasse",
+          "volume": 121
+        },
+        {
+          "mot_cle": "camera chien de chasse",
+          "volume": 70
+        },
+        {
+          "mot_cle": "caméra observation animaux",
+          "volume": 30
+        },
+        {
+          "mot_cle": "camera pour chien de chasse",
+          "volume": 30
+        },
+        {
+          "mot_cle": "caméra jardin",
+          "volume": 29
+        }
+      ],
+      "type_contenu": "Article comparatif d'usage",
+      "intention": "Informationnelle + Commerciale",
+      "questions_paa": [
+        "Quelle caméra pour observer les animaux ?",
+        "Quelle caméra pour surveiller son chien ?",
+        "Comment surveiller mon jardin ?"
+      ],
+      "angle_editorial": "Julien a un voisin qui lui demande conseil pour surveiller son jardin ou son chien : article qui élargit l'audience du blog au-delà des chasseurs, tout en recommandant les mêmes caméras.",
+      "vous_aimerez_aussi_ids": [
+        "A12",
+        "A1",
+        "A22"
+      ],
+      "section_produit_instruction": "CTA vers le C20 (usage local, jardin) et vers la gamme solaire pour un usage extérieur prolongé (observation animalière, surveillance).",
+      "url_produit_suggeree": "https://wildtrail.fr/produits",
+      "meta_description": "Caméra de chasse ou caméra de surveillance nature : quelles différences pour observer animaux, jardin ou chien ?",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Vision nocturne et infrarouge : comment capturer le gibier de nuit avec sa caméra de chasse",
+        "Caméra de chasse : le guide complet 2026 pour bien choisir la vôtre",
+        "Caméra embarquée, GoPro ou caméra de chasse : laquelle choisir pour filmer sa sortie ?"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/vision-nocturne-et-infrarouge-comment-capturer-le-gibier-de-nuit-avec-sa-camera-de-chasse",
+        "/blog/camera-de-chasse-le-guide-complet-2026-pour-bien-choisir-la-votre",
+        "/blog/camera-embarquee-gopro-ou-camera-de-chasse-laquelle-choisir-pour-filmer-sa-sortie"
+      ]
+    },
+    {
+      "id": "A22",
+      "slug_prevu": "camera-embarquee-gopro-ou-camera-de-chasse-laquelle-choisir-pour-filmer-sa-sortie",
+      "mois": 6,
+      "priorite": "Basse",
+      "pilier": "Usages connexes",
+      "categorie_blog": "Usages connexes",
+      "titre_seo": "Caméra embarquée, GoPro ou caméra de chasse : laquelle choisir pour filmer sa sortie ?",
+      "mot_cle_principal": "camera de chantier",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "camera de chantier",
+          "volume": 191
+        },
+        {
+          "mot_cle": "camera embarquée chasse",
+          "volume": 82
+        },
+        {
+          "mot_cle": "caméra sport hd 720p avis",
+          "volume": 30
+        },
+        {
+          "mot_cle": "caméra de chantier",
+          "volume": 19
+        },
+        {
+          "mot_cle": "caméra chantier",
+          "volume": 13
+        },
+        {
+          "mot_cle": "caméra embarquée chasse",
+          "volume": 8
+        },
+        {
+          "mot_cle": "Quelle est la GoPro la moins chère ?",
+          "volume": 0
+        },
+        {
+          "mot_cle": "Quel est la meilleur caméra pour faire du VTT ?",
+          "volume": 0
+        }
+      ],
+      "type_contenu": "Article comparatif d'usage",
+      "intention": "Informationnelle + Commerciale",
+      "questions_paa": [
+        "Quelle Go Pro pour la chasse ?",
+        "Quelle est la meilleure GoPro pour la chasse ?",
+        "Comment bien choisir sa caméra embarquée ?"
+      ],
+      "angle_editorial": "Julien veut aussi garder un souvenir de ses sorties (affût, pêche, VTT) et hésite entre une GoPro et une caméra de chasse classique : comparatif des usages complémentaires.",
+      "vous_aimerez_aussi_ids": [
+        "A1",
+        "A21",
+        "A15"
+      ],
+      "section_produit_instruction": "CTA croisé vers la boutique en soulignant la complémentarité caméra fixe / caméra embarquée.",
+      "url_produit_suggeree": "https://wildtrail.fr/produits",
+      "meta_description": "GoPro, caméra embarquée ou caméra de chasse : laquelle choisir pour filmer vos sorties nature ?",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Caméra de chasse : le guide complet 2026 pour bien choisir la vôtre",
+        "Caméra de chasse ou caméra de surveillance nature : quelles différences et pour quel usage ?",
+        "Où et comment installer sa caméra de chasse pour maximiser ses résultats"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/camera-de-chasse-le-guide-complet-2026-pour-bien-choisir-la-votre",
+        "/blog/camera-de-chasse-ou-camera-de-surveillance-nature-quelles-differences-et-pour-quel-usage",
+        "/blog/ou-et-comment-installer-sa-camera-de-chasse-pour-maximiser-ses-resultats"
+      ]
+    },
+    {
+      "id": "A23",
+      "slug_prevu": "camera-de-chasse-definition-fonctionnement-et-petite-histoire-d-un-outil-devenu-indispensable",
+      "mois": 1,
+      "priorite": "Moyenne",
+      "pilier": "Définition / top of funnel (optimisé IA)",
+      "categorie_blog": "Définitions & bases",
+      "titre_seo": "Caméra de chasse : définition, fonctionnement et petite histoire d'un outil devenu indispensable",
+      "mot_cle_principal": "caméra définition",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "caméra définition",
+          "volume": 320
+        },
+        {
+          "mot_cle": "comment fonctionne une caméra de chasse",
+          "volume": 40
+        },
+        {
+          "mot_cle": "Comment faire fonctionner une caméra de chasse ?",
+          "volume": 0
+        },
+        {
+          "mot_cle": "Comment fonctionne une caméra de chasse GSM ?",
+          "volume": 0
+        },
+        {
+          "mot_cle": "Comment fonctionne caméra de chasse ?",
+          "volume": 0
+        },
+        {
+          "mot_cle": "C'est quoi une caméra de chasse ?",
+          "volume": 0
+        },
+        {
+          "mot_cle": "Qui a créé la caméra ?",
+          "volume": 0
+        },
+        {
+          "mot_cle": "Quand a été inventé la caméra ?",
+          "volume": 0
+        }
+      ],
+      "type_contenu": "Article lexique / definition (optimisé AI Overview)",
+      "intention": "Informationnelle",
+      "questions_paa": [
+        "C'est quoi une caméra de chasse ?",
+        "Comment fonctionne caméra de chasse ?",
+        "Qui a créé la caméra ?",
+        "Quand a été inventé la caméra ?"
+      ],
+      "angle_editorial": "Article court et très structuré pensé pour être repris tel quel par l'IA Overview de Google et les assistants IA : réponse directe en 2-3 phrases dès l'introduction, puis structure en questions/réponses (balisage FAQ). Sert de porte d'entrée « débutant total ».",
+      "vous_aimerez_aussi_ids": [
+        "A1",
+        "A4",
+        "A12"
+      ],
+      "section_produit_instruction": "CTA doux vers l'article pilier A1 puis vers la boutique.",
+      "url_produit_suggeree": "https://wildtrail.fr/produits",
+      "meta_description": "Caméra de chasse : définition simple, fonctionnement et petite histoire d'un outil devenu indispensable.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Caméra de chasse : le guide complet 2026 pour bien choisir la vôtre",
+        "Quelle est la meilleure caméra de chasse en 2026 ? Notre comparatif détaillé",
+        "Vision nocturne et infrarouge : comment capturer le gibier de nuit avec sa caméra de chasse"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/camera-de-chasse-le-guide-complet-2026-pour-bien-choisir-la-votre",
+        "/blog/quelle-est-la-meilleure-camera-de-chasse-en-2026-notre-comparatif-detaille",
+        "/blog/vision-nocturne-et-infrarouge-comment-capturer-le-gibier-de-nuit-avec-sa-camera-de-chasse"
+      ]
+    },
+    {
+      "id": "A24",
+      "slug_prevu": "carte-sd-etancheite-ip66-les-accessoires-indispensables-pour-votre-camera-de-chasse",
+      "mois": 3,
+      "priorite": "Basse",
+      "pilier": "Accessoires",
+      "categorie_blog": "Accessoires",
+      "titre_seo": "Carte SD, étanchéité IP66 : les accessoires indispensables pour votre caméra de chasse",
+      "mot_cle_principal": "carte sd pour caméra de chasse",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "carte sd pour caméra de chasse",
+          "volume": 5
+        },
+        {
+          "mot_cle": "Quelle carte SD pour caméra de chasse ?",
+          "volume": 0
+        }
+      ],
+      "type_contenu": "Guide accessoires",
+      "intention": "Informationnelle + Commerciale",
+      "questions_paa": [],
+      "angle_editorial": "Julien a perdu des photos à cause d'une carte SD bas de gamme qui a lâché sous la pluie : conseils pour choisir la bonne carte SD (classe, capacité) et vérifier l'étanchéité réelle.",
+      "vous_aimerez_aussi_ids": [
+        "A10",
+        "A9",
+        "A1"
+      ],
+      "section_produit_instruction": "Mention de l'indice d'étanchéité des boîtiers WildTrail (à confirmer sur fiche produit) + CTA boutique.",
+      "url_produit_suggeree": "https://wildtrail.fr/produits",
+      "meta_description": "Carte SD et étanchéité IP66 : les accessoires indispensables pour ne jamais perdre une photo de votre caméra de chasse.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Batterie de caméra de chasse : lithium, rechargeable ou piles classiques, que choisir ?",
+        "Panneau solaire pour caméra de chasse : faut-il investir ? (et lequel choisir)",
+        "Caméra de chasse : le guide complet 2026 pour bien choisir la vôtre"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/batterie-de-camera-de-chasse-lithium-rechargeable-ou-piles-classiques-que-choisir",
+        "/blog/panneau-solaire-pour-camera-de-chasse-faut-il-investir-et-lequel-choisir",
+        "/blog/camera-de-chasse-le-guide-complet-2026-pour-bien-choisir-la-votre"
+      ]
+    },
+    {
+      "id": "A25",
+      "slug_prevu": "camera-de-chasse-lidl-que-valent-les-modeles-vendus-en-grande-surface-et-que-choisir-a-la-place",
+      "mois": 6,
+      "priorite": "Haute",
+      "pilier": "Grande distribution / positionnement",
+      "categorie_blog": "Comparatifs & marques",
+      "titre_seo": "Caméra de chasse Lidl : que valent les modèles vendus en grande surface (et que choisir à la place) ?",
+      "mot_cle_principal": "caméra de chasse lidl",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "caméra de chasse lidl",
+          "volume": 700
+        },
+        {
+          "mot_cle": "lidl caméra",
+          "volume": 480
+        },
+        {
+          "mot_cle": "lidl camera",
+          "volume": 436
+        },
+        {
+          "mot_cle": "camera de surveillance lidl",
+          "volume": 127
+        },
+        {
+          "mot_cle": "camera lidl",
+          "volume": 44
+        },
+        {
+          "mot_cle": "caméra de surveillance lidl",
+          "volume": 13
+        },
+        {
+          "mot_cle": "camera gibier lidl",
+          "volume": 10
+        },
+        {
+          "mot_cle": "caméra gibier lidl",
+          "volume": 10
+        }
+      ],
+      "type_contenu": "Comparatif marque/distributeur",
+      "intention": "Commerciale + Informationnelle",
+      "questions_paa": [
+        "caméra de chasse lidl avis"
+      ],
+      "angle_editorial": "Julien a vu une caméra de chasse en promotion chez Lidl et hésite : bon plan ponctuel ou matériel qui ne tiendra pas la saison ? On explique ce qui différencie une offre saisonnière de grande surface d'un modèle pensé pour durer, sans dénigrer gratuitement.",
+      "vous_aimerez_aussi_ids": [
+        "A19",
+        "A2",
+        "A4"
+      ],
+      "section_produit_instruction": "CTA vers le WildTrail C20 (meilleur point d'entrée, budget proche d'une offre Lidl) en valorisant la garantie et le SAV spécialisé WildTrail.",
+      "url_produit_suggeree": "https://wildtrail.fr/produits/cameras-de-chasse-connectees/wildtrail-c20-camera-chasse-wifi-bluetooth",
+      "meta_description": "Caméra de chasse Lidl : que valent les modèles vendus en promotion saisonnière ? Notre avis honnête et une alternative fiable.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Caméra de chasse Decathlon, Lidl, Amazon : bon plan ou fausse bonne idée face à un spécialiste ?",
+        "Caméra de chasse pas chère ou haut de gamme : comment faire le bon choix sans se tromper ?",
+        "Quelle est la meilleure caméra de chasse en 2026 ? Notre comparatif détaillé"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/camera-de-chasse-decathlon-lidl-amazon-bon-plan-ou-fausse-bonne-idee-face-a-un-specialiste",
+        "/blog/camera-de-chasse-pas-chere-ou-haut-de-gamme-comment-faire-le-bon-choix-sans-se-tromper",
+        "/blog/quelle-est-la-meilleure-camera-de-chasse-en-2026-notre-comparatif-detaille"
+      ]
+    },
+    {
+      "id": "A26",
+      "slug_prevu": "camera-de-chasse-decathlon-que-valent-le-piege-photo-et-la-gamme-solognac-et-que-choisir-a-la-place",
+      "mois": 6,
+      "priorite": "Haute",
+      "pilier": "Grande distribution / positionnement",
+      "categorie_blog": "Comparatifs & marques",
+      "titre_seo": "Caméra de chasse Decathlon : que valent le piège photo et la gamme Solognac (et que choisir à la place) ?",
+      "mot_cle_principal": "camera de chasse decathlon",
+      "mots_cles_secondaires": [
+        {
+          "mot_cle": "camera de chasse decathlon",
+          "volume": 1455
+        },
+        {
+          "mot_cle": "camera chasse decathlon",
+          "volume": 800
+        },
+        {
+          "mot_cle": "piege photo decathlon",
+          "volume": 655
+        },
+        {
+          "mot_cle": "piège photographique décathlon",
+          "volume": 536
+        },
+        {
+          "mot_cle": "caméra sportive decathlon",
+          "volume": 480
+        },
+        {
+          "mot_cle": "decathlon camera",
+          "volume": 436
+        },
+        {
+          "mot_cle": "camera decathlon",
+          "volume": 400
+        },
+        {
+          "mot_cle": "decathlon camera chasse",
+          "volume": 217
+        }
+      ],
+      "type_contenu": "Comparatif marque/distributeur",
+      "intention": "Commerciale + Informationnelle",
+      "questions_paa": [
+        "gopro decathlon prix"
+      ],
+      "angle_editorial": "Julien a repéré un piège photo Décathlon (souvent marque Solognac) et hésite avec un modèle spécialisé : on détaille ce que propose vraiment Decathlon en caméra de chasse (gamme permanente contrairement à une offre saisonnière type Lidl, mais fiche technique et SAV toujours généralistes), sans dénigrer gratuitement.",
+      "vous_aimerez_aussi_ids": [
+        "A2",
+        "A4",
+        "A20"
+      ],
+      "section_produit_instruction": "CTA vers le WildTrail C20 et le H40 (prix proches d'un piège photo Décathlon/Solognac) en valorisant la garantie et le SAV spécialisé WildTrail.",
+      "url_produit_suggeree": "https://wildtrail.fr/produits",
+      "meta_description": "Caméra de chasse Decathlon (Solognac, piège photo) : que valent-elles vraiment ? Notre avis honnête et une alternative fiable.",
+      "statut": "a_faire",
+      "vous_aimerez_aussi_titres": [
+        "Caméra de chasse pas chère ou haut de gamme : comment faire le bon choix sans se tromper ?",
+        "Quelle est la meilleure caméra de chasse en 2026 ? Notre comparatif détaillé",
+        "Bushnell, Spypoint, Browning, Apeman... : comparatif des grandes marques de caméras de chasse"
+      ],
+      "vous_aimerez_aussi_urls": [
+        "/blog/camera-de-chasse-pas-chere-ou-haut-de-gamme-comment-faire-le-bon-choix-sans-se-tromper",
+        "/blog/quelle-est-la-meilleure-camera-de-chasse-en-2026-notre-comparatif-detaille",
+        "/blog/bushnell-spypoint-browning-apeman-comparatif-des-grandes-marques-de-cameras-de-chasse"
+      ]
+    }
+  ]
+}
