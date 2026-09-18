@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { TrashIcon, StarIcon } from "@/components/Icons";
 import SingleImageField from "./SingleImageField";
 
@@ -24,6 +25,15 @@ function StarPicker({ value, onChange }) {
 }
 
 export default function TestimonialsEditor({ testimonials, onChange }) {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    fetch("/api/admin/products")
+      .then((r) => r.json())
+      .then((data) => setProducts(data.products || []))
+      .catch(() => {});
+  }, []);
+
   function update(index, patch) {
     onChange(testimonials.map((t, i) => (i === index ? { ...t, ...patch } : t)));
   }
@@ -39,12 +49,20 @@ export default function TestimonialsEditor({ testimonials, onChange }) {
         text: "",
         avatar: { url: "", alt: "" },
         image: { url: "", alt: "" },
+        product: null,
       },
     ]);
   }
 
   function remove(index) {
     onChange(testimonials.filter((_, i) => i !== index));
+  }
+
+  function setProduct(index, slug) {
+    if (!slug) return update(index, { product: null });
+    const p = products.find((prod) => prod.slug === slug);
+    if (!p) return;
+    update(index, { product: { slug: p.slug, categoryId: p.categoryId, name: p.name } });
   }
 
   return (
@@ -87,6 +105,18 @@ export default function TestimonialsEditor({ testimonials, onChange }) {
           <div className="form-field" style={{ marginTop: 10 }}>
             <label>Photo jointe (optionnelle — ex : capture d'écran envoyée par le client)</label>
             <SingleImageField value={item.image} onChange={(image) => update(i, { image })} />
+          </div>
+
+          <div className="form-field" style={{ marginTop: 10 }}>
+            <label>Produit acheté (affiche "Achat vérifié" avec un lien vers la fiche produit)</label>
+            <select value={item.product?.slug || ""} onChange={(e) => setProduct(i, e.target.value)}>
+              <option value="">Aucun — ne pas afficher "Achat vérifié"</option>
+              {products.map((p) => (
+                <option key={p.id} value={p.slug}>
+                  {p.name}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
       ))}

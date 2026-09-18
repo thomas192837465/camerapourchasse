@@ -1802,6 +1802,25 @@ h1, h2, h3, h4, p {
   color: var(--ink);
 }
 
+.testimonial-verified {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  margin-top: 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--green-700);
+}
+
+.testimonial-verified:hover {
+  text-decoration: underline;
+}
+
+.testimonial-verified .icon {
+  width: 13px;
+  height: 13px;
+}
+
 /* ---------- Product detail ---------- */
 
 .product-detail {

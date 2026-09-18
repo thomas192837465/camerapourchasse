@@ -1,7 +1,8 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { StarIcon, ChevronLeftIcon, ChevronRightIcon } from "./Icons";
+import Link from "next/link";
+import { StarIcon, ChevronLeftIcon, ChevronRightIcon, CheckIcon } from "./Icons";
 import { cloudinaryTransform } from "@/lib/cloudinaryUrl";
 
 const TRUNCATE_LENGTH = 110;
@@ -49,6 +50,14 @@ function TestimonialCard({ item }) {
         )}
         <strong className="testimonial-name">{item.name}</strong>
       </div>
+      {item.product?.slug ? (
+        <Link
+          href={`/produits/${item.product.categoryId}/${item.product.slug}`}
+          className="testimonial-verified"
+        >
+          <CheckIcon /> Achat vérifié — {item.product.name}
+        </Link>
+      ) : null}
     </div>
   );
 }
