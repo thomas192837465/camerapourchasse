@@ -50,11 +50,8 @@ function TestimonialCard({ item }) {
         )}
         <strong className="testimonial-name">{item.name}</strong>
       </div>
-      {item.product?.slug ? (
-        <Link
-          href={`/produits/${item.product.categoryId}/${item.product.slug}`}
-          className="testimonial-verified"
-        >
+      {item.verified ? (
+        <Link href="/produits" className="testimonial-verified">
           <CheckIcon /> Achat vérifié
         </Link>
       ) : null}
