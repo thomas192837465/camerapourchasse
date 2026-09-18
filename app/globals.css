@@ -1736,8 +1736,46 @@ h1, h2, h3, h4, p {
   color: var(--ink);
 }
 
+.testimonials-marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(to right, transparent, #000 40px, #000 calc(100% - 40px), transparent);
+  mask-image: linear-gradient(to right, transparent, #000 40px, #000 calc(100% - 40px), transparent);
+}
+
+.testimonials-marquee-track {
+  display: flex;
+  gap: 20px;
+  width: max-content;
+  animation: testimonials-marquee-scroll var(--marquee-duration, 30s) linear infinite;
+}
+
+.testimonials-marquee:hover .testimonials-marquee-track {
+  animation-play-state: paused;
+}
+
+@keyframes testimonials-marquee-scroll {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .testimonials-marquee-track {
+    animation: none;
+  }
+}
+
 .testimonial-item {
-  flex-basis: 300px;
+  flex: 0 0 300px;
+}
+
+@media (max-width: 640px) {
+  .testimonial-item {
+    flex-basis: 240px;
+  }
 }
 
 .testimonial-card {

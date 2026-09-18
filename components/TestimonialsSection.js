@@ -1,20 +1,20 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { StarIcon, ChevronLeftIcon, ChevronRightIcon, CheckIcon } from "./Icons";
+import { StarIcon, CheckIcon } from "./Icons";
 import { cloudinaryTransform } from "@/lib/cloudinaryUrl";
 
 const TRUNCATE_LENGTH = 110;
 
-function TestimonialCard({ item }) {
+function TestimonialCard({ item, hidden }) {
   const [expanded, setExpanded] = useState(false);
   const rating = Math.round(item.rating || 5);
   const text = item.text || "";
   const isLong = text.length > TRUNCATE_LENGTH;
 
   return (
-    <div className="testimonial-card">
+    <div className="testimonial-card" aria-hidden={hidden || undefined}>
       <span className="trust-rating-stars">
         {[1, 2, 3, 4, 5].map((n) => (
           <span key={n} className={`trust-star${n <= rating ? " filled" : ""}`}>
@@ -26,7 +26,7 @@ function TestimonialCard({ item }) {
       <p className="testimonial-text">
         {expanded || !isLong ? text : `${text.slice(0, TRUNCATE_LENGTH).trimEnd()}…`}
         {isLong && !expanded ? (
-          <button type="button" className="testimonial-more" onClick={() => setExpanded(true)}>
+          <button type="button" className="testimonial-more" onClick={() => setExpanded(true)} tabIndex={hidden ? -1 : 0}>
             Lire la suite
           </button>
         ) : null}
@@ -51,7 +51,7 @@ function TestimonialCard({ item }) {
         <strong className="testimonial-name">{item.name}</strong>
       </div>
       {item.verified ? (
-        <Link href="/produits" className="testimonial-verified">
+        <Link href="/produits" className="testimonial-verified" tabIndex={hidden ? -1 : 0}>
           <CheckIcon /> Achat vérifié
         </Link>
       ) : null}
@@ -60,39 +60,17 @@ function TestimonialCard({ item }) {
 }
 
 // Section "Ils nous ont fait confiance" affichée sur l'accueil : témoignages saisis dans l'admin,
-// présentés en carrousel horizontal (même mécanique que ProductCarousel).
+// défilant en continu (bandeau façon "wall of love"). La liste est dupliquée une fois : l'animation
+// CSS glisse de 0 à -50% de la largeur totale, donc le deuxième exemplaire prend le relais pile là
+// où le premier s'arrête, ce qui donne une boucle infinie sans à-coup.
 export default function TestimonialsSection({ title, rating, testimonials }) {
-  const trackRef = useRef(null);
-  const [paused, setPaused] = useState(false);
   const valid = (testimonials || []).filter((t) => t.name && t.text);
-
-  // Défilement automatique du carrousel, mis en pause au survol pour laisser le temps de lire.
-  useEffect(() => {
-    if (paused || valid.length < 2) return;
-    const id = setInterval(() => {
-      const track = trackRef.current;
-      if (!track) return;
-      const atEnd = track.scrollLeft + track.clientWidth >= track.scrollWidth - 4;
-      if (atEnd) {
-        track.scrollTo({ left: 0, behavior: "smooth" });
-      } else {
-        const cardWidth = track.firstChild?.offsetWidth || 280;
-        track.scrollBy({ left: cardWidth + 20, behavior: "smooth" });
-      }
-    }, 4000);
-    return () => clearInterval(id);
-  }, [paused, valid.length]);
 
   if (!valid.length) return null;
 
-  function scrollByAmount(direction) {
-    const track = trackRef.current;
-    if (!track) return;
-    const cardWidth = track.firstChild?.offsetWidth || 280;
-    track.scrollBy({ left: direction * (cardWidth + 20) * 2, behavior: "smooth" });
-  }
-
   const roundedRating = Math.round(rating || 0);
+  const loop = [...valid, ...valid];
+  const duration = Math.max(20, valid.length * 6);
 
   return (
     <section className="section testimonials-section">
@@ -111,30 +89,14 @@ export default function TestimonialsSection({ title, rating, testimonials }) {
           </div>
         ) : null}
 
-        <div className="carousel" onMouseEnter={() => setPaused(true)} onMouseLeave={() => setPaused(false)}>
-          <button
-            type="button"
-            className="carousel-nav prev"
-            onClick={() => scrollByAmount(-1)}
-            aria-label="Témoignages précédents"
-          >
-            <ChevronLeftIcon />
-          </button>
-          <div className="carousel-track" ref={trackRef}>
-            {valid.map((t, i) => (
-              <div className="carousel-item testimonial-item" key={t.id || i}>
-                <TestimonialCard item={t} />
+        <div className="testimonials-marquee">
+          <div className="testimonials-marquee-track" style={{ "--marquee-duration": `${duration}s` }}>
+            {loop.map((t, i) => (
+              <div className="testimonial-item" key={`${t.id || t.name}-${i}`}>
+                <TestimonialCard item={t} hidden={i >= valid.length} />
               </div>
             ))}
           </div>
-          <button
-            type="button"
-            className="carousel-nav next"
-            onClick={() => scrollByAmount(1)}
-            aria-label="Témoignages suivants"
-          >
-            <ChevronRightIcon />
-          </button>
         </div>
       </div>
     </section>
