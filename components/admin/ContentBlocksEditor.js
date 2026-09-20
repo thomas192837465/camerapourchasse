@@ -8,21 +8,23 @@ const BLOCK_LABELS = {
   subheading: "Sous-titre (H3)",
   paragraph: "Paragraphe",
   image: "Photo",
+  imageText: "Image + texte",
   table: "Tableau",
   faq: "FAQ",
 };
 
-function makeBlock(type) {
+function makeBlock(type, extraProps) {
   const id = `blk-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
   const extra = {
     heading: { text: "" },
     subheading: { text: "" },
     paragraph: { text: "" },
     image: { image: { url: "", alt: "" }, caption: "" },
+    imageText: { side: "right", heading: "", subheading: "", text: "", image: { url: "", alt: "" }, caption: "" },
     table: { title: "", intro: "", rows: [] },
     faq: { items: [] },
   }[type];
-  return { id, type, ...extra };
+  return { id, type, ...extra, ...extraProps };
 }
 
 export default function ContentBlocksEditor({ blocks, onChange }) {
@@ -42,8 +44,8 @@ export default function ContentBlocksEditor({ blocks, onChange }) {
     onChange(next);
   }
 
-  function add(type) {
-    onChange([...blocks, makeBlock(type)]);
+  function add(type, extraProps) {
+    onChange([...blocks, makeBlock(type, extraProps)]);
   }
 
   return (
@@ -109,6 +111,10 @@ export default function ContentBlocksEditor({ blocks, onChange }) {
             </>
           ) : null}
 
+          {block.type === "imageText" ? (
+            <ImageTextBlockEditor block={block} onChange={(patch) => update(i, patch)} />
+          ) : null}
+
           {block.type === "table" ? (
             <TableBlockEditor block={block} onChange={(patch) => update(i, patch)} />
           ) : null}
@@ -118,13 +124,65 @@ export default function ContentBlocksEditor({ blocks, onChange }) {
       ))}
 
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-        {Object.entries(BLOCK_LABELS).map(([type, label]) => (
-          <button key={type} type="button" className="btn btn-outline btn-sm" onClick={() => add(type)}>
-            + {label}
-          </button>
-        ))}
+        {Object.entries(BLOCK_LABELS)
+          .filter(([type]) => type !== "imageText")
+          .map(([type, label]) => (
+            <button key={type} type="button" className="btn btn-outline btn-sm" onClick={() => add(type)}>
+              + {label}
+            </button>
+          ))}
+        <button type="button" className="btn btn-outline btn-sm" onClick={() => add("imageText", { side: "left" })}>
+          + Image à gauche, texte à droite
+        </button>
+        <button type="button" className="btn btn-outline btn-sm" onClick={() => add("imageText", { side: "right" })}>
+          + Image à droite, texte à gauche
+        </button>
       </div>
     </div>
+  );
+}
+
+function ImageTextBlockEditor({ block, onChange }) {
+  return (
+    <>
+      <div className="form-field">
+        <label>Position de la photo</label>
+        <select value={block.side} onChange={(e) => onChange({ side: e.target.value })}>
+          <option value="left">À gauche (texte à droite)</option>
+          <option value="right">À droite (texte à gauche)</option>
+        </select>
+      </div>
+      <div className="form-field" style={{ marginTop: 10 }}>
+        <label>Titre (optionnel)</label>
+        <input
+          placeholder="ex : Créé par nos graphistes"
+          value={block.heading}
+          onChange={(e) => onChange({ heading: e.target.value })}
+        />
+      </div>
+      <div className="form-field" style={{ marginTop: 10 }}>
+        <label>Sous-titre (optionnel)</label>
+        <input value={block.subheading} onChange={(e) => onChange({ subheading: e.target.value })} />
+      </div>
+      <div className="form-field" style={{ marginTop: 10 }}>
+        <label>Paragraphe</label>
+        <textarea rows={4} placeholder="Texte du paragraphe…" value={block.text} onChange={(e) => onChange({ text: e.target.value })} />
+        <p className="form-hint" style={{ marginTop: 6 }}>
+          **texte** pour du gras, [texte](https://...) pour un lien.
+        </p>
+      </div>
+      <div style={{ marginTop: 10 }}>
+        <SingleImageField
+          value={block.image}
+          onChange={(img) => onChange({ image: img })}
+          altPlaceholder="Texte alternatif (SEO)"
+        />
+        <div className="form-field" style={{ marginTop: 10 }}>
+          <label>Légende (optionnelle)</label>
+          <input value={block.caption} onChange={(e) => onChange({ caption: e.target.value })} />
+        </div>
+      </div>
+    </>
   );
 }
 

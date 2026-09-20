@@ -101,6 +101,9 @@ export default function ContentBlocks({ blocks }) {
       rows.push({ kind: "media", key: block.id, text: buffer, image: block, index: imageCount });
       imageCount += 1;
       buffer = [];
+    } else if (block.type === "imageText") {
+      flushText();
+      rows.push({ kind: "imageText", key: block.id, block });
     } else if (block.type === "table" || block.type === "faq") {
       flushText();
       rows.push({ kind: "standalone", key: block.id, block });
@@ -147,6 +150,52 @@ export default function ContentBlocks({ blocks }) {
                   />
                 </div>
                 {row.image.caption ? <figcaption>{row.image.caption}</figcaption> : null}
+              </figure>
+            </div>
+          );
+        }
+
+        if (row.kind === "imageText") {
+          const b = row.block;
+          const textCol = (
+            <div className="content-blocks-row-text" key="text">
+              {b.heading ? (
+                <h2 id={b.id} className="reco-title content-blocks-heading">
+                  {b.heading}
+                </h2>
+              ) : null}
+              {b.subheading ? <h3 className="content-blocks-subheading">{b.subheading}</h3> : null}
+              {b.text ? (
+                <p
+                  className="content-blocks-paragraph"
+                  dangerouslySetInnerHTML={{ __html: renderRichText(b.text) }}
+                />
+              ) : null}
+            </div>
+          );
+
+          if (!b.image?.url) {
+            return (
+              <div className="content-blocks-text-only" key={row.key}>
+                {textCol}
+              </div>
+            );
+          }
+
+          return (
+            <div className={`content-blocks-row${b.side === "left" ? " content-blocks-row-reverse" : ""}`} key={row.key}>
+              {textCol}
+              <figure className="content-blocks-row-media">
+                <div className="content-blocks-image">
+                  <Image
+                    src={b.image.url}
+                    alt={b.image.alt || ""}
+                    fill
+                    sizes="(max-width: 960px) 100vw, 560px"
+                    style={{ objectFit: "cover" }}
+                  />
+                </div>
+                {b.caption ? <figcaption>{b.caption}</figcaption> : null}
               </figure>
             </div>
           );
