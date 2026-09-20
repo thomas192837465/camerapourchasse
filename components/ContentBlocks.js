@@ -128,7 +128,7 @@ export default function ContentBlocks({ blocks }) {
                     src={row.image.image.url}
                     alt={row.image.image.alt || ""}
                     fill
-                    sizes="(max-width: 587px) 100vw, 587px"
+                    sizes="(max-width: 450px) 100vw, 450px"
                     style={{ objectFit: "cover" }}
                   />
                 </div>
@@ -145,7 +145,7 @@ export default function ContentBlocks({ blocks }) {
                     src={row.image.image.url}
                     alt={row.image.image.alt || ""}
                     fill
-                    sizes="(max-width: 587px) 100vw, 587px"
+                    sizes="(max-width: 450px) 100vw, 450px"
                     style={{ objectFit: "cover" }}
                   />
                 </div>
@@ -191,7 +191,7 @@ export default function ContentBlocks({ blocks }) {
                     src={b.image.url}
                     alt={b.image.alt || ""}
                     fill
-                    sizes="(max-width: 587px) 100vw, 587px"
+                    sizes="(max-width: 450px) 100vw, 450px"
                     style={{ objectFit: "cover" }}
                   />
                 </div>

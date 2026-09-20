@@ -284,6 +284,15 @@ export default function ContentSettingsPage() {
       </div>
 
       <div className="admin-card">
+        <h2>Contenu bas de page d'accueil</h2>
+        <p className="form-hint" style={{ marginBottom: 10 }}>
+          Affiché tout en bas de la page d'accueil (/), sous les avis clients — titres, paragraphes, photos et FAQ
+          pour le SEO.
+        </p>
+        <ContentBlocksEditor blocks={content.homeBlocks} onChange={(blocks) => set("homeBlocks", blocks)} />
+      </div>
+
+      <div className="admin-card">
         <h2>Page "Livraison"</h2>
         <p className="form-hint" style={{ marginBottom: 10 }}>
           Visible sur /livraison. Les textes entre [crochets] sont des exemples : remplacez-les par vos vraies
