@@ -2611,20 +2611,16 @@ h1, h2, h3, h4, p {
   margin: 0;
 }
 
-.content-blocks-row-media .content-blocks-image {
-  aspect-ratio: 4 / 5;
-}
-
 .content-blocks-image-only {
   margin: 0;
 }
 
-.content-blocks-image-only .content-blocks-image {
-  aspect-ratio: 16 / 8;
-}
-
 .content-blocks-image {
   position: relative;
+  width: 100%;
+  max-width: 587px;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
   border-radius: var(--radius-lg);
   overflow: hidden;
   background: var(--card);
@@ -3988,8 +3984,6 @@ h1, h2, h3, h4, p {
   }
   .content-blocks-row-reverse { direction: ltr; }
   .content-blocks-row-reverse .content-blocks-row-media { order: -1; }
-  .content-blocks-row-media .content-blocks-image,
-  .content-blocks-image-only .content-blocks-image { aspect-ratio: 4 / 3; }
   .pd-description-row { grid-template-columns: 1fr; }
   .hero-v2-inner { grid-template-columns: 1fr; }
   .hero-v2-media { order: -1; }
