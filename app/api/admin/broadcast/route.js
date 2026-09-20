@@ -93,11 +93,14 @@ export async function POST(request) {
     const bodyHtml = renderBlocksToEmailHtml(blocks, accentColor);
 
     const broadcastId = `bc-${Date.now()}`;
-    await firestoreCreateDoc(idToken, "broadcasts", broadcastId, {
+    const broadcastCreated = await firestoreCreateDoc(idToken, "broadcasts", broadcastId, {
       subject,
       sentAt: new Date(),
       total: emails.length,
     });
+    if (!broadcastCreated) {
+      console.error(`[broadcast] échec de la création de broadcasts/${broadcastId}`);
+    }
 
     let sent = 0;
     for (const email of emails) {
@@ -114,13 +117,18 @@ export async function POST(request) {
       if (!result.error) {
         sent += 1;
         // Indexé par l'ID Resend : le webhook d'ouverture (app/api/webhooks/resend) n'a que cet
-        // ID pour retrouver à quel envoi/destinataire il correspond.
+        // ID pour retrouver à quel envoi/destinataire il correspond. Attendu (pas fire-and-forget)
+        // : une fonction serverless Vercel peut être coupée juste après la réponse envoyée, donc
+        // une écriture non attendue ici n'a aucune garantie de se terminer.
         if (result.id) {
-          firestoreCreateDoc(idToken, "emailEvents", result.id, {
+          const created = await firestoreCreateDoc(idToken, "emailEvents", result.id, {
             broadcastId,
             email,
             opened: false,
-          }).catch(() => {});
+          });
+          if (!created) {
+            console.error(`[broadcast] échec de la création de emailEvents/${result.id} pour ${email}`);
+          }
         }
       }
     }
