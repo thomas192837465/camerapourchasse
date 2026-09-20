@@ -1,10 +1,11 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { getAllSubscribers } from "@/lib/subscribers";
+import { getAllSubscribers, deleteSubscriber } from "@/lib/subscribers";
 import { getAllBroadcasts } from "@/lib/broadcasts";
 import { useAuth } from "@/lib/auth";
 import ContentBlocksEditor from "@/components/admin/ContentBlocksEditor";
+import { TrashIcon } from "@/components/Icons";
 
 const SOURCE_LABELS = {
   footer: "Pied de page",
@@ -75,6 +76,16 @@ export default function AdminSubscribersPage() {
       setError(err.message || "Une erreur est survenue.");
     } finally {
       setSending(false);
+    }
+  }
+
+  async function handleDelete(email) {
+    if (!window.confirm(`Retirer ${email} de la liste des inscrits ?`)) return;
+    try {
+      await deleteSubscriber(email);
+      setSubscribers((list) => list.filter((s) => s.id !== email));
+    } catch (err) {
+      alert(err.message || "Échec de la suppression.");
     }
   }
 
@@ -178,6 +189,7 @@ export default function AdminSubscribersPage() {
                 <th>E-mail</th>
                 <th>Source</th>
                 <th>Inscrit le</th>
+                <th></th>
               </tr>
             </thead>
             <tbody>
@@ -186,6 +198,11 @@ export default function AdminSubscribersPage() {
                   <td>{s.email}</td>
                   <td>{SOURCE_LABELS[s.source] || s.source}</td>
                   <td>{formatDate(s.createdAt)}</td>
+                  <td>
+                    <button type="button" className="icon-btn" onClick={() => handleDelete(s.email)} aria-label="Supprimer">
+                      <TrashIcon />
+                    </button>
+                  </td>
                 </tr>
               ))}
             </tbody>
