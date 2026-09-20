@@ -112,6 +112,7 @@ export default function ContentBlocks({ blocks }) {
 
   return (
     <section className="section content-blocks">
+      <div className="content-blocks-inner">
       {rows.map((row) => {
         if (row.kind === "standalone") return renderStandaloneBlock(row.block);
 
@@ -157,6 +158,7 @@ export default function ContentBlocks({ blocks }) {
           </div>
         );
       })}
+      </div>
     </section>
   );
 }
