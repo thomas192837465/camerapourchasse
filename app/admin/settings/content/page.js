@@ -238,6 +238,32 @@ export default function ContentSettingsPage() {
       </div>
 
       <div className="admin-card">
+        <h2>Panier latéral</h2>
+        <div className="form-field">
+          <label>Bandeau promotionnel (laisser vide pour le masquer)</label>
+          <input
+            placeholder='ex : "Bonus nouveaux clients : Économisez 10% avec le code : START"'
+            value={content.cartBannerText}
+            onChange={(e) => set("cartBannerText", e.target.value)}
+          />
+        </div>
+        <div className="form-field">
+          <label>Seuil de livraison gratuite en euros (0 pour masquer la barre de progression)</label>
+          <input
+            type="number"
+            min="0"
+            step="1"
+            value={content.freeShippingThreshold}
+            onChange={(e) => set("freeShippingThreshold", Number(e.target.value))}
+          />
+          <span className="form-hint">
+            Affiche "Seulement X€ de plus et la livraison est gratuite" avec une barre de progression, calculée sur
+            le sous-total du panier.
+          </span>
+        </div>
+      </div>
+
+      <div className="admin-card">
         <h2>Pied de page</h2>
         <div className="form-field">
           <label>Description sous le logo</label>

@@ -2,16 +2,24 @@
 
 import { useEffect, useState } from "react";
 import Image from "next/image";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { useCart } from "@/lib/cart-context";
 import { useCheckout } from "@/lib/useCheckout";
 import { getPublishedProducts } from "@/lib/products";
+import { PAYMENT_ICONS } from "@/lib/icons-fa";
 import { CartIcon, CheckIcon } from "./Icons";
+import FaIcon from "./FaIcon";
 import QtyStepper from "./QtyStepper";
 
-export default function CartDrawer() {
+export default function CartDrawer({ content }) {
   const { items, total, count, drawerOpen, closeDrawer, updateQty, removeItem, addItem, hasMixedSources } = useCart();
   const { goToCheckout, redirecting, error } = useCheckout();
   const [suggestions, setSuggestions] = useState([]);
+
+  const bannerText = content?.cartBannerText || "";
+  const freeShippingThreshold = Number(content?.freeShippingThreshold) || 0;
+  const remainingForFreeShipping = freeShippingThreshold > 0 ? Math.max(0, freeShippingThreshold - total) : 0;
+  const freeShippingProgress = freeShippingThreshold > 0 ? Math.min(100, (total / freeShippingThreshold) * 100) : 0;
 
   useEffect(() => {
     if (!drawerOpen) return;
@@ -53,6 +61,26 @@ export default function CartDrawer() {
             ×
           </button>
         </div>
+
+        {bannerText ? <p className="cart-drawer-banner">{bannerText}</p> : null}
+
+        {items.length > 0 && freeShippingThreshold > 0 ? (
+          <div className="cart-free-shipping">
+            <p>
+              {remainingForFreeShipping > 0 ? (
+                <>
+                  Seulement <strong>€{remainingForFreeShipping.toFixed(2).replace(".", ",")}</strong> de plus et la
+                  livraison est <strong>gratuite</strong>.
+                </>
+              ) : (
+                <>🎉 Livraison gratuite débloquée !</>
+              )}
+            </p>
+            <div className="cart-free-shipping-bar">
+              <div className="cart-free-shipping-bar-fill" style={{ width: `${freeShippingProgress}%` }} />
+            </div>
+          </div>
+        ) : null}
 
         {items.length === 0 ? (
           <div className="cart-drawer-empty">
@@ -114,7 +142,7 @@ export default function CartDrawer() {
               </div>
               <div className="summary-row" style={{ marginBottom: 14 }}>
                 <span>Livraison</span>
-                <span>Gratuite</span>
+                <span>{freeShippingThreshold > 0 && remainingForFreeShipping > 0 ? "Calculée à l'étape suivante" : "Gratuite"}</span>
               </div>
               {hasMixedSources ? (
                 <div className="banner warning" style={{ marginBottom: 12 }}>
@@ -133,9 +161,22 @@ export default function CartDrawer() {
               >
                 {redirecting ? "Redirection…" : "Finaliser ma commande"}
               </button>
-              <p className="cart-drawer-trust">
-                <CheckIcon style={{ width: 14, height: 14 }} /> Satisfaction garantie
-              </p>
+              <div className="cart-payment-icons">
+                {Object.entries(PAYMENT_ICONS).map(([key, icon]) => (
+                  <FontAwesomeIcon key={key} icon={icon} />
+                ))}
+              </div>
+              <div className="cart-drawer-trust-row">
+                <span>
+                  <FaIcon name="lock" /> Paiement sécurisé
+                </span>
+                <span>
+                  <FaIcon name="truck" /> Livraison rapide
+                </span>
+                <span>
+                  <CheckIcon style={{ width: 13, height: 13 }} /> Satisfaction client
+                </span>
+              </div>
             </div>
           </>
         )}

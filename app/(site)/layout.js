@@ -23,7 +23,7 @@ export default async function SiteLayout({ children }) {
       {children}
       <BlogTeaser posts={recentPosts} />
       <Footer content={content} />
-      <CartDrawer />
+      <CartDrawer content={content} />
     </>
   );
 }
