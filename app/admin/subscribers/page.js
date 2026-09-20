@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getAllSubscribers } from "@/lib/subscribers";
+import { useAuth } from "@/lib/auth";
 
 const SOURCE_LABELS = {
   footer: "Pied de page",
@@ -14,8 +15,14 @@ function formatDate(iso) {
 }
 
 export default function AdminSubscribersPage() {
+  const { user } = useAuth();
   const [subscribers, setSubscribers] = useState([]);
   const [ready, setReady] = useState(false);
+  const [subject, setSubject] = useState("");
+  const [message, setMessage] = useState("");
+  const [sending, setSending] = useState(false);
+  const [result, setResult] = useState(null);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     getAllSubscribers().then((list) => {
@@ -23,6 +30,35 @@ export default function AdminSubscribersPage() {
       setReady(true);
     });
   }, []);
+
+  async function handleSend(e) {
+    e.preventDefault();
+    setError("");
+    setResult(null);
+
+    if (!window.confirm(`Envoyer ce message à ${subscribers.length} inscrit(s) ? Cette action est irréversible.`)) {
+      return;
+    }
+
+    setSending(true);
+    try {
+      const idToken = await user.getIdToken();
+      const res = await fetch("/api/admin/broadcast", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ idToken, subject, message }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Échec de l'envoi.");
+      setResult(data);
+      setSubject("");
+      setMessage("");
+    } catch (err) {
+      setError(err.message || "Une erreur est survenue.");
+    } finally {
+      setSending(false);
+    }
+  }
 
   function exportCsv() {
     const rows = [["E-mail", "Source", "Date d'inscription"], ...subscribers.map((s) => [s.email, SOURCE_LABELS[s.source] || s.source, formatDate(s.createdAt)])];
@@ -48,6 +84,37 @@ export default function AdminSubscribersPage() {
             Exporter en CSV
           </button>
         ) : null}
+      </div>
+
+      <div className="admin-card">
+        <h2>Envoyer un message à toute la liste</h2>
+        <p className="form-hint" style={{ marginBottom: 14 }}>
+          Envoyé individuellement à chacun des {subscribers.length} inscrit(s) via Resend.
+        </p>
+        <form onSubmit={handleSend}>
+          <div className="form-field">
+            <label>Sujet</label>
+            <input value={subject} onChange={(e) => setSubject(e.target.value)} required />
+          </div>
+          <div className="form-field" style={{ marginTop: 10 }}>
+            <label>Message</label>
+            <textarea rows={6} value={message} onChange={(e) => setMessage(e.target.value)} required />
+          </div>
+          {error ? <div className="banner error" style={{ marginTop: 12 }}>{error}</div> : null}
+          {result ? (
+            <div className="banner" style={{ marginTop: 12 }}>
+              Envoyé à {result.sent} / {result.total} inscrit(s).
+            </div>
+          ) : null}
+          <button
+            type="submit"
+            className="btn btn-primary"
+            style={{ marginTop: 12 }}
+            disabled={sending || !subscribers.length}
+          >
+            {sending ? "Envoi en cours…" : `Envoyer à ${subscribers.length} inscrit(s)`}
+          </button>
+        </form>
       </div>
 
       <div className="admin-card">
