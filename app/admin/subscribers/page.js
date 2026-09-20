@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { getAllSubscribers } from "@/lib/subscribers";
+import { getAllBroadcasts } from "@/lib/broadcasts";
 import { useAuth } from "@/lib/auth";
 import ContentBlocksEditor from "@/components/admin/ContentBlocksEditor";
 
@@ -15,6 +16,11 @@ function formatDate(iso) {
   return new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric" });
 }
 
+function formatDateTime(iso) {
+  if (!iso) return "—";
+  return new Date(iso).toLocaleDateString("fr-FR", { day: "numeric", month: "long", year: "numeric", hour: "2-digit", minute: "2-digit" });
+}
+
 export default function AdminSubscribersPage() {
   const { user } = useAuth();
   const [subscribers, setSubscribers] = useState([]);
@@ -24,13 +30,23 @@ export default function AdminSubscribersPage() {
   const [sending, setSending] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
+  const [broadcasts, setBroadcasts] = useState([]);
+  const [broadcastsReady, setBroadcastsReady] = useState(false);
 
   useEffect(() => {
     getAllSubscribers().then((list) => {
       setSubscribers(list);
       setReady(true);
     });
+    loadBroadcasts();
   }, []);
+
+  function loadBroadcasts() {
+    getAllBroadcasts().then((list) => {
+      setBroadcasts(list);
+      setBroadcastsReady(true);
+    });
+  }
 
   async function handleSend(e) {
     e.preventDefault();
@@ -54,6 +70,7 @@ export default function AdminSubscribersPage() {
       setResult(data);
       setSubject("");
       setBlocks([]);
+      loadBroadcasts();
     } catch (err) {
       setError(err.message || "Une erreur est survenue.");
     } finally {
@@ -117,6 +134,40 @@ export default function AdminSubscribersPage() {
             {sending ? "Envoi en cours…" : `Envoyer à ${subscribers.length} inscrit(s)`}
           </button>
         </form>
+      </div>
+
+      <div className="admin-card">
+        <h2>Historique des envois</h2>
+        <p className="form-hint" style={{ marginBottom: 14 }}>
+          Taux d'ouverture indicatif : de nombreux clients mails (Gmail, Outlook…) bloquent le pixel de suivi par
+          défaut, donc le vrai nombre de lectures est presque toujours plus élevé que ce chiffre.
+        </p>
+        {broadcasts.length ? (
+          <table className="admin-table">
+            <thead>
+              <tr>
+                <th>Sujet</th>
+                <th>Envoyé le</th>
+                <th>Destinataires</th>
+                <th>Ouvertures</th>
+              </tr>
+            </thead>
+            <tbody>
+              {broadcasts.map((b) => (
+                <tr key={b.id}>
+                  <td>{b.subject}</td>
+                  <td>{formatDateTime(b.sentAt)}</td>
+                  <td>{b.total}</td>
+                  <td>
+                    {b.opened} / {b.total} {b.total ? `(${Math.round((b.opened / b.total) * 100)}%)` : ""}
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p style={{ color: "var(--ink-soft)" }}>{broadcastsReady ? "Aucun envoi pour le moment." : "Chargement…"}</p>
+        )}
       </div>
 
       <div className="admin-card">

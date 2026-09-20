@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { sendEmail, emailEnabled } from "@/lib/email";
 import { getSettings } from "@/lib/settings";
 import { renderBlocksToEmailHtml, wrapEmailTemplate } from "@/lib/emailTemplate";
+import { firestoreCreateDoc } from "@/lib/firestoreRest";
 
 const PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
 const API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
@@ -91,6 +92,13 @@ export async function POST(request) {
     const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "";
     const bodyHtml = renderBlocksToEmailHtml(blocks, accentColor);
 
+    const broadcastId = `bc-${Date.now()}`;
+    await firestoreCreateDoc(idToken, "broadcasts", broadcastId, {
+      subject,
+      sentAt: new Date(),
+      total: emails.length,
+    });
+
     let sent = 0;
     for (const email of emails) {
       const html = wrapEmailTemplate({
@@ -103,7 +111,18 @@ export async function POST(request) {
       // Envoi séquentiel volontaire : reste sous la limite de fréquence de l'API Resend, et une
       // erreur sur un destinataire ne doit pas empêcher l'envoi aux suivants.
       const result = await sendEmail({ to: email, subject, html });
-      if (!result.error) sent += 1;
+      if (!result.error) {
+        sent += 1;
+        // Indexé par l'ID Resend : le webhook d'ouverture (app/api/webhooks/resend) n'a que cet
+        // ID pour retrouver à quel envoi/destinataire il correspond.
+        if (result.id) {
+          firestoreCreateDoc(idToken, "emailEvents", result.id, {
+            broadcastId,
+            email,
+            opened: false,
+          }).catch(() => {});
+        }
+      }
     }
 
     return NextResponse.json({ sent, total: emails.length });

@@ -95,5 +95,18 @@ service cloud.firestore {
       allow create, update: if true;
       allow read, delete: if isAdmin();
     }
+
+    // Historique des envois groupés à la newsletter (voir app/api/admin/broadcast) : réservé à
+    // l'admin, qui crée le document avec son propre jeton au moment de l'envoi.
+    match /broadcasts/{broadcastId} {
+      allow read, write: if isAdmin();
+    }
+
+    // Statut individuel (ouvert ou non) de chaque e-mail envoyé, indexé par l'ID Resend — créé par
+    // l'admin à l'envoi, mis à jour par le webhook Resend (app/api/webhooks/resend), qui
+    // s'authentifie comme admin (comme la tâche planifiée de relance de panier).
+    match /emailEvents/{emailId} {
+      allow read, write: if isAdmin();
+    }
   }
 }
