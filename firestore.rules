@@ -78,5 +78,22 @@ service cloud.firestore {
       allow create: if true;
       allow read, delete: if isAdmin();
     }
+
+    // Inscriptions newsletter : écriture publique (opt-in explicite du visiteur, un document par
+    // e-mail — voir lib/subscribers.js), lecture réservée à l'admin (liste marketing, pas une
+    // donnée à exposer aux visiteurs).
+    match /subscribers/{email} {
+      allow create, update: if true;
+      allow read, delete: if isAdmin();
+    }
+
+    // Paniers "site" en cours (hors Shopify), pour la relance des paniers abandonnés : écriture
+    // publique (le visiteur enregistre son propre brouillon dès qu'il saisit son e-mail au
+    // checkout), lecture réservée à l'admin — utilisée par la tâche planifiée d'envoi des
+    // relances (voir app/api/cron/abandoned-carts), qui s'authentifie comme admin.
+    match /cartRecoveries/{visitorId} {
+      allow create, update: if true;
+      allow read, delete: if isAdmin();
+    }
   }
 }

@@ -16,6 +16,7 @@ const LINKS = [
       { href: "/admin/blog", label: "Blog" },
       { href: "/admin/cart-activity", label: "Activité du panier" },
       { href: "/admin/orders", label: "Commandes" },
+      { href: "/admin/subscribers", label: "Inscrits newsletter" },
     ],
   },
   {

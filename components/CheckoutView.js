@@ -7,6 +7,8 @@ import { useCart } from "@/lib/cart-context";
 import { createOrder } from "@/lib/orders";
 import { firebaseEnabled } from "@/lib/firebase";
 import { useAuth } from "@/lib/auth";
+import { getVisitorId } from "@/lib/cartActivity";
+import { saveCartRecovery, markCartRecovered } from "@/lib/cartRecovery";
 
 const emptyForm = {
   name: "",
@@ -52,6 +54,13 @@ export default function CheckoutView() {
     return (e) => setForm((f) => ({ ...f, [field]: e.target.value }));
   }
 
+  // Enregistre le brouillon de panier dès que l'e-mail est valide — permet une relance si le
+  // client quitte la page sans finaliser (voir lib/cartRecovery.js).
+  function handleEmailBlur() {
+    if (!form.email.includes("@")) return;
+    saveCartRecovery(getVisitorId(), { email: form.email, items, total });
+  }
+
   async function handleSubmit(e) {
     e.preventDefault();
     setError("");
@@ -78,6 +87,7 @@ export default function CheckoutView() {
         total,
         userId: user?.uid,
       });
+      markCartRecovered(getVisitorId());
       clear();
       router.push(`/commande/confirmation/${orderId}`);
     } catch (err) {
@@ -108,7 +118,7 @@ export default function CheckoutView() {
             </div>
             <div className="form-field">
               <label htmlFor="email">E-mail</label>
-              <input id="email" type="email" required value={form.email} onChange={set("email")} />
+              <input id="email" type="email" required value={form.email} onChange={set("email")} onBlur={handleEmailBlur} />
             </div>
             <div className="form-field">
               <label htmlFor="phone">Téléphone</label>

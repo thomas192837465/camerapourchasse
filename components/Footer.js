@@ -4,14 +4,26 @@ import { useState } from "react";
 import Link from "next/link";
 import { LogoMarkIcon } from "./Icons";
 import { cloudinaryTransform } from "@/lib/cloudinaryUrl";
+import { addSubscriber } from "@/lib/subscribers";
 
 export default function Footer({ content }) {
   const [subscribed, setSubscribed] = useState(false);
+  const [error, setError] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
-  function handleSubscribe(e) {
+  async function handleSubscribe(e) {
     e.preventDefault();
-    // Pas encore branché à un service d'e-mailing — retour visuel honnête en attendant.
-    setSubscribed(true);
+    setError("");
+    const email = e.target.elements.email.value;
+    setSubmitting(true);
+    try {
+      await addSubscriber(email, "footer");
+      setSubscribed(true);
+    } catch (err) {
+      setError(err.message || "Une erreur est survenue, veuillez réessayer.");
+    } finally {
+      setSubmitting(false);
+    }
   }
 
   return (
@@ -63,10 +75,11 @@ export default function Footer({ content }) {
             <p className="footer-newsletter-thanks">Merci ! Vous êtes bien inscrit(e).</p>
           ) : (
             <form onSubmit={handleSubscribe}>
-              <input type="email" required placeholder="Votre e-mail" aria-label="E-mail" />
-              <button type="submit" className="btn btn-primary">
-                S'inscrire
+              <input type="email" name="email" required placeholder="Votre e-mail" aria-label="E-mail" />
+              <button type="submit" className="btn btn-primary" disabled={submitting}>
+                {submitting ? "Envoi…" : "S'inscrire"}
               </button>
+              {error ? <p className="footer-newsletter-thanks" style={{ color: "#f0a93a" }}>{error}</p> : null}
             </form>
           )}
         </div>
