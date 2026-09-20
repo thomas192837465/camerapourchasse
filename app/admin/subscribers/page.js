@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { getAllSubscribers } from "@/lib/subscribers";
 import { useAuth } from "@/lib/auth";
+import ContentBlocksEditor from "@/components/admin/ContentBlocksEditor";
 
 const SOURCE_LABELS = {
   footer: "Pied de page",
@@ -19,7 +20,7 @@ export default function AdminSubscribersPage() {
   const [subscribers, setSubscribers] = useState([]);
   const [ready, setReady] = useState(false);
   const [subject, setSubject] = useState("");
-  const [message, setMessage] = useState("");
+  const [blocks, setBlocks] = useState([]);
   const [sending, setSending] = useState(false);
   const [result, setResult] = useState(null);
   const [error, setError] = useState("");
@@ -46,13 +47,13 @@ export default function AdminSubscribersPage() {
       const res = await fetch("/api/admin/broadcast", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idToken, subject, message }),
+        body: JSON.stringify({ idToken, subject, blocks }),
       });
       const data = await res.json();
       if (!res.ok) throw new Error(data.error || "Échec de l'envoi.");
       setResult(data);
       setSubject("");
-      setMessage("");
+      setBlocks([]);
     } catch (err) {
       setError(err.message || "Une erreur est survenue.");
     } finally {
@@ -89,16 +90,17 @@ export default function AdminSubscribersPage() {
       <div className="admin-card">
         <h2>Envoyer un message à toute la liste</h2>
         <p className="form-hint" style={{ marginBottom: 14 }}>
-          Envoyé individuellement à chacun des {subscribers.length} inscrit(s) via Resend.
+          Envoyé individuellement à chacun des {subscribers.length} inscrit(s) via Resend, automatiquement habillé
+          aux couleurs et au logo du site (réglages "Thème" et "Contenu"). Un lien de désinscription est ajouté
+          automatiquement en bas de chaque e-mail.
         </p>
         <form onSubmit={handleSend}>
           <div className="form-field">
             <label>Sujet</label>
             <input value={subject} onChange={(e) => setSubject(e.target.value)} required />
           </div>
-          <div className="form-field" style={{ marginTop: 10 }}>
-            <label>Message</label>
-            <textarea rows={6} value={message} onChange={(e) => setMessage(e.target.value)} required />
+          <div style={{ marginTop: 14 }}>
+            <ContentBlocksEditor blocks={blocks} onChange={setBlocks} />
           </div>
           {error ? <div className="banner error" style={{ marginTop: 12 }}>{error}</div> : null}
           {result ? (

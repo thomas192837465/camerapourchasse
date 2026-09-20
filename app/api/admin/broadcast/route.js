@@ -1,5 +1,7 @@
 import { NextResponse } from "next/server";
 import { sendEmail, emailEnabled } from "@/lib/email";
+import { getSettings } from "@/lib/settings";
+import { renderBlocksToEmailHtml, wrapEmailTemplate } from "@/lib/emailTemplate";
 
 const PROJECT_ID = process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID;
 const API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
@@ -30,7 +32,8 @@ async function verifyAdmin(idToken) {
   return adminRes.status === 200 ? uid : null;
 }
 
-/** Liste tous les e-mails inscrits, via l'API REST Firestore (même jeton admin déjà vérifié). */
+/** Liste les e-mails inscrits n'ayant pas demandé à se désinscrire (voir app/api/unsubscribe),
+ * via l'API REST Firestore (même jeton admin déjà vérifié). */
 async function listSubscriberEmails(idToken) {
   const emails = [];
   let pageToken;
@@ -46,7 +49,8 @@ async function listSubscriberEmails(idToken) {
     const data = await res.json();
     for (const doc of data.documents || []) {
       const email = doc.fields?.email?.stringValue;
-      if (email) emails.push(email);
+      const unsubscribed = doc.fields?.unsubscribed?.booleanValue === true;
+      if (email && !unsubscribed) emails.push(email);
     }
     pageToken = data.nextPageToken;
   } while (pageToken);
@@ -55,7 +59,7 @@ async function listSubscriberEmails(idToken) {
 
 export async function POST(request) {
   try {
-    const { idToken, subject, message } = await request.json();
+    const { idToken, subject, blocks } = await request.json();
 
     const uid = await verifyAdmin(idToken);
     if (!uid) {
@@ -65,8 +69,9 @@ export async function POST(request) {
     if (!emailEnabled) {
       return NextResponse.json({ error: "Resend n'est pas configuré (RESEND_API_KEY / RESEND_FROM_EMAIL)." }, { status: 503 });
     }
-    if (!subject?.trim() || !message?.trim()) {
-      return NextResponse.json({ error: "Sujet et message sont requis." }, { status: 400 });
+    const hasContent = Array.isArray(blocks) && blocks.some((b) => b.text || b.image?.url || b.rows?.length || b.items?.length);
+    if (!subject?.trim() || !hasContent) {
+      return NextResponse.json({ error: "Sujet et contenu du message sont requis." }, { status: 400 });
     }
 
     const emails = await listSubscriberEmails(idToken);
@@ -74,14 +79,27 @@ export async function POST(request) {
       return NextResponse.json({ sent: 0, total: 0 });
     }
 
-    const html = message
-      .split("\n")
-      .filter(Boolean)
-      .map((line) => `<p>${line}</p>`)
-      .join("");
+    // Habillage automatique aux couleurs/logo du site — rien à styliser à la main dans l'admin.
+    const [theme, content, seo] = await Promise.all([
+      getSettings("theme"),
+      getSettings("content"),
+      getSettings("seo"),
+    ]);
+    const accentColor = theme.green900 || "#16301f";
+    const logoUrl = content.logoImage?.url || "";
+    const siteTitle = seo.siteTitle || `${content.logoLine1 || ""} ${content.logoLine2 || ""}`.trim() || "Notre boutique";
+    const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "";
+    const bodyHtml = renderBlocksToEmailHtml(blocks, accentColor);
 
     let sent = 0;
     for (const email of emails) {
+      const html = wrapEmailTemplate({
+        bodyHtml,
+        siteTitle,
+        logoUrl,
+        accentColor,
+        unsubscribeUrl: `${siteUrl}/api/unsubscribe?email=${encodeURIComponent(email)}`,
+      });
       // Envoi séquentiel volontaire : reste sous la limite de fréquence de l'API Resend, et une
       // erreur sur un destinataire ne doit pas empêcher l'envoi aux suivants.
       const result = await sendEmail({ to: email, subject, html });
