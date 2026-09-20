@@ -20,7 +20,7 @@ function makeBlock(type, extraProps) {
     subheading: { text: "" },
     paragraph: { text: "" },
     image: { image: { url: "", alt: "" }, caption: "" },
-    imageText: { side: "right", heading: "", subheading: "", text: "", image: { url: "", alt: "" }, caption: "" },
+    imageText: { side: "right", heading: "", items: [], image: { url: "", alt: "" }, caption: "" },
     table: { title: "", intro: "", rows: [] },
     faq: { items: [] },
   }[type];
@@ -143,6 +143,42 @@ export default function ContentBlocksEditor({ blocks, onChange }) {
 }
 
 function ImageTextBlockEditor({ block, onChange }) {
+  // Compat : les blocs créés avant l'ajout des sous-titres/paragraphes multiples n'ont qu'un seul
+  // champ "subheading" et "text" — on les affiche comme premiers éléments de la liste au besoin.
+  const items = block.items?.length
+    ? block.items
+    : [block.subheading, block.text].some(Boolean)
+    ? [
+        ...(block.subheading ? [{ id: "legacy-sub", type: "subheading", text: block.subheading }] : []),
+        ...(block.text ? [{ id: "legacy-p", type: "paragraph", text: block.text }] : []),
+      ]
+    : [];
+
+  function updateItems(next) {
+    onChange({ items: next });
+  }
+
+  function addItem(type) {
+    const id = `blk-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
+    updateItems([...items, { id, type, text: "" }]);
+  }
+
+  function updateItem(index, text) {
+    updateItems(items.map((it, i) => (i === index ? { ...it, text } : it)));
+  }
+
+  function removeItem(index) {
+    updateItems(items.filter((_, i) => i !== index));
+  }
+
+  function moveItem(index, dir) {
+    const target = index + dir;
+    if (target < 0 || target >= items.length) return;
+    const next = [...items];
+    [next[index], next[target]] = [next[target], next[index]];
+    updateItems(next);
+  }
+
   return (
     <>
       <div className="form-field">
@@ -160,18 +196,50 @@ function ImageTextBlockEditor({ block, onChange }) {
           onChange={(e) => onChange({ heading: e.target.value })}
         />
       </div>
-      <div className="form-field" style={{ marginTop: 10 }}>
-        <label>Sous-titre (optionnel)</label>
-        <input value={block.subheading} onChange={(e) => onChange({ subheading: e.target.value })} />
+
+      {items.map((item, i) => (
+        <div className="repeatable-row" key={item.id} style={{ marginTop: 10, alignItems: "flex-start" }}>
+          <div className="form-field">
+            <label>{item.type === "subheading" ? "Sous-titre" : "Paragraphe"}</label>
+            {item.type === "subheading" ? (
+              <input value={item.text} onChange={(e) => updateItem(i, e.target.value)} />
+            ) : (
+              <textarea rows={4} placeholder="Texte du paragraphe…" value={item.text} onChange={(e) => updateItem(i, e.target.value)} />
+            )}
+          </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: 4 }}>
+            <button type="button" className="icon-btn" onClick={() => moveItem(i, -1)} disabled={i === 0} aria-label="Monter">
+              ↑
+            </button>
+            <button
+              type="button"
+              className="icon-btn"
+              onClick={() => moveItem(i, 1)}
+              disabled={i === items.length - 1}
+              aria-label="Descendre"
+            >
+              ↓
+            </button>
+            <button type="button" className="icon-btn" onClick={() => removeItem(i)} aria-label="Supprimer">
+              <TrashIcon />
+            </button>
+          </div>
+        </div>
+      ))}
+
+      <div style={{ display: "flex", gap: 8, marginTop: 10 }}>
+        <button type="button" className="add-row-btn" onClick={() => addItem("subheading")}>
+          + Ajouter un sous-titre
+        </button>
+        <button type="button" className="add-row-btn" onClick={() => addItem("paragraph")}>
+          + Ajouter un paragraphe
+        </button>
       </div>
-      <div className="form-field" style={{ marginTop: 10 }}>
-        <label>Paragraphe</label>
-        <textarea rows={4} placeholder="Texte du paragraphe…" value={block.text} onChange={(e) => onChange({ text: e.target.value })} />
-        <p className="form-hint" style={{ marginTop: 6 }}>
-          **texte** pour du gras, [texte](https://...) pour un lien.
-        </p>
-      </div>
-      <div style={{ marginTop: 10 }}>
+      <p className="form-hint" style={{ marginTop: 6 }}>
+        **texte** pour du gras, [texte](https://...) pour un lien, dans les paragraphes.
+      </p>
+
+      <div style={{ marginTop: 14 }}>
         <SingleImageField
           value={block.image}
           onChange={(img) => onChange({ image: img })}

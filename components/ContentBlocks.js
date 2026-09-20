@@ -157,6 +157,14 @@ export default function ContentBlocks({ blocks }) {
 
         if (row.kind === "imageText") {
           const b = row.block;
+          // Compat : anciens blocs enregistrés avec un seul champ subheading/text avant l'ajout
+          // des sous-titres/paragraphes multiples.
+          const items = b.items?.length
+            ? b.items
+            : [
+                ...(b.subheading ? [{ id: "legacy-sub", type: "subheading", text: b.subheading }] : []),
+                ...(b.text ? [{ id: "legacy-p", type: "paragraph", text: b.text }] : []),
+              ];
           const textCol = (
             <div className="content-blocks-row-text" key="text">
               {b.heading ? (
@@ -164,13 +172,21 @@ export default function ContentBlocks({ blocks }) {
                   {b.heading}
                 </h2>
               ) : null}
-              {b.subheading ? <h3 className="content-blocks-subheading">{b.subheading}</h3> : null}
-              {b.text ? (
-                <p
-                  className="content-blocks-paragraph"
-                  dangerouslySetInnerHTML={{ __html: renderRichText(b.text) }}
-                />
-              ) : null}
+              {items.map((item, i) =>
+                item.type === "subheading" ? (
+                  item.text ? (
+                    <h3 className="content-blocks-subheading" key={item.id || i}>
+                      {item.text}
+                    </h3>
+                  ) : null
+                ) : item.text ? (
+                  <p
+                    className="content-blocks-paragraph"
+                    key={item.id || i}
+                    dangerouslySetInnerHTML={{ __html: renderRichText(item.text) }}
+                  />
+                ) : null
+              )}
             </div>
           );
 
