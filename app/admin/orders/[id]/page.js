@@ -171,8 +171,8 @@ export default function AdminOrderDetailPage() {
       <div className="admin-card">
         <h2>Statut & suivi</h2>
         <p className="form-hint" style={{ marginBottom: 14 }}>
-          À renseigner manuellement pour le moment ({order.source === "shopify" ? "importée de Shopify" : "commande du site"}
-          ) — sera automatisé lors du branchement Shopify (voir Réglages → Shopify).
+          {order.source === "shopify" ? "Commande importée de Shopify" : "Commande du site"} — statut et suivi
+          transporteur à renseigner manuellement.
         </p>
         <div className="form-grid">
           <div className="form-field">

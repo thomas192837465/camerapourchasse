@@ -22,8 +22,8 @@ export default function AdminOrdersPage() {
         <div>
           <h1>Commandes</h1>
           <p>
-            {loading ? "Chargement…" : `${orders.length} commande(s)`} — suivi manuel en attendant la connexion
-            Shopify.
+            {loading ? "Chargement…" : `${orders.length} commande(s)`} — commandes du site et commandes Shopify
+            (synchronisées automatiquement).
           </p>
         </div>
       </div>
