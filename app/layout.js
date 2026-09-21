@@ -4,6 +4,7 @@ import { Caveat } from "next/font/google";
 import { config } from "@fortawesome/fontawesome-svg-core";
 import { getSettings } from "@/lib/settings";
 import { CartProvider } from "@/lib/cart-context";
+import GoogleTag from "@/components/GoogleTag";
 
 config.autoAddCss = false;
 
@@ -68,6 +69,7 @@ export default async function RootLayout({ children }) {
       </head>
       <body className={caveat.variable}>
         <CartProvider>{children}</CartProvider>
+        <GoogleTag />
       </body>
     </html>
   );
