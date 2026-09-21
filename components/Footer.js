@@ -31,18 +31,24 @@ export default function Footer({ content }) {
       <div className="container footer-grid">
         <div className="footer-brand">
           <div className="logo">
-            <span className="logo-mark" style={{ background: "rgba(255,255,255,0.1)" }}>
-              {content.logoImage?.url ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={cloudinaryTransform(content.logoImage.url, "w_120,q_auto,f_auto")} alt={content.logoImage.alt || ""} />
-              ) : (
-                <LogoMarkIcon />
-              )}
-            </span>
-            <span className="logo-text">
-              <span className="line1" style={{ color: "#fff" }}>{content.logoLine1}</span>
-              <span className="line2" style={{ color: "#9fc79a" }}>{content.logoLine2}</span>
-            </span>
+            {content.logoImage?.url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                className="logo-image"
+                src={cloudinaryTransform(content.logoImage.url, "h_88,q_auto,f_auto")}
+                alt={content.logoImage.alt || content.logoLine1 || ""}
+              />
+            ) : (
+              <>
+                <span className="logo-mark" style={{ background: "rgba(255,255,255,0.1)" }}>
+                  <LogoMarkIcon />
+                </span>
+                <span className="logo-text">
+                  <span className="line1" style={{ color: "#fff" }}>{content.logoLine1}</span>
+                  <span className="line2" style={{ color: "#9fc79a" }}>{content.logoLine2}</span>
+                </span>
+              </>
+            )}
           </div>
           <p>{content.footerDescription}</p>
         </div>

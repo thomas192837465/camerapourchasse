@@ -53,7 +53,10 @@ export default async function HomePage() {
     "@type": "Organization",
     name: seo.siteTitle,
     url: siteUrl || undefined,
-    logo: seo.ogImage || undefined,
+    // Le vrai logo de marque (Admin → Réglages → Contenu), pas l'image de partage réseaux sociaux :
+    // c'est ce champ que Google utilise pour associer un logo à l'entreprise (bandeau de résultats,
+    // Knowledge Panel). Repli sur ogImage tant qu'aucun logo n'a été envoyé.
+    logo: content.logoImage?.url || seo.ogImage || undefined,
     email: legal.email || undefined,
     telephone: legal.phone || undefined,
     address: legal.address || undefined,

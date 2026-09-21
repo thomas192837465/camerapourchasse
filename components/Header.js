@@ -18,18 +18,24 @@ export default function Header({ content, categories = [], navItems = [] }) {
     <header className="site-header">
       <div className="container">
         <Link href="/" className="logo" onClick={closeMobile}>
-          <span className="logo-mark">
-            {content.logoImage?.url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={cloudinaryTransform(content.logoImage.url, "w_120,q_auto,f_auto")} alt={content.logoImage.alt || ""} />
-            ) : (
-              <LogoMarkIcon />
-            )}
-          </span>
-          <span className="logo-text">
-            <span className="line1">{content.logoLine1}</span>
-            <span className="line2">{content.logoLine2}</span>
-          </span>
+          {content.logoImage?.url ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              className="logo-image"
+              src={cloudinaryTransform(content.logoImage.url, "h_88,q_auto,f_auto")}
+              alt={content.logoImage.alt || content.logoLine1 || ""}
+            />
+          ) : (
+            <>
+              <span className="logo-mark">
+                <LogoMarkIcon />
+              </span>
+              <span className="logo-text">
+                <span className="line1">{content.logoLine1}</span>
+                <span className="line2">{content.logoLine2}</span>
+              </span>
+            </>
+          )}
         </Link>
 
         <nav className="main-nav">
