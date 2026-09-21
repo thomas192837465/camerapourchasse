@@ -264,6 +264,30 @@ export default function ContentSettingsPage() {
       </div>
 
       <div className="admin-card">
+        <h2>Popup de bienvenue (code promo)</h2>
+        <p className="form-hint" style={{ marginBottom: 10 }}>
+          S'affiche une seule fois par visiteur (mémorisé dans son navigateur), avec un bouton pour recevoir un
+          code de réduction par e-mail — l'adresse est ajoutée à la liste d'inscrits.
+        </p>
+        <label style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 14 }}>
+          <input
+            type="checkbox"
+            checked={content.promoPopupEnabled}
+            onChange={(e) => set("promoPopupEnabled", e.target.checked)}
+          />
+          Activer la popup
+        </label>
+        <div className="form-field">
+          <label>Code promo envoyé par e-mail</label>
+          <input value={content.promoPopupCode} onChange={(e) => set("promoPopupCode", e.target.value)} />
+          <span className="form-hint">
+            Ce code doit exister comme vraie réduction dans Shopify (Réductions) pour s'appliquer au paiement —
+            créez-le à l'identique là-bas.
+          </span>
+        </div>
+      </div>
+
+      <div className="admin-card">
         <h2>Pied de page</h2>
         <div className="form-field">
           <label>Description sous le logo</label>

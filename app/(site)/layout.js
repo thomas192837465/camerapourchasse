@@ -5,6 +5,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import BlogTeaser from "@/components/BlogTeaser";
 import CartDrawer from "@/components/CartDrawer";
+import PromoPopup from "@/components/PromoPopup";
 
 export const revalidate = 60;
 
@@ -24,6 +25,7 @@ export default async function SiteLayout({ children }) {
       <BlogTeaser posts={recentPosts} />
       <Footer content={content} />
       <CartDrawer content={content} />
+      <PromoPopup content={content} />
     </>
   );
 }
