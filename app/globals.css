@@ -2634,6 +2634,67 @@ h1, h2, h3, h4, p {
   text-align: center;
 }
 
+/* ---------- Variante "article" (blog) : mise en page d'origine, en carte, colonne unique ----------
+   Les articles partagent leur colonne avec une barre latérale (sommaire, produits liés) : le bandeau
+   blanc pleine largeur des autres pages y casserait la mise en page à deux colonnes. */
+
+.content-blocks-article {
+  position: static;
+  left: auto;
+  width: auto;
+  transform: none;
+  margin-top: 32px;
+  padding: 44px 48px;
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.content-blocks-article .content-blocks-inner {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+  gap: 20px;
+}
+
+.content-blocks-article .content-blocks-text-only {
+  max-width: none;
+}
+
+.content-blocks-article .content-blocks-heading {
+  position: relative;
+  margin-top: 14px;
+  padding-left: 18px;
+}
+
+.content-blocks-article .content-blocks-heading::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 3px;
+  bottom: 3px;
+  width: 4px;
+  border-radius: 4px;
+  background: var(--green-600);
+}
+
+.content-blocks-article .content-blocks-paragraph {
+  text-align: justify;
+}
+
+.content-blocks-article .content-blocks-row {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.content-blocks-article .content-blocks-image {
+  max-width: none;
+  aspect-ratio: 16 / 8;
+  border: 1px solid var(--border);
+}
+
 .content-blocks-table {
   width: 100%;
   border-collapse: collapse;
@@ -3984,6 +4045,8 @@ h1, h2, h3, h4, p {
   }
   .content-blocks-row-reverse { direction: ltr; }
   .content-blocks-row-reverse .content-blocks-row-media { order: -1; }
+  .content-blocks-article { padding: 28px 22px; margin-top: 28px; }
+  .content-blocks-article .content-blocks-paragraph { text-align: left; }
   .pd-description-row { grid-template-columns: 1fr; }
   .hero-v2-inner { grid-template-columns: 1fr; }
   .hero-v2-media { order: -1; }

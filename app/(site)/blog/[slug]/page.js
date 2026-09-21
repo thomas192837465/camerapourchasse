@@ -131,7 +131,7 @@ export default async function BlogPostPage({ params }) {
             </div>
           ) : null}
 
-          <ContentBlocks blocks={post.blocks} />
+          <ContentBlocks blocks={post.blocks} variant="article" />
 
           {relatedPosts.length ? (
             <section className="blog-related-articles">

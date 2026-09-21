@@ -81,7 +81,12 @@ function renderStandaloneBlock(block) {
 // Chaque bloc "image" vient se glisser à côté du texte qui le précède (titre/sous-titre/paragraphe
 // accumulés depuis le dernier élément posé), en alternant photo à gauche / à droite d'une image à
 // l'autre — un texte ou tableau/FAQ sans photo associée reste affiché pleine largeur.
-export default function ContentBlocks({ blocks }) {
+//
+// variant="page" (défaut) : bandeau blanc pleine largeur avec rangées image/texte alternées, utilisé
+// sur l'accueil, notre histoire, les pages catégorie, etc.
+// variant="article" : mise en page d'origine (carte encadrée, texte justifié, blocs empilés), pour
+// les articles de blog qui partagent la colonne avec une barre latérale (sommaire, produits liés).
+export default function ContentBlocks({ blocks, variant = "page" }) {
   if (!blocks?.length) return null;
 
   const rows = [];
@@ -114,7 +119,7 @@ export default function ContentBlocks({ blocks }) {
   flushText();
 
   return (
-    <section className="section content-blocks">
+    <section className={`section content-blocks${variant === "article" ? " content-blocks-article" : ""}`}>
       <div className="content-blocks-inner">
       {rows.map((row) => {
         if (row.kind === "standalone") return renderStandaloneBlock(row.block);
