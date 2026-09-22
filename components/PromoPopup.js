@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { addSubscriber } from "@/lib/subscribers";
+import { CONSENT_DECIDED_EVENT, consentDecided } from "@/lib/gtag";
 import { CloseIcon } from "./Icons";
 
 const SEEN_KEY = "wt_promo_popup_seen";
@@ -16,14 +17,30 @@ export default function PromoPopup({ content }) {
   const [error, setError] = useState("");
 
   useEffect(() => {
-    if (content.promoPopupEnabled === false) return;
+    if (content.promoPopupEnabled === false) return undefined;
     try {
-      if (localStorage.getItem(SEEN_KEY)) return;
+      if (localStorage.getItem(SEEN_KEY)) return undefined;
     } catch {
-      return;
+      return undefined;
     }
-    const timer = setTimeout(() => setOpen(true), 2500);
-    return () => clearTimeout(timer);
+
+    // La bannière de consentement passe avant : empiler deux surcouches donne
+    // l'impression d'un site qui réclame, et fait cliquer au hasard sur le RGPD.
+    let timer;
+    const arm = () => {
+      timer = setTimeout(() => setOpen(true), 2500);
+    };
+
+    if (consentDecided()) {
+      arm();
+      return () => clearTimeout(timer);
+    }
+
+    window.addEventListener(CONSENT_DECIDED_EVENT, arm, { once: true });
+    return () => {
+      window.removeEventListener(CONSENT_DECIDED_EVENT, arm);
+      clearTimeout(timer);
+    };
   }, [content.promoPopupEnabled]);
 
   function markSeen() {
