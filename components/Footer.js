@@ -5,6 +5,34 @@ import Link from "next/link";
 import { LogoMarkIcon } from "./Icons";
 import { cloudinaryTransform } from "@/lib/cloudinaryUrl";
 import { addSubscriber } from "@/lib/subscribers";
+import { CONSENT_MODE, OPEN_CONSENT_EVENT } from "@/lib/gtag";
+
+/**
+ * Rouvre la bannière de consentement. Le RGPD impose que retirer son
+ * consentement soit aussi simple que de le donner : ce lien est ce qui rend
+ * la bannière réversible. Rien n'est rendu si le mode consentement est inactif,
+ * pour ne pas afficher un lien qui n'ouvrirait rien.
+ */
+function CookiePreferencesLink() {
+  if (!CONSENT_MODE) return null;
+  return (
+    <button
+      type="button"
+      onClick={() => window.dispatchEvent(new Event(OPEN_CONSENT_EVENT))}
+      style={{
+        background: "none",
+        border: "none",
+        padding: 0,
+        font: "inherit",
+        color: "inherit",
+        cursor: "pointer",
+        textAlign: "left",
+      }}
+    >
+      Préférences cookies
+    </button>
+  );
+}
 
 export default function Footer({ content }) {
   const [subscribed, setSubscribed] = useState(false);
@@ -31,24 +59,18 @@ export default function Footer({ content }) {
       <div className="container footer-grid">
         <div className="footer-brand">
           <div className="logo">
-            {content.logoImage?.url ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                className="logo-image"
-                src={cloudinaryTransform(content.logoImage.url, "h_88,q_auto,f_auto")}
-                alt={content.logoImage.alt || content.logoLine1 || ""}
-              />
-            ) : (
-              <>
-                <span className="logo-mark" style={{ background: "rgba(255,255,255,0.1)" }}>
-                  <LogoMarkIcon />
-                </span>
-                <span className="logo-text">
-                  <span className="line1" style={{ color: "#fff" }}>{content.logoLine1}</span>
-                  <span className="line2" style={{ color: "#9fc79a" }}>{content.logoLine2}</span>
-                </span>
-              </>
-            )}
+            <span className="logo-mark" style={{ background: "rgba(255,255,255,0.1)" }}>
+              {content.logoImage?.url ? (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img src={cloudinaryTransform(content.logoImage.url, "w_120,q_auto,f_auto")} alt={content.logoImage.alt || ""} />
+              ) : (
+                <LogoMarkIcon />
+              )}
+            </span>
+            <span className="logo-text">
+              <span className="line1" style={{ color: "#fff" }}>{content.logoLine1}</span>
+              <span className="line2" style={{ color: "#9fc79a" }}>{content.logoLine2}</span>
+            </span>
           </div>
           <p>{content.footerDescription}</p>
         </div>
@@ -72,6 +94,7 @@ export default function Footer({ content }) {
           <ul>
             <li><Link href="/mentions-legales">Mentions légales</Link></li>
             <li><Link href="/cgv">CGV</Link></li>
+            <li><CookiePreferencesLink /></li>
           </ul>
         </div>
 
