@@ -97,12 +97,12 @@ export default async function SansAbonnementPage() {
 
       <h1 className="listing-title">Caméra de chasse sans abonnement : votre carte SIM, votre choix</h1>
 
-      <ContentBlocks blocks={BLOCKS} />
-
       <section className="section" style={{ paddingTop: 0 }}>
         <h2 className="reco-title">Nos modèles sans abonnement</h2>
         <ProductGrid products={products} />
       </section>
+
+      <ContentBlocks blocks={BLOCKS} />
 
       <ContentBlocks blocks={BLOCKS_AFTER_GRID} />
     </main>

@@ -15,6 +15,8 @@ export default function CartDrawer({ content }) {
   const { items, total, count, drawerOpen, closeDrawer, updateQty, removeItem, addItem, hasMixedSources } = useCart();
   const { goToCheckout, redirecting, error } = useCheckout();
   const [suggestions, setSuggestions] = useState([]);
+  const [bundles, setBundles] = useState({});
+  const [selectedBundleVariants, setSelectedBundleVariants] = useState({});
 
   const bannerText = content?.cartBannerText || "";
   const freeShippingThreshold = Number(content?.freeShippingThreshold) || 0;
@@ -29,6 +31,49 @@ export default function CartDrawer({ content }) {
     });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [drawerOpen]);
+
+  // Suggère la carte SD (ou autre produit "pack") d'une caméra ajoutée au panier sans passer par le
+  // sélecteur de la fiche produit (ex : "Ajouter au panier" depuis une page catégorie) — voir
+  // ProductPackSelector pour l'équivalent sur la fiche produit elle-même.
+  useEffect(() => {
+    const idsToFetch = [...new Set(items.map((it) => it.productId))].filter((id) => !(id in bundles));
+    if (!idsToFetch.length) return;
+    idsToFetch.forEach((id) => {
+      fetch(`/api/cart/sd-suggestion?productId=${encodeURIComponent(id)}`)
+        .then((res) => res.json())
+        .then((data) => setBundles((prev) => ({ ...prev, [id]: data.bundle || null })))
+        .catch(() => setBundles((prev) => ({ ...prev, [id]: null })));
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [items]);
+
+  const sdSuggestions = [];
+  {
+    const seen = new Set();
+    for (const item of items) {
+      const bundle = bundles[item.productId];
+      if (!bundle?.variants?.length) continue;
+      if (items.some((it) => it.productId === bundle.productId)) continue;
+      if (seen.has(bundle.productId)) continue;
+      seen.add(bundle.productId);
+      sdSuggestions.push({ forItem: item, bundle });
+    }
+  }
+
+  function handleAddBundle(bundle) {
+    const variantId = selectedBundleVariants[bundle.productId] || bundle.defaultVariantId;
+    const variant = bundle.variants.find((v) => v.id === variantId) || bundle.variants[0];
+    if (!variant) return;
+    addItem({
+      productId: bundle.productId,
+      name: `${bundle.name} — ${variant.label}`,
+      price: variant.price,
+      image: bundle.image || "",
+      variant: "",
+      source: "shopify",
+      shopifyVariantId: variant.id,
+    });
+  }
 
   useEffect(() => {
     function onKeyDown(e) {
@@ -134,6 +179,43 @@ export default function CartDrawer({ content }) {
                 </div>
               ))}
             </div>
+
+            {sdSuggestions.length ? (
+              <div className="cart-drawer-sd-suggestions">
+                {sdSuggestions.map(({ forItem, bundle }) => {
+                  const selectedId = selectedBundleVariants[bundle.productId] || bundle.defaultVariantId;
+                  return (
+                    <div className="cart-drawer-sd-suggestion" key={bundle.productId}>
+                      <div className="cart-drawer-sd-suggestion-thumb">
+                        {bundle.image ? (
+                          <Image src={bundle.image} alt={bundle.name} fill sizes="44px" style={{ objectFit: "contain" }} />
+                        ) : null}
+                      </div>
+                      <div className="cart-drawer-sd-suggestion-info">
+                        <p>Ajouter une carte SD pour votre {forItem.name} ?</p>
+                        {bundle.variants.length > 1 ? (
+                          <select
+                            value={selectedId || ""}
+                            onChange={(e) =>
+                              setSelectedBundleVariants((prev) => ({ ...prev, [bundle.productId]: e.target.value }))
+                            }
+                          >
+                            {bundle.variants.map((v) => (
+                              <option key={v.id} value={v.id}>
+                                {v.label} — €{v.price.toFixed(2).replace(".", ",")}
+                              </option>
+                            ))}
+                          </select>
+                        ) : null}
+                      </div>
+                      <button type="button" className="btn btn-outline btn-sm" onClick={() => handleAddBundle(bundle)}>
+                        Ajouter
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : null}
 
             <div className="cart-drawer-footer">
               <div className="summary-row">

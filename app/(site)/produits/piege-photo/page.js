@@ -117,12 +117,12 @@ export default async function PiegePhotoPage() {
 
       <h1 className="listing-title">Piège photo : observer la faune sans la déranger</h1>
 
-      <ContentBlocks blocks={BLOCKS} />
-
       <section className="section" style={{ paddingTop: 0 }}>
         <h2 className="reco-title">Nos pièges photo</h2>
         <ProductGrid products={products} />
       </section>
+
+      <ContentBlocks blocks={BLOCKS} />
 
       <ContentBlocks blocks={BLOCKS_AFTER_GRID} />
     </main>
