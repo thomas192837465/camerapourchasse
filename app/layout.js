@@ -5,6 +5,7 @@ import { config } from "@fortawesome/fontawesome-svg-core";
 import { getSettings } from "@/lib/settings";
 import { CartProvider } from "@/lib/cart-context";
 import GoogleTag from "@/components/GoogleTag";
+import ConsentBanner from "@/components/ConsentBanner";
 
 config.autoAddCss = false;
 
@@ -70,6 +71,7 @@ export default async function RootLayout({ children }) {
       <body className={caveat.variable}>
         <CartProvider>{children}</CartProvider>
         <GoogleTag />
+        <ConsentBanner />
       </body>
     </html>
   );

@@ -85,22 +85,62 @@ soit validée.
 
 ---
 
-## RGPD — à traiter
+## RGPD — mode consentement v2
 
-Le site n'a aujourd'hui aucun bandeau de consentement. Deux conséquences :
+Le consentement est recueilli à deux endroits, parce que le tunnel traverse
+deux domaines :
 
-- côté droit français, déposer des cookies publicitaires sans consentement
-  préalable n'est pas conforme ;
-- côté Google, le **mode consentement v2** est requis pour les données publicitaires
-  provenant de l'EEE. Sans lui, le remarketing et les audiences personnalisées se
-  dégradent progressivement.
+| Domaine | Qui demande le consentement |
+| --- | --- |
+| `wildtrail.fr` | `components/ConsentBanner.js` (ce dépôt) |
+| checkout Shopify | la bannière cookies native de Shopify, activée pour la France |
 
-Le code est prêt : passer `NEXT_PUBLIC_CONSENT_MODE=1` pose les refus par défaut,
-puis la bannière appelle `grantAdConsent()` / `denyAdConsent()` (`lib/gtag.js`).
-Il manque la bannière elle-même.
+### Côté site
 
-⚠️ Ne pas activer `NEXT_PUBLIC_CONSENT_MODE=1` tant qu'aucune bannière n'existe :
-les refus par défaut ne seraient jamais levés et plus aucune conversion ne remonterait.
+`components/ConsentBanner.js` s'affiche tant que le visiteur ne s'est pas
+prononcé, et respecte trois règles qui conditionnent la validité du consentement :
+
+- **« Tout refuser » a exactement le même poids visuel que « Tout accepter »** —
+  c'est le motif de sanction le plus fréquent de la CNIL ;
+- **aucune case n'est pré-cochée** dans le volet « Personnaliser » ;
+- **le refus est mémorisé** (`wt_consent_v1` dans le stockage local), sinon la
+  bannière reviendrait à chaque page jusqu'à l'épuisement du visiteur.
+
+Le lien « Préférences cookies » du pied de page rouvre la bannière : le retrait
+du consentement doit rester aussi simple que son octroi.
+
+Le choix déjà exprimé est rejoué **de façon synchrone dans le script d'init de
+`GoogleTag`**, pas depuis React. Attendre l'hydratation ferait partir le premier
+hit en « refusé » pour un visiteur qui avait pourtant accepté.
+
+Sans consentement publicitaire, `decorateCheckoutUrl` cesse aussi de transmettre
+le `gclid` au checkout : il servirait précisément à la mesure refusée.
+
+### Activation
+
+```bash
+NEXT_PUBLIC_CONSENT_MODE=1
+```
+
+Tant que cette variable est absente, `ConsentBanner` ne rend rien et le site se
+comporte exactement comme avant — le déploiement du code est donc sans effet
+tant qu'on n'a pas basculé la variable.
+
+### Côté checkout Shopify
+
+⚠️ **Le pixel personnalisé est réglé sur « Autorisation requise » (Marketing +
+Analyse), et la bannière cookies Shopify est active pour la France.** Conséquence
+directe : *le pixel ne se déclenche que pour les acheteurs qui cliquent
+« Accepter »*. Une commande passée sans accepter la bannière ne remonte aucune
+conversion — l'action reste « Inactive » et l'onglet « Pages Web » reste vide,
+alors que l'installation est parfaitement correcte.
+
+C'est la cause du premier test infructueux (commande GUKE02PIZ, 21/09/2026).
+Tout test de validation doit donc **accepter les cookies au checkout**.
+
+Le mode consentement v2 ne supprime pas cette perte, il la compense : Google
+reçoit un signal « refusé » au lieu de rien du tout, et modélise les conversions
+manquantes. Sans lui, les acheteurs qui refusent sont purement invisibles.
 
 ## Merchant Center (plus tard)
 

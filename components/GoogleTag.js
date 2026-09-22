@@ -1,5 +1,12 @@
 import Script from "next/script";
-import { GOOGLE_ADS_ID, GA4_ID, CONSENT_MODE, CHECKOUT_DOMAIN, googleTagEnabled } from "@/lib/gtag";
+import {
+  GOOGLE_ADS_ID,
+  GA4_ID,
+  CONSENT_MODE,
+  CHECKOUT_DOMAIN,
+  CONSENT_STORAGE_KEY,
+  googleTagEnabled,
+} from "@/lib/gtag";
 
 /**
  * Charge le tag Google (gtag.js) sur l'ensemble du site.
@@ -23,6 +30,9 @@ export default function GoogleTag() {
     ? `linker: { domains: ${JSON.stringify(linkerDomains)}, decorate_forms: true, accept_incoming: true },`
     : "";
 
+  // Le choix déjà exprimé est réappliqué ici, de façon synchrone, avant le premier
+  // hit — et non depuis React. Attendre l'hydratation ferait partir la première
+  // mesure en « refusé » pour un visiteur qui avait pourtant accepté.
   const consentDefault = CONSENT_MODE
     ? `gtag('consent', 'default', {
         ad_storage: 'denied',
@@ -30,7 +40,19 @@ export default function GoogleTag() {
         ad_personalization: 'denied',
         analytics_storage: 'denied',
         wait_for_update: 500
-      });`
+      });
+      try {
+        var stored = JSON.parse(localStorage.getItem('${CONSENT_STORAGE_KEY}') || 'null');
+        if (stored) {
+          var ads = stored.ads === true ? 'granted' : 'denied';
+          gtag('consent', 'update', {
+            ad_storage: ads,
+            ad_user_data: ads,
+            ad_personalization: ads,
+            analytics_storage: stored.analytics === true ? 'granted' : 'denied'
+          });
+        }
+      } catch (e) {}`
     : "";
 
   return (
