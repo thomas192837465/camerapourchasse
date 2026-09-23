@@ -26,7 +26,11 @@ export default function ProductCard({ product }) {
   return (
     <article className="product-card">
       <Link className="product-thumb" href={`/produits/${product.categoryId}/${product.slug}`}>
-        {product.isBestSeller ? <span className="badge">Best-seller</span> : null}
+        {product.isPromo ? (
+          <span className="badge badge-promo">Promotion</span>
+        ) : product.isBestSeller ? (
+          <span className="badge">Best-seller</span>
+        ) : null}
         {image ? (
           <Image
             src={image}

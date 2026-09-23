@@ -106,6 +106,16 @@ export default function ShopifyContentForm({ shopifyProduct, initialContent, cat
               Mettre en avant ("Meilleures Ventes")
             </label>
           </div>
+          <div className="form-field" style={{ justifyContent: "center" }}>
+            <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <input type="checkbox" checked={content.isPromo} onChange={(e) => set("isPromo", e.target.checked)} />
+              En promotion (badge + toujours en tête sur /produits)
+            </label>
+            <span className="form-hint">
+              Reste affiché en premier sur /produits même si un filtre catégorie/prix est actif — n'apparaît pas dans
+              les pages dédiées à une seule catégorie.
+            </span>
+          </div>
           <div className="form-field full">
             <label>Slug (URL) — laisser vide pour garder celui de Shopify ("{shopifyProduct.handle}")</label>
             <input

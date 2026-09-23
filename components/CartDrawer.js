@@ -25,7 +25,7 @@ export default function CartDrawer({ content }) {
 
   useEffect(() => {
     if (!drawerOpen) return;
-    getPublishedProducts({ isBestSeller: true }).then((products) => {
+    getPublishedProducts({ isBestSeller: true, excludePromo: true }).then((products) => {
       const cartIds = new Set(items.map((it) => it.productId));
       setSuggestions(products.filter((p) => !cartIds.has(p.id)).slice(0, 6));
     });

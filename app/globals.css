@@ -890,6 +890,10 @@ h1, h2, h3, h4, p {
   border-radius: 999px;
 }
 
+.product-thumb .badge-promo {
+  background: #c0392b;
+}
+
 .product-body {
   padding: 14px 16px 16px;
   display: flex;

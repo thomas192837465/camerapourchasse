@@ -33,7 +33,7 @@ export default async function CategoryOrLegacyProductPage({ params, searchParams
 
     const [categories, products, filterOptions] = await Promise.all([
       getCategories(),
-      getPublishedProducts({ categoryIds: [category.slug], tags, maxPrice, search }),
+      getPublishedProducts({ categoryIds: [category.slug], tags, maxPrice, search, excludePromo: true }),
       getSettings("filters"),
     ]);
 
