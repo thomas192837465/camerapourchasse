@@ -841,10 +841,13 @@ h1, h2, h3, h4, p {
   padding: 10px 20px;
 }
 
-/* Le badge "Promotion" est pensé pour la vignette carrée de la vue grille — sur la miniature plus
-   étroite de la vue liste, il se retrouve à cheval sur la photo et le texte. On le masque donc là. */
-.product-grid.list-view .badge-promo {
-  display: none;
+/* Le badge reste ancré en haut à gauche de la vignette dans les deux vues ; en liste, la vignette
+   est plus étroite (160px) donc le badge y est aussi légèrement réduit pour ne pas la déborder. */
+.product-grid.list-view .badge {
+  font-size: 0.6rem;
+  padding: 3px 7px;
+  top: 6px;
+  left: 6px;
 }
 
 .product-card {
@@ -947,6 +950,18 @@ h1, h2, h3, h4, p {
   color: var(--ink-faint);
   text-decoration: line-through;
   margin-left: 6px;
+}
+
+.discount-pct {
+  display: inline-block;
+  background: #c0392b;
+  color: #fff;
+  font-size: 0.7rem;
+  font-weight: 700;
+  padding: 2px 7px;
+  border-radius: 999px;
+  margin-left: 6px;
+  vertical-align: middle;
 }
 
 .product-body .btn {

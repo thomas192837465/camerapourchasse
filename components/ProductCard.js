@@ -51,7 +51,12 @@ export default function ProductCard({ product }) {
         <div className="price">
           €{product.price.toFixed(2).replace(".", ",")}
           {product.compareAtPrice ? (
-            <span className="compare">€{product.compareAtPrice.toFixed(2).replace(".", ",")}</span>
+            <>
+              <span className="compare">€{product.compareAtPrice.toFixed(2).replace(".", ",")}</span>
+              <span className="discount-pct">
+                -{Math.round((1 - product.price / product.compareAtPrice) * 100)}%
+              </span>
+            </>
           ) : null}
         </div>
         <button className="btn btn-primary btn-block btn-sm" onClick={handleAdd}>
