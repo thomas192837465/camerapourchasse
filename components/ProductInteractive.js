@@ -175,7 +175,7 @@ export default function ProductInteractive({ product, bundle }) {
   return (
     <>
     <section className="product-detail">
-      <div className="pd-gallery">
+      <div>
         <div className="gallery-main">
           {images.length ? (
             <Image
@@ -229,7 +229,7 @@ export default function ProductInteractive({ product, bundle }) {
         ) : null}
       </div>
 
-      <div className="pd-summary">
+      <div>
         <h1 className="pd-title">{product.name}</h1>
 
         <div className="pd-rating">
@@ -252,10 +252,6 @@ export default function ProductInteractive({ product, bundle }) {
           </div>
         ) : null}
 
-        <DeliveryEstimate />
-      </div>
-
-      <div className="pd-rest">
         {product.features?.length ? (
           <ul className="pd-features">
             {product.features.map((f, i) => (
@@ -297,6 +293,8 @@ export default function ProductInteractive({ product, bundle }) {
             {added ? "Ajouté ✓" : "Ajouter au Panier"}
           </button>
         </div>
+
+        <DeliveryEstimate />
 
         <Tabs
           tabs={[
