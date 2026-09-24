@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import { CameraIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon } from "./Icons";
 import { useCart } from "@/lib/cart-context";
@@ -95,6 +95,21 @@ export default function ProductInteractive({ product, bundle }) {
   const [qty, setQty] = useState(1);
   const { addItem } = useCart();
   const [added, setAdded] = useState(false);
+  const buyRowRef = useRef(null);
+  const [showStickyBar, setShowStickyBar] = useState(false);
+
+  // Barre "Ajouter au panier" fixée en bas de l'écran une fois que le bouton d'origine (dans
+  // pd-buy-row) est scrollé hors de vue, pour ne pas obliger à remonter toute la fiche produit.
+  useEffect(() => {
+    const el = buyRowRef.current;
+    if (!el) return undefined;
+    const observer = new IntersectionObserver(
+      ([entry]) => setShowStickyBar(!entry.isIntersecting && entry.boundingClientRect.top < 0),
+      { threshold: 0 }
+    );
+    observer.observe(el);
+    return () => observer.disconnect();
+  }, []);
 
   const selectedBundleOption = hasBundle ? bundleOptions?.find((o) => o.id === selectedOptionId) : null;
   const selectedVariant = isMultiVariant ? product.variants.find((v) => v.id === selectedOptionId) : null;
@@ -151,7 +166,10 @@ export default function ProductInteractive({ product, bundle }) {
     setTimeout(() => setAdded(false), 2000);
   }
 
+  const stickyPrice = hasBundle ? selectedBundleOption?.price ?? product.price : displayPrice;
+
   return (
+    <>
     <section className="product-detail">
       <div>
         <div className="gallery-main">
@@ -265,7 +283,7 @@ export default function ProductInteractive({ product, bundle }) {
           </>
         ) : null}
 
-        <div className="pd-buy-row">
+        <div className="pd-buy-row" ref={buyRowRef}>
           <QtyStepper value={qty} onChange={setQty} />
           <button className="btn btn-primary" onClick={handleAdd}>
             {added ? "Ajouté ✓" : "Ajouter au Panier"}
@@ -308,5 +326,16 @@ export default function ProductInteractive({ product, bundle }) {
         />
       </div>
     </section>
+
+    <div className={`pd-sticky-bar${showStickyBar ? " visible" : ""}`}>
+      <div className="pd-sticky-info">
+        <span className="pd-sticky-name">{product.name}</span>
+        <span className="pd-sticky-price">€{stickyPrice.toFixed(2).replace(".", ",")}</span>
+      </div>
+      <button className="btn btn-primary" onClick={handleAdd}>
+        {added ? "Ajouté ✓" : "Ajouter au Panier"}
+      </button>
+    </div>
+    </>
   );
 }

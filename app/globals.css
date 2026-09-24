@@ -2417,6 +2417,51 @@ h1, h2, h3, h4, p {
   padding: 13px 20px;
 }
 
+.pd-sticky-bar {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 40;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  background: var(--card);
+  border-top: 1px solid var(--border);
+  box-shadow: 0 -4px 16px rgba(15, 26, 17, 0.1);
+  padding: 10px 16px calc(10px + env(safe-area-inset-bottom));
+  transform: translateY(100%);
+  transition: transform 0.25s ease;
+}
+
+.pd-sticky-bar.visible {
+  transform: translateY(0);
+}
+
+.pd-sticky-info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.pd-sticky-name {
+  font-size: 0.8rem;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.pd-sticky-price {
+  font-weight: 800;
+  color: var(--green-800);
+}
+
+.pd-sticky-bar .btn {
+  flex-shrink: 0;
+}
+
 .pd-delivery-estimate {
   display: flex;
   align-items: center;
