@@ -28,10 +28,10 @@ export default function ProductCard({ product }) {
   return (
     <article className="product-card">
       <Link className="product-thumb" href={`/produits/${product.categoryId}/${product.slug}`}>
-        {product.isPromo ? (
-          <span className="badge badge-promo">Promotion</span>
-        ) : hasDiscount ? (
+        {hasDiscount ? (
           <span className="badge badge-discount">-{discountPct}%</span>
+        ) : product.isPromo ? (
+          <span className="badge badge-promo">Promotion</span>
         ) : product.isBestSeller ? (
           <span className="badge">Best-seller</span>
         ) : null}
