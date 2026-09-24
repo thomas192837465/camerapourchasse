@@ -101,14 +101,18 @@ export default function ProductInteractive({ product, bundle }) {
   // Barre "Ajouter au panier" fixée en bas de l'écran une fois que le bouton d'origine (dans
   // pd-buy-row) est scrollé hors de vue, pour ne pas obliger à remonter toute la fiche produit.
   useEffect(() => {
-    const el = buyRowRef.current;
-    if (!el) return undefined;
-    const observer = new IntersectionObserver(
-      ([entry]) => setShowStickyBar(!entry.isIntersecting && entry.boundingClientRect.top < 0),
-      { threshold: 0 }
-    );
-    observer.observe(el);
-    return () => observer.disconnect();
+    function checkPosition() {
+      const el = buyRowRef.current;
+      if (!el) return;
+      setShowStickyBar(el.getBoundingClientRect().bottom < 0);
+    }
+    checkPosition();
+    window.addEventListener("scroll", checkPosition, { passive: true });
+    window.addEventListener("resize", checkPosition);
+    return () => {
+      window.removeEventListener("scroll", checkPosition);
+      window.removeEventListener("resize", checkPosition);
+    };
   }, []);
 
   const selectedBundleOption = hasBundle ? bundleOptions?.find((o) => o.id === selectedOptionId) : null;
