@@ -236,21 +236,20 @@ export default function ProductInteractive({ product, bundle }) {
           <TrustRating average={product.rating?.average || 0} count={product.rating?.count || 0} />
         </div>
 
-        {!hasBundle || !bundleOptions ? (
-          <div className="pd-price">
-            €{product.price.toFixed(2).replace(".", ",")}
-            {product.compareAtPrice ? (
-              <>
-                <span className="compare" style={{ fontSize: "1.1rem", marginLeft: 10 }}>
-                  €{product.compareAtPrice.toFixed(2).replace(".", ",")}
-                </span>
-                <span className="discount-pct" style={{ marginLeft: 10 }}>
-                  -{Math.round((1 - product.price / product.compareAtPrice) * 100)}%
-                </span>
-              </>
-            ) : null}
-          </div>
-        ) : null}
+        <div className="pd-price">
+          {hasBundle && bundleOptions ? <span className="pd-price-from">À partir de </span> : null}
+          €{product.price.toFixed(2).replace(".", ",")}
+          {product.compareAtPrice ? (
+            <>
+              <span className="compare" style={{ fontSize: "1.1rem", marginLeft: 10 }}>
+                €{product.compareAtPrice.toFixed(2).replace(".", ",")}
+              </span>
+              <span className="discount-pct" style={{ marginLeft: 10 }}>
+                -{Math.round((1 - product.price / product.compareAtPrice) * 100)}%
+              </span>
+            </>
+          ) : null}
+        </div>
 
         <DeliveryEstimate />
       </div>

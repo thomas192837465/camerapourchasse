@@ -2137,6 +2137,12 @@ h1, h2, h3, h4, p {
   margin-bottom: 18px;
 }
 
+.pd-price-from {
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+}
+
 .pd-features {
   display: flex;
   flex-direction: column;
