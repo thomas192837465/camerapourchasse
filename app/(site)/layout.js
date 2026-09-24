@@ -6,6 +6,7 @@ import Footer from "@/components/Footer";
 import BlogTeaser from "@/components/BlogTeaser";
 import CartDrawer from "@/components/CartDrawer";
 import PromoPopup from "@/components/PromoPopup";
+import ClarityTag from "@/components/ClarityTag";
 
 export const revalidate = 60;
 
@@ -26,6 +27,7 @@ export default async function SiteLayout({ children }) {
       <Footer content={content} />
       <CartDrawer content={content} />
       <PromoPopup content={content} />
+      <ClarityTag />
     </>
   );
 }
