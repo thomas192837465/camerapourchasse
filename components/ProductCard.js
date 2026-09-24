@@ -9,6 +9,8 @@ import { useCart } from "@/lib/cart-context";
 export default function ProductCard({ product }) {
   const { addItem } = useCart();
   const image = product.images?.find((img) => img.url)?.url;
+  const hasDiscount = product.compareAtPrice > product.price;
+  const discountPct = hasDiscount ? Math.round((1 - product.price / product.compareAtPrice) * 100) : 0;
 
   function handleAdd(e) {
     e.preventDefault();
@@ -28,6 +30,8 @@ export default function ProductCard({ product }) {
       <Link className="product-thumb" href={`/produits/${product.categoryId}/${product.slug}`}>
         {product.isPromo ? (
           <span className="badge badge-promo">Promotion</span>
+        ) : hasDiscount ? (
+          <span className="badge badge-discount">-{discountPct}%</span>
         ) : product.isBestSeller ? (
           <span className="badge">Best-seller</span>
         ) : null}
@@ -51,12 +55,7 @@ export default function ProductCard({ product }) {
         <div className="price">
           €{product.price.toFixed(2).replace(".", ",")}
           {product.compareAtPrice ? (
-            <>
-              <span className="compare">€{product.compareAtPrice.toFixed(2).replace(".", ",")}</span>
-              <span className="discount-pct">
-                -{Math.round((1 - product.price / product.compareAtPrice) * 100)}%
-              </span>
-            </>
+            <span className="compare">€{product.compareAtPrice.toFixed(2).replace(".", ",")}</span>
           ) : null}
         </div>
         <button className="btn btn-primary btn-block btn-sm" onClick={handleAdd}>
