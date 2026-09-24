@@ -891,6 +891,7 @@ h1, h2, h3, h4, p {
   position: absolute;
   top: 10px;
   left: 10px;
+  z-index: 2;
   background: var(--green-700);
   color: #fff;
   font-size: 0.68rem;
