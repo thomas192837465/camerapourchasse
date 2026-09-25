@@ -19,6 +19,14 @@ const DEFAULT_FAVICON_SVG =
   '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><rect width="24" height="24" rx="6" fill="#2c5b3d"/><rect x="4" y="8" width="16" height="11" rx="2.5" fill="none" stroke="#fff" stroke-width="1.8"/><circle cx="12" cy="13.5" r="3.2" fill="none" stroke="#fff" stroke-width="1.8"/><rect x="9" y="5" width="4" height="3" rx="0.8" fill="none" stroke="#fff" stroke-width="1.8"/></svg>';
 const DEFAULT_FAVICON = `data:image/svg+xml,${encodeURIComponent(DEFAULT_FAVICON_SVG)}`;
 
+// Sans cette balise, certains navigateurs mobiles (surtout Android) supposent une largeur de bureau
+// par défaut et zooment la page pour compenser — d'où un rendu correct sur certains téléphones et
+// "trop zoomé" sur d'autres, selon la façon dont chaque navigateur comble cette absence.
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
+};
+
 export async function generateMetadata() {
   const seo = await getSettings("seo");
   return {
