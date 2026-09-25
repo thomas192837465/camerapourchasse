@@ -11,6 +11,10 @@ const SEEN_KEY = "wt_promo_popup_seen";
 // qu'il aille au bout ou qu'il ferme la popup — voir SEEN_KEY dans le stockage local du navigateur.
 export default function PromoPopup({ content }) {
   const [open, setOpen] = useState(false);
+  // Une fois la popup fermée (ou déjà vue lors d'une visite précédente), un petit bouton flottant
+  // reste accessible en bas à droite pour la rouvrir — sans lui, un visiteur qui ferme par réflexe
+  // perd tout accès au code promo pour le reste de sa visite.
+  const [showFab, setShowFab] = useState(false);
   const [step, setStep] = useState("teaser");
   const [email, setEmail] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -19,7 +23,10 @@ export default function PromoPopup({ content }) {
   useEffect(() => {
     if (content.promoPopupEnabled === false) return undefined;
     try {
-      if (localStorage.getItem(SEEN_KEY)) return undefined;
+      if (localStorage.getItem(SEEN_KEY)) {
+        setShowFab(true);
+        return undefined;
+      }
     } catch {
       return undefined;
     }
@@ -52,6 +59,12 @@ export default function PromoPopup({ content }) {
   function close() {
     setOpen(false);
     markSeen();
+    setShowFab(true);
+  }
+
+  function reopen() {
+    setOpen(true);
+    setShowFab(false);
   }
 
   async function handleSubmit(e) {
@@ -74,7 +87,13 @@ export default function PromoPopup({ content }) {
     }
   }
 
-  if (!open) return null;
+  if (!open) {
+    return showFab ? (
+      <button type="button" className="promo-fab" onClick={reopen} aria-label="Voir mon code de réduction">
+        🎁
+      </button>
+    ) : null;
+  }
 
   return (
     <div className="promo-popup-overlay" onClick={close}>

@@ -4107,6 +4107,33 @@ h1, h2, h3, h4, p {
   margin: 0;
 }
 
+/* Positionné au-dessus de la hauteur de la barre "Ajouter au panier" fixe (pd-sticky-bar) pour ne
+   jamais se superposer avec elle sur une fiche produit, qu'elle soit visible ou non. */
+.promo-fab {
+  position: fixed;
+  right: 20px;
+  bottom: 84px;
+  z-index: 90;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: none;
+  background: var(--green-700);
+  color: #fff;
+  font-size: 1.5rem;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.promo-fab:hover {
+  transform: scale(1.08);
+}
+
 .media-picker-item {
   cursor: pointer;
   transition: box-shadow 0.15s ease;
