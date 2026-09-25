@@ -3881,6 +3881,11 @@ h1, h2, h3, h4, p {
   color: #b3413a;
 }
 
+.status-pill.checkout {
+  background: var(--green-700);
+  color: #fff;
+}
+
 .color-field-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));

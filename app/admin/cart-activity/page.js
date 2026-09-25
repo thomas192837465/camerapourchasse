@@ -30,15 +30,17 @@ export default function AdminCartActivityPage() {
     return () => clearInterval(id);
   }, []);
 
+  const checkoutCount = events.filter((e) => e.type === "checkout").length;
+
   return (
     <>
       <div className="admin-header">
         <div>
           <h1>Activité du panier</h1>
           <p>
-            {ready ? `${events.length} ajout(s) récent(s)` : "Chargement…"} — mis à jour en temps réel, visiteurs
-            connectés et anonymes confondus. N'affecte pas les performances du site : l'enregistrement se fait en
-            arrière-plan au moment de l'ajout au panier.
+            {ready ? `${events.length} événement(s) récent(s), dont ${checkoutCount} "Finaliser ma commande"` : "Chargement…"} —
+            mis à jour en temps réel, visiteurs connectés et anonymes confondus. N'affecte pas les performances du
+            site : l'enregistrement se fait en arrière-plan au moment de l'action.
           </p>
         </div>
       </div>
@@ -49,16 +51,23 @@ export default function AdminCartActivityPage() {
             <thead>
               <tr>
                 <th>Quand</th>
+                <th>Action</th>
                 <th>Visiteur</th>
-                <th>Produit</th>
-                <th>Qté</th>
-                <th>Prix</th>
+                <th>Produit(s)</th>
+                <th>Montant</th>
               </tr>
             </thead>
             <tbody>
               {events.map((e) => (
                 <tr key={e.id}>
                   <td>{timeAgo(e.createdAt)}</td>
+                  <td>
+                    {e.type === "checkout" ? (
+                      <span className="status-pill checkout">Finaliser ma commande</span>
+                    ) : (
+                      <span className="status-pill">Ajout au panier</span>
+                    )}
+                  </td>
                   <td>
                     {e.userEmail ? (
                       <span className="status-pill">{e.userEmail}</span>
@@ -69,17 +78,22 @@ export default function AdminCartActivityPage() {
                     )}
                   </td>
                   <td>
-                    {e.name}
-                    {e.variant ? <span className="form-hint"> — {e.variant}</span> : null}
+                    {e.type === "checkout"
+                      ? (e.items || []).map((it) => `${it.qty}× ${it.name}`).join(", ")
+                      : `${e.name}${e.variant ? ` — ${e.variant}` : ""}`}
                   </td>
-                  <td>{e.qty}</td>
-                  <td>€{Number(e.price || 0).toFixed(2).replace(".", ",")}</td>
+                  <td>
+                    €
+                    {Number(e.type === "checkout" ? e.value : e.price || 0)
+                      .toFixed(2)
+                      .replace(".", ",")}
+                  </td>
                 </tr>
               ))}
             </tbody>
           </table>
         ) : (
-          <p style={{ color: "var(--ink-soft)" }}>{ready ? "Aucun ajout au panier pour le moment." : "Chargement…"}</p>
+          <p style={{ color: "var(--ink-soft)" }}>{ready ? "Aucune activité pour le moment." : "Chargement…"}</p>
         )}
       </div>
     </>
