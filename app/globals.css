@@ -1839,6 +1839,10 @@ h1, h2, h3, h4, p {
   .testimonials-marquee-track {
     animation: none;
   }
+
+  .promo-fab {
+    animation: none;
+  }
 }
 
 .testimonial-item {
@@ -4128,10 +4132,22 @@ h1, h2, h3, h4, p {
   box-shadow: var(--shadow-md);
   cursor: pointer;
   transition: transform 0.15s ease;
+  animation: promo-fab-pulse 1.8s ease-in-out infinite;
 }
 
 .promo-fab:hover {
+  animation-play-state: paused;
   transform: scale(1.08);
+}
+
+@keyframes promo-fab-pulse {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.12);
+  }
 }
 
 .media-picker-item {
