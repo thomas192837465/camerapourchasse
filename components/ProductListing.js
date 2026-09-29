@@ -1,7 +1,6 @@
 import Link from "next/link";
 import Filters from "./Filters";
 import ResultsView from "./ResultsView";
-import SearchBar from "./SearchBar";
 import ContentBlocks from "./ContentBlocks";
 import ProductComparisonTable from "./ProductComparisonTable";
 import { buildFaqJsonLd } from "@/lib/schema";
@@ -9,7 +8,6 @@ import { buildFaqJsonLd } from "@/lib/schema";
 export default function ProductListing({
   categories,
   products,
-  filterOptions,
   selectedCategorySlugs,
   title,
   category,
@@ -54,12 +52,8 @@ export default function ProductListing({
 
       <h1 className="listing-title">{title}</h1>
 
-      <section className="search-hero">
-        <SearchBar />
-      </section>
-
       <div className="search-layout">
-        <Filters categories={categories} options={filterOptions} selectedCategorySlugs={selectedCategorySlugs} />
+        <Filters categories={categories} selectedCategorySlugs={selectedCategorySlugs} />
         <ResultsView products={products} />
       </div>
 

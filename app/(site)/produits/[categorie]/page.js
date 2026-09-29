@@ -1,7 +1,6 @@
 import { notFound, permanentRedirect } from "next/navigation";
 import { getCategoryBySlug, getCategories } from "@/lib/categories";
 import { getProductBySlug, getPublishedProducts } from "@/lib/products";
-import { getSettings } from "@/lib/settings";
 import { pageMetadata } from "@/lib/metadata";
 import ProductListing from "@/components/ProductListing";
 
@@ -31,17 +30,15 @@ export default async function CategoryOrLegacyProductPage({ params, searchParams
     const maxPrice = sp?.max ? Number(sp.max) : undefined;
     const search = sp?.q || "";
 
-    const [categories, products, filterOptions] = await Promise.all([
+    const [categories, products] = await Promise.all([
       getCategories(),
       getPublishedProducts({ categoryIds: [category.slug], tags, maxPrice, search }),
-      getSettings("filters"),
     ]);
 
     return (
       <ProductListing
         categories={categories}
         products={products}
-        filterOptions={filterOptions}
         selectedCategorySlugs={[category.slug]}
         title={category.name}
         category={category}

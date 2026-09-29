@@ -38,10 +38,9 @@ export default async function ProductsPage({ searchParams }) {
   const maxPrice = sp?.max ? Number(sp.max) : undefined;
   const search = sp?.q || "";
 
-  const [categories, products, filterOptions, content] = await Promise.all([
+  const [categories, products, content] = await Promise.all([
     getCategories(),
     getPublishedProducts({ categoryIds, tags, maxPrice, search }),
-    getSettings("filters"),
     getSettings("content"),
   ]);
 
@@ -49,7 +48,6 @@ export default async function ProductsPage({ searchParams }) {
     <ProductListing
       categories={categories}
       products={products}
-      filterOptions={filterOptions}
       selectedCategorySlugs={categoryIds}
       title={search ? `Résultats pour "${search}"` : "Toutes nos caméras de chasse"}
       introBlocks={content.produitsIntroBlocks}
