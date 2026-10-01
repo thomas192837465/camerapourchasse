@@ -2,6 +2,8 @@ import crypto from "node:crypto";
 import { signInWithEmailAndPassword } from "firebase/auth";
 import { doc, setDoc, serverTimestamp } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
+import { getReceivedEmail } from "@/lib/email";
+import { recordInboundEmail } from "@/lib/supportThreads";
 
 // Vérifie la signature "Svix" que Resend appose sur chaque appel de webhook, à la main plutôt
 // qu'avec le package svix (dont Webhook.verify() renvoyait `undefined` sans lever d'erreur dans
@@ -30,8 +32,9 @@ function verifySvixSignature(secret, payload, svixId, svixTimestamp, svixSignatu
   });
 }
 
-// Reçoit les évènements Resend (ouverture d'e-mail, etc.) — à configurer dans Resend →
-// Webhooks → Add Endpoint avec cette URL, événement "email.opened" au minimum.
+// Reçoit les évènements Resend (ouverture d'e-mail, messagerie entrante, etc.) — à configurer dans
+// Resend → Webhooks → Add Endpoint avec cette URL, événements "email.opened" et "email.received"
+// (c'est ce second événement qui alimente Admin → Messages clients, voir lib/supportThreads.js).
 export async function POST(request) {
   const payload = await request.text();
   const svixId = request.headers.get("svix-id");
@@ -64,6 +67,35 @@ export async function POST(request) {
   }
 
   console.log("[resend webhook] évènement vérifié :", event?.type, "email_id:", event?.data?.email_id);
+
+  if (event?.type === "email.received") {
+    const emailId = event.data?.email_id;
+    if (!emailId) {
+      console.error("[resend webhook] email.received sans email_id dans le payload :", JSON.stringify(event.data));
+    } else {
+      try {
+        // Le webhook ne transmet que des métadonnées (expéditeur, sujet) : le corps du message se
+        // récupère à part via l'API Resend.
+        const full = await getReceivedEmail(emailId);
+        if (full) {
+          await signInWithEmailAndPassword(auth, process.env.CRON_ADMIN_EMAIL, process.env.CRON_ADMIN_PASSWORD);
+          await recordInboundEmail({
+            from: full.from,
+            subject: full.subject,
+            html: full.html,
+            text: full.text,
+            resendEmailId: emailId,
+            resendMessageId: full.message_id,
+          });
+          console.log("[resend webhook] e-mail entrant enregistré pour", full.from);
+        } else {
+          console.error("[resend webhook] échec de la récupération du corps de l'e-mail", emailId);
+        }
+      } catch (err) {
+        console.error("[resend webhook] échec de l'enregistrement de l'e-mail entrant :", err.message);
+      }
+    }
+  }
 
   if (event?.type === "email.opened") {
     const emailId = event.data?.email_id;

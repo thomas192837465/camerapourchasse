@@ -1,5 +1,4 @@
 rules_version = '2';
-
 service cloud.firestore {
   match /databases/{database}/documents {
 
@@ -107,6 +106,16 @@ service cloud.firestore {
     // s'authentifie comme admin (comme la tâche planifiée de relance de panier).
     match /emailEvents/{emailId} {
       allow read, write: if isAdmin();
+    }
+
+    // Messagerie "Messages clients" (voir lib/supportThreads.js) : un fil par adresse e-mail
+    // cliente, alimenté par le webhook Resend (email.received, authentifié comme admin) et par les
+    // réponses envoyées depuis l'admin. Entièrement privé — ce n'est pas une donnée de visiteur.
+    match /supportThreads/{threadId} {
+      allow read, write: if isAdmin();
+      match /messages/{messageId} {
+        allow read, write: if isAdmin();
+      }
     }
   }
 }
