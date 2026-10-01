@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import { getOrderById, updateOrder, ORDER_STATUSES } from "@/lib/orders";
+import { getOrderById, updateOrder, deleteOrder, ORDER_STATUSES } from "@/lib/orders";
 import { getProductById } from "@/lib/products";
 
 function CopyButton({ text, label = "Copier" }) {
@@ -48,6 +48,7 @@ export default function AdminOrderDetailPage() {
   const [status, setStatus] = useState("nouvelle");
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
+  const [deleting, setDeleting] = useState(false);
   const [supplierLinks, setSupplierLinks] = useState({});
 
   useEffect(() => {
@@ -77,6 +78,22 @@ export default function AdminOrderDetailPage() {
       setTimeout(() => setSaved(false), 2000);
     } finally {
       setSaving(false);
+    }
+  }
+
+  // Pour une commande Shopify supprimée côté Shopify après coup (commande de test, par exemple) :
+  // le webhook ne gère que la création, donc ce ménage manuel reste nécessaire pour les commandes
+  // déjà importées avant qu'on ajoute la synchronisation de suppression (voir webhooks/shopify).
+  async function handleDelete() {
+    if (!window.confirm("Supprimer définitivement cette commande de l'admin WildTrail ? Cette action est irréversible.")) {
+      return;
+    }
+    setDeleting(true);
+    try {
+      await deleteOrder(id);
+      router.push("/admin/orders");
+    } catch {
+      setDeleting(false);
     }
   }
 
@@ -206,6 +223,17 @@ export default function AdminOrderDetailPage() {
         </div>
         <button className="btn btn-primary" onClick={handleSave} disabled={saving}>
           {saving ? "Enregistrement…" : saved ? "Enregistré ✓" : "Enregistrer"}
+        </button>
+      </div>
+
+      <div className="admin-card">
+        <h2>Zone de danger</h2>
+        <p className="form-hint" style={{ marginBottom: 14 }}>
+          Supprime cette commande de l'admin WildTrail uniquement — sans effet sur Shopify. À utiliser pour
+          nettoyer une commande de test déjà supprimée côté Shopify mais encore visible ici.
+        </p>
+        <button className="btn btn-outline" style={{ color: "var(--gold)" }} onClick={handleDelete} disabled={deleting}>
+          {deleting ? "Suppression…" : "Supprimer cette commande"}
         </button>
       </div>
     </>

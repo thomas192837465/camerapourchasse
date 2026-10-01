@@ -1,6 +1,6 @@
 import crypto from "node:crypto";
 import { signInWithEmailAndPassword } from "firebase/auth";
-import { doc, getDoc, setDoc, Timestamp } from "firebase/firestore";
+import { deleteDoc, doc, getDoc, setDoc, Timestamp } from "firebase/firestore";
 import { auth, db } from "@/lib/firebase";
 
 // Vérifie la signature que Shopify appose sur chaque appel de webhook (en-tête
@@ -55,10 +55,11 @@ function mapOrderToDoc(order) {
   };
 }
 
-// Reçoit les commandes créées côté checkout Shopify et les recopie dans notre base (collection
-// "orders") pour qu'elles apparaissent dans Admin → Commandes aux côtés de celles du formulaire du
-// site — à configurer dans Shopify → Réglages → Notifications → Webhooks, événement "Création de
-// commande", format JSON, avec cette URL.
+// Reçoit les commandes créées et supprimées côté Shopify et reflète ça dans notre base (collection
+// "orders") pour qu'elles apparaissent (ou disparaissent) dans Admin → Commandes aux côtés de celles
+// du formulaire du site — à configurer dans Shopify → Réglages → Notifications → Webhooks, deux
+// événements sur cette même URL : "Création de commande" ET "Suppression de commande" (sans ce
+// second événement, une commande de test supprimée côté Shopify reste comptée indéfiniment ici).
 export async function POST(request) {
   const rawBody = await request.text();
   const hmacHeader = request.headers.get("x-shopify-hmac-sha256");
@@ -85,6 +86,17 @@ export async function POST(request) {
   }
 
   if (!order?.id) {
+    return new Response("ok");
+  }
+
+  if (topic === "orders/delete") {
+    try {
+      await signInWithEmailAndPassword(auth, process.env.CRON_ADMIN_EMAIL, process.env.CRON_ADMIN_PASSWORD);
+      await deleteDoc(doc(db, "orders", `shopify-${order.id}`));
+      console.log("[shopify webhook] orders/shopify-" + order.id + " supprimée (suivi de la suppression Shopify).");
+    } catch (err) {
+      console.error("[shopify webhook] échec de la suppression :", err.message);
+    }
     return new Response("ok");
   }
 
