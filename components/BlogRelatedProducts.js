@@ -11,7 +11,7 @@ export default function BlogRelatedProducts({ products }) {
       <h3>Produits recommandés</h3>
       <div className="blog-sidebar-products">
         {products.map((product) => {
-          const image = product.images?.find((img) => img.url)?.url;
+          const image = product.images?.find((img) => img.url && img.type !== "video")?.url;
           return (
             <Link
               key={product.id}

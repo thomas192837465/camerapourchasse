@@ -84,7 +84,7 @@ export default function CartDrawer({ content }) {
   }, [closeDrawer]);
 
   function handleQuickAdd(product) {
-    const image = product.images?.find((img) => img.url)?.url || "";
+    const image = product.images?.find((img) => img.url && img.type !== "video")?.url || "";
     addItem({
       productId: product.id,
       name: product.name,
@@ -142,7 +142,7 @@ export default function CartDrawer({ content }) {
                 <p>Vous pourriez aussi aimer</p>
                 <div className="cart-drawer-upsell-row">
                   {suggestions.map((p) => {
-                    const image = p.images?.find((img) => img.url)?.url;
+                    const image = p.images?.find((img) => img.url && img.type !== "video")?.url;
                     return (
                       <button type="button" key={p.id} className="cart-drawer-upsell-item" onClick={() => handleQuickAdd(p)}>
                         <span className="cart-drawer-upsell-thumb">

@@ -183,6 +183,14 @@ export function StarIcon(props) {
   );
 }
 
+export function PlayIcon(props) {
+  return (
+    <svg className="icon" viewBox="0 0 24 24" fill="currentColor" {...props}>
+      <path d="M8 5v14l11-7z"></path>
+    </svg>
+  );
+}
+
 export function TrashIcon(props) {
   return (
     <svg className="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.8" {...props}>

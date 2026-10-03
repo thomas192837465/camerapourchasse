@@ -2,12 +2,14 @@
 
 import { useRef, useState } from "react";
 import { resizeImageToFit } from "@/lib/image";
-import { uploadToCloudinary, cloudinaryEnabled } from "@/lib/cloudinary";
+import { uploadToCloudinary, uploadVideoToCloudinary, videoPosterUrl, cloudinaryEnabled } from "@/lib/cloudinary";
 import { addMediaItem } from "@/lib/media";
+import { PlayIcon } from "../Icons";
 import MediaLibraryPicker from "./MediaLibraryPicker";
 
 export default function ImageUploader({ images, onChange, targetSize }) {
   const inputRef = useRef(null);
+  const videoInputRef = useRef(null);
   const [uploading, setUploading] = useState(false);
   const [error, setError] = useState("");
   const [showLibrary, setShowLibrary] = useState(false);
@@ -43,6 +45,34 @@ export default function ImageUploader({ images, onChange, targetSize }) {
     }
   }
 
+  async function handleVideoFiles(e) {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    setError("");
+
+    if (!cloudinaryEnabled) {
+      setError(
+        "Cloudinary n'est pas configuré (voir .env.local.example : NEXT_PUBLIC_CLOUDINARY_CLOUD_NAME et NEXT_PUBLIC_CLOUDINARY_UPLOAD_PRESET)."
+      );
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const uploaded = [];
+      for (const file of files) {
+        const { url, publicId } = await uploadVideoToCloudinary(file);
+        uploaded.push({ url, cloudinaryId: publicId, alt: "", type: "video" });
+      }
+      onChange([...images, ...uploaded]);
+    } catch (err) {
+      setError(err.message || "Échec de l'upload.");
+    } finally {
+      setUploading(false);
+      if (videoInputRef.current) videoInputRef.current.value = "";
+    }
+  }
+
   function handleSelectFromLibrary(item) {
     onChange([...images, { url: item.url, cloudinaryId: item.cloudinaryId, alt: item.alt || "" }]);
     setShowLibrary(false);
@@ -71,6 +101,8 @@ export default function ImageUploader({ images, onChange, targetSize }) {
       <p className="form-hint" style={{ marginBottom: 10 }}>
         Les photos sont automatiquement redimensionnées en {targetSize.width}×{targetSize.height}px sur fond blanc
         (le produit entier reste visible, sans recadrage). La première photo est utilisée comme image principale.
+        Les vidéos s'ajoutent telles quelles (pas de redimensionnement) et s'affichent dans le même carrousel sur
+        la fiche produit.
       </p>
 
       {!cloudinaryEnabled ? (
@@ -83,7 +115,16 @@ export default function ImageUploader({ images, onChange, targetSize }) {
         {images.map((img, i) => (
           <div key={img.cloudinaryId || i}>
             <div className="uploader-slot">
-              <img src={img.url} alt={img.alt || ""} />
+              {img.type === "video" ? (
+                <>
+                  <video src={img.url} muted />
+                  <span className="video-tag">
+                    <PlayIcon />
+                  </span>
+                </>
+              ) : (
+                <img src={img.url} alt={img.alt || ""} />
+              )}
               {i === 0 ? <span className="primary-tag">Principale</span> : null}
               <button type="button" className="remove-tag" onClick={() => handleRemove(i)} aria-label="Supprimer">
                 ×
@@ -91,7 +132,7 @@ export default function ImageUploader({ images, onChange, targetSize }) {
             </div>
             <input
               type="text"
-              placeholder="Texte alternatif (SEO)"
+              placeholder={img.type === "video" ? "Légende (optionnel)" : "Texte alternatif (SEO)"}
               value={img.alt}
               onChange={(e) => handleAltChange(i, e.target.value)}
               style={{
@@ -129,9 +170,20 @@ export default function ImageUploader({ images, onChange, targetSize }) {
           <span style={{ fontSize: "1.4rem" }}>🖼</span>
           Choisir dans la bibliothèque
         </button>
+
+        <button
+          type="button"
+          className="uploader-add"
+          onClick={() => videoInputRef.current?.click()}
+          disabled={uploading || !cloudinaryEnabled}
+        >
+          <PlayIcon style={{ width: "1.2rem", height: "1.2rem" }} />
+          {uploading ? "Envoi…" : "Ajouter une vidéo"}
+        </button>
       </div>
 
       <input ref={inputRef} type="file" accept="image/*" multiple hidden onChange={handleFiles} />
+      <input ref={videoInputRef} type="file" accept="video/*" multiple hidden onChange={handleVideoFiles} />
       {error ? <div className="banner error">{error}</div> : null}
 
       {showLibrary ? (

@@ -38,7 +38,7 @@ export default async function HomePage() {
   const bestSellers = allProducts.filter((p) => p.isBestSeller);
 
   const heroBackdropImages = bestSellers
-    .map((p) => p.images?.find((img) => img.url))
+    .map((p) => p.images?.find((img) => img.url && img.type !== "video"))
     .filter(Boolean);
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "";

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
-import { CameraIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon } from "./Icons";
+import { CameraIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, PlayIcon } from "./Icons";
 import { useCart } from "@/lib/cart-context";
 import QtyStepper from "./QtyStepper";
 import Tabs from "./Tabs";
@@ -12,6 +12,7 @@ import ProductPackSelector from "./ProductPackSelector";
 import FaIcon from "./FaIcon";
 import DeliveryEstimate from "./DeliveryEstimate";
 import { cloudinaryTransform } from "@/lib/cloudinaryUrl";
+import { videoPosterUrl } from "@/lib/cloudinary";
 
 const VISIBLE_THUMBS = 3;
 
@@ -139,7 +140,7 @@ export default function ProductInteractive({ product, bundle }) {
         productId: product.id,
         name: selectedVariant ? `${product.name} — ${selectedVariant.title}` : product.name,
         price: hasBundle ? product.price : displayPrice,
-        image: images[0]?.url || "",
+        image: images.find((img) => img.type !== "video")?.url || "",
         variant,
         source: product.source,
         shopifyVariantId: selectedVariant ? selectedVariant.id : product.shopifyVariantId,
@@ -178,14 +179,24 @@ export default function ProductInteractive({ product, bundle }) {
       <div>
         <div className="gallery-main">
           {images.length ? (
-            <Image
-              src={images[activeImage]?.url}
-              alt={images[activeImage]?.alt || product.name}
-              fill
-              sizes="(max-width: 960px) 100vw, 50vw"
-              style={{ objectFit: "contain" }}
-              priority
-            />
+            images[activeImage]?.type === "video" ? (
+              <video
+                key={images[activeImage].url}
+                src={images[activeImage].url}
+                controls
+                playsInline
+                className="gallery-main-video"
+              />
+            ) : (
+              <Image
+                src={images[activeImage]?.url}
+                alt={images[activeImage]?.alt || product.name}
+                fill
+                sizes="(max-width: 960px) 100vw, 50vw"
+                style={{ objectFit: "contain" }}
+                priority
+              />
+            )
           ) : (
             <div style={{ display: "flex", alignItems: "center", justifyContent: "center", height: "100%", color: "var(--ink-faint)" }}>
               <CameraIcon style={{ width: "34%", height: "34%", strokeWidth: 1.1 }} />
@@ -207,7 +218,7 @@ export default function ProductInteractive({ product, bundle }) {
           <div className="gallery-thumbs">
             {visibleThumbs.map((img, i) => (
               <button key={i} className={i === activeImage ? "active" : ""} onClick={() => setActiveImage(i)}>
-                <Image src={img.url} alt={img.alt || product.name} fill sizes="100px" style={{ objectFit: "contain" }} />
+                <ThumbMedia img={img} alt={product.name} />
               </button>
             ))}
             {overflowImage ? (
@@ -215,13 +226,7 @@ export default function ProductInteractive({ product, bundle }) {
                 className={activeImage >= VISIBLE_THUMBS ? "active" : ""}
                 onClick={() => setActiveImage(VISIBLE_THUMBS)}
               >
-                <Image
-                  src={overflowImage.url}
-                  alt={overflowImage.alt || product.name}
-                  fill
-                  sizes="100px"
-                  style={{ objectFit: "contain" }}
-                />
+                <ThumbMedia img={overflowImage} alt={product.name} />
                 <span className="gallery-thumbs-more-overlay">+{overflowCount}</span>
               </button>
             ) : null}
@@ -342,4 +347,21 @@ export default function ProductInteractive({ product, bundle }) {
     </div>
     </>
   );
+}
+
+// Vignette de la galerie/fil d'attente : une vidéo n'a pas de prévisualisation Next/Image valide
+// (ce n'est pas une image), donc on affiche l'image de sa première frame (même fichier Cloudinary,
+// extension changée — voir lib/cloudinary.js) avec un repère "lecture" par-dessus.
+function ThumbMedia({ img, alt }) {
+  if (img.type === "video") {
+    return (
+      <>
+        <Image src={videoPosterUrl(img.url)} alt={img.alt || alt} fill sizes="100px" style={{ objectFit: "contain" }} />
+        <span className="gallery-thumbs-video-overlay">
+          <PlayIcon />
+        </span>
+      </>
+    );
+  }
+  return <Image src={img.url} alt={img.alt || alt} fill sizes="100px" style={{ objectFit: "contain" }} />;
 }

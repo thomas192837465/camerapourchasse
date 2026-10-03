@@ -9,7 +9,7 @@ export default function ProductDetail({ product, category, related, siteName, si
   const faq = (product.faq || []).filter((f) => f.question && f.answer);
   const validReviews = (product.reviews || []).filter((r) => r.name && r.text);
   const featuredImage = product.seo?.featuredImage?.url;
-  const galleryImages = (product.images || []).filter((i) => i.url).map((i) => i.url);
+  const galleryImages = (product.images || []).filter((i) => i.url && i.type !== "video").map((i) => i.url);
   const jsonLdImages = featuredImage ? [featuredImage, ...galleryImages.filter((u) => u !== featuredImage)] : galleryImages;
 
   const jsonLd = {

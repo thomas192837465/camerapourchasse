@@ -14,7 +14,7 @@ export async function generateMetadata({ params }) {
 
   // Image de mise en avant choisie dans l'admin (SEO) en priorité, sinon la première photo du produit.
   const featuredImage = product.seo?.featuredImage?.url;
-  const galleryImages = product.images?.filter((i) => i.url).map((i) => i.url) || [];
+  const galleryImages = product.images?.filter((i) => i.url && i.type !== "video").map((i) => i.url) || [];
   const ogImages = featuredImage ? [featuredImage, ...galleryImages.filter((u) => u !== featuredImage)] : galleryImages;
 
   return pageMetadata(`/produits/${product.categoryId}/${product.slug}`, {

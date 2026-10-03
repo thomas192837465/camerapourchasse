@@ -8,7 +8,7 @@ import { useCart } from "@/lib/cart-context";
 
 export default function ProductCard({ product }) {
   const { addItem } = useCart();
-  const image = product.images?.find((img) => img.url)?.url;
+  const image = product.images?.find((img) => img.url && img.type !== "video")?.url;
   const hasDiscount = product.compareAtPrice > product.price;
   const discountPct = hasDiscount ? Math.round((1 - product.price / product.compareAtPrice) * 100) : 0;
 
