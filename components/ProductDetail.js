@@ -86,9 +86,11 @@ export default function ProductDetail({ product, category, related, siteName, si
         ) : null}
 
         <nav className="breadcrumb">
-          <Link href="/">Accueil</Link>
-          <span className="sep">/</span>
-          <Link href="/produits">Produits</Link>
+          <span className="breadcrumb-collapsible">
+            <Link href="/">Accueil</Link>
+            <span className="sep">/</span>
+            <Link href="/produits">Produits</Link>
+          </span>
           {category ? (
             <>
               <span className="sep">/</span>

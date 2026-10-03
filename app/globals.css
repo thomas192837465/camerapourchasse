@@ -1744,6 +1744,33 @@ h1, h2, h3, h4, p {
   font-weight: 600;
 }
 
+/* "Accueil / Produits" (voir ProductDetail.js) : garde la mise en page desktop identique
+   (display: contents retire juste ce <span> de regroupement de l'arbre de boîtes, ses enfants
+   participent au flex du parent comme avant) — seule la media query ci-dessous le masque. */
+.breadcrumb-collapsible {
+  display: contents;
+}
+
+@media (max-width: 640px) {
+  /* Le nom du produit (dernier maillon) est souvent long. Sur mobile : on masque "Accueil /
+     Produits" (faible valeur ici, le logo permet déjà de revenir à l'accueil) pour libérer de la
+     place, et on tronque le reste avec des points de suspension plutôt que de le laisser revenir
+     à la ligne et pousser toute la page vers le bas. */
+  .breadcrumb-collapsible {
+    display: none;
+  }
+  .breadcrumb a,
+  .breadcrumb .sep {
+    flex-shrink: 0;
+  }
+  .breadcrumb .current {
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+}
+
 /* ---------- Carousel ---------- */
 
 .carousel {
