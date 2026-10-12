@@ -6,6 +6,7 @@ import { useCart } from "@/lib/cart-context";
 import { useCheckout } from "@/lib/useCheckout";
 import QtyStepper from "./QtyStepper";
 import { CartIcon } from "./Icons";
+import { formatPrice } from "@/lib/format";
 
 export default function CartView() {
   const { items, total, updateQty, removeItem, isShopifyCart, hasMixedSources } = useCart();
@@ -46,7 +47,7 @@ export default function CartView() {
                 </button>
               </div>
               <QtyStepper value={item.qty} onChange={(v) => updateQty(item.key, v)} />
-              <div className="price">€{(item.qty * item.price).toFixed(2).replace(".", ",")}</div>
+              <div className="price">{formatPrice((item.qty * item.price))}</div>
             </div>
           ))}
         </div>
@@ -55,7 +56,7 @@ export default function CartView() {
           <h2>Résumé</h2>
           <div className="summary-row">
             <span>Sous-total</span>
-            <span>€{total.toFixed(2).replace(".", ",")}</span>
+            <span>{formatPrice(total)}</span>
           </div>
           <div className="summary-row">
             <span>Livraison</span>
@@ -63,7 +64,7 @@ export default function CartView() {
           </div>
           <div className="summary-row total">
             <span>Total</span>
-            <span>€{total.toFixed(2).replace(".", ",")}</span>
+            <span>{formatPrice(total)}</span>
           </div>
 
           {hasMixedSources ? (
@@ -76,7 +77,7 @@ export default function CartView() {
 
           <button
             type="button"
-            className="btn btn-primary btn-block"
+            className="btn btn-accent btn-lg btn-block"
             style={{ marginTop: 18, opacity: hasMixedSources ? 0.5 : 1 }}
             onClick={goToCheckout}
             disabled={redirecting || hasMixedSources}

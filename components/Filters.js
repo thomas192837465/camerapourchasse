@@ -79,8 +79,8 @@ export default function Filters({ categories, selectedCategorySlugs }) {
             />
           </div>
           <div className="range-values">
-            <span>€0</span>
-            <span>€{maxPrice}</span>
+            <span>0 €</span>
+            <span>{maxPrice} €</span>
           </div>
         </div>
       </details>

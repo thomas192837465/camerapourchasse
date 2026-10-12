@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { addSubscriber } from "@/lib/subscribers";
 import { CONSENT_DECIDED_EVENT, consentDecided } from "@/lib/gtag";
 import { CloseIcon } from "./Icons";
+import { storeDiscountCode } from "@/lib/discountCode";
 
 const SEEN_KEY = "wt_promo_popup_seen";
 
@@ -35,7 +36,14 @@ export default function PromoPopup({ content }) {
     // l'impression d'un site qui réclame, et fait cliquer au hasard sur le RGPD.
     let timer;
     const arm = () => {
-      timer = setTimeout(() => setOpen(true), 2500);
+      timer = setTimeout(() => {
+        // Ne pas interrompre un visiteur qui a son panier ouvert : on laisse juste le bouton cadeau.
+        if (document.querySelector(".cart-drawer.open")) {
+          setShowFab(true);
+          return;
+        }
+        setOpen(true);
+      }, 2500);
     };
 
     if (consentDecided()) {
@@ -73,11 +81,13 @@ export default function PromoPopup({ content }) {
     setSubmitting(true);
     try {
       await addSubscriber(email, "popup");
-      await fetch("/api/promo-signup", {
+      const res = await fetch("/api/promo-signup", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email }),
       });
+      const data = await res.json().catch(() => ({}));
+      if (data.code) storeDiscountCode(data.code);
       markSeen();
       setStep("success");
     } catch (err) {

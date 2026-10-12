@@ -82,7 +82,7 @@ export async function POST(request) {
 
     // Habillage automatique aux couleurs/logo du site — rien à styliser à la main dans l'admin.
     const [theme, content, seo] = await Promise.all([
-      getSettings("theme"),
+      getSettings("themeV2"),
       getSettings("content"),
       getSettings("seo"),
     ]);

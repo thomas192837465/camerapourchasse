@@ -6,13 +6,14 @@ export async function POST(request) {
     return NextResponse.json({ error: "Shopify n'est pas configuré." }, { status: 503 });
   }
 
-  const { lines } = await request.json();
+  const { lines, discountCode } = await request.json();
   if (!Array.isArray(lines) || !lines.length || lines.some((l) => !l.variantId || !l.quantity)) {
     return NextResponse.json({ error: "Panier invalide." }, { status: 400 });
   }
 
   try {
-    const checkoutUrl = await createShopifyCheckoutUrl(lines);
+    const code = typeof discountCode === "string" ? discountCode.trim().slice(0, 64) : "";
+    const checkoutUrl = await createShopifyCheckoutUrl(lines, code ? [code] : []);
     return NextResponse.json({ checkoutUrl });
   } catch (err) {
     return NextResponse.json({ error: err.message }, { status: 500 });

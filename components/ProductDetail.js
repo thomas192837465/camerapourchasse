@@ -3,8 +3,9 @@ import ProductInteractive from "./ProductInteractive";
 import ProductCarousel from "./ProductCarousel";
 import ContentBlocks from "./ContentBlocks";
 import TestimonialsSection from "./TestimonialsSection";
+import { ProductKeyStats, ProductReviews, ProductBrandPromise, ProductFaq, ProductFinalCta } from "./ProductSections";
 
-export default function ProductDetail({ product, category, related, siteName, siteUrl = "", bundle, testimonials }) {
+export default function ProductDetail({ product, category, related, siteName, siteUrl = "", bundle, testimonials, trustBadges, brandPoints, contactEmail, qtyTiers, promo, texts = {} }) {
   const productUrl = `${siteUrl}/produits/${product.categoryId}/${product.slug}`;
   const faq = (product.faq || []).filter((f) => f.question && f.answer);
   const validReviews = (product.reviews || []).filter((r) => r.name && r.text);
@@ -26,6 +27,18 @@ export default function ProductDetail({ product, category, related, siteName, si
       priceCurrency: "EUR",
       price: product.price,
       url: productUrl,
+      itemCondition: "https://schema.org/NewCondition",
+      seller: { "@type": "Organization", name: siteName },
+      // Politique de retour = droit de rétractation légal de 14 jours (voir CGV, article 6),
+      // frais de retour à la charge du client. Recommandé par Google pour les fiches marchandes.
+      hasMerchantReturnPolicy: {
+        "@type": "MerchantReturnPolicy",
+        applicableCountry: "FR",
+        returnPolicyCategory: "https://schema.org/MerchantReturnFiniteReturnWindow",
+        merchantReturnDays: 14,
+        returnMethod: "https://schema.org/ReturnByMail",
+        returnFees: "https://schema.org/ReturnFeesCustomerResponsibility",
+      },
       availability:
         product.stock > 0 ? "https://schema.org/InStock" : "https://schema.org/OutOfStock",
     },
@@ -85,7 +98,7 @@ export default function ProductDetail({ product, category, related, siteName, si
           <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd) }} />
         ) : null}
 
-        <nav className="breadcrumb">
+        <nav className="breadcrumb" aria-label="Fil d'Ariane">
           <Link href="/">Accueil</Link>
           <span className="sep">/</span>
           <Link href="/produits">Produits</Link>
@@ -99,33 +112,38 @@ export default function ProductDetail({ product, category, related, siteName, si
           <span className="current">{product.name}</span>
         </nav>
 
-        <ProductInteractive product={product} bundle={bundle} />
+        <ProductInteractive product={product} bundle={bundle} trustBadges={trustBadges} qtyTiers={qtyTiers} promo={promo} texts={texts} />
 
-        <ContentBlocks blocks={product.blocks} />
-
-        {faq.length ? (
-          <section className="section" style={{ paddingTop: 0 }}>
-            <h2 className="reco-title">Questions fréquentes</h2>
-            <div className="faq-list">
-              {faq.map((f, i) => (
-                <details className="faq-item" key={i}>
-                  <summary>{f.question}</summary>
-                  <p>{f.answer}</p>
-                </details>
-              ))}
-            </div>
-          </section>
-        ) : null}
-
-        {related.length ? (
-          <section className="section" style={{ paddingTop: 0 }}>
-            <h2 className="reco-title">Vous pourriez aimer</h2>
-            <ProductCarousel products={related} />
-          </section>
-        ) : null}
       </main>
 
-      <TestimonialsSection title={testimonials?.title} rating={testimonials?.rating} testimonials={testimonials?.items} />
+      <ProductKeyStats product={product} T={texts} />
+
+      {product.blocks?.length ? (
+        <div className="container">
+          <ContentBlocks blocks={product.blocks} />
+        </div>
+      ) : null}
+
+      <ProductReviews product={product} T={texts} />
+
+      <ProductBrandPromise points={brandPoints} T={texts} />
+
+      <ProductFaq faq={faq} contactEmail={contactEmail} T={texts} />
+
+      <ProductFinalCta product={product} T={texts} />
+
+      {related.length ? (
+        <section className="section">
+          <div className="container">
+            <h2 className="reco-title">{texts.relatedTitle || "Vous pourriez aussi aimer"}</h2>
+            <ProductCarousel products={related} />
+          </div>
+        </section>
+      ) : null}
+
+      {!validReviews.length ? (
+        <TestimonialsSection title={testimonials?.title} rating={testimonials?.rating} testimonials={testimonials?.items} />
+      ) : null}
     </>
   );
 }

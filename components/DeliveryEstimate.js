@@ -24,7 +24,10 @@ export default function DeliveryEstimate() {
 
   return (
     <p className="pd-delivery-estimate">
-      <FaIcon name="truck" /> Commandez aujourd'hui, {dates.today} — reçu dans votre boîte aux lettres le {dates.arrival}
+      <FaIcon name="truck" />
+      <span>
+        Commandez aujourd&apos;hui, livraison estimée le <strong>{dates.arrival}</strong>
+      </span>
     </p>
   );
 }

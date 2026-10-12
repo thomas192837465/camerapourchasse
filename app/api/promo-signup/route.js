@@ -21,7 +21,7 @@ export async function POST(request) {
     }
 
     const [theme, content, seo] = await Promise.all([
-      getSettings("theme"),
+      getSettings("themeV2"),
       getSettings("content"),
       getSettings("seo"),
     ]);
@@ -76,7 +76,7 @@ export async function POST(request) {
       return NextResponse.json({ error: "Échec de l'envoi de l'e-mail." }, { status: 500 });
     }
 
-    return NextResponse.json({ ok: true });
+    return NextResponse.json({ ok: true, code });
   } catch (err) {
     console.error("Échec de l'envoi du code promo :", err);
     return NextResponse.json({ error: "Une erreur est survenue, réessayez." }, { status: 500 });

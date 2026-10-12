@@ -5,13 +5,17 @@ import { getSettings, saveSettings } from "@/lib/settings";
 import { defaultTheme } from "@/lib/defaults";
 
 const FIELDS = [
-  { key: "green900", label: "Vert très foncé (titres)" },
-  { key: "green800", label: "Vert foncé (prix, footer)" },
-  { key: "green700", label: "Vert (hover, accents)" },
-  { key: "green600", label: "Vert principal (boutons)" },
-  { key: "green500", label: "Vert clair (bordures actives)" },
-  { key: "green100", label: "Vert très clair" },
-  { key: "green50", label: "Vert quasi blanc (fonds)" },
+  { key: "green900", label: "Anthracite très foncé (titres, bandes sombres)" },
+  { key: "green800", label: "Anthracite (prix, footer)" },
+  { key: "green700", label: "Anthracite clair (survols)" },
+  { key: "green600", label: "Boutons secondaires" },
+  { key: "green500", label: "Bordures actives" },
+  { key: "green100", label: "Gris clair" },
+  { key: "green50", label: "Gris quasi blanc (fonds)" },
+  { key: "accent", label: "Lime signal (boutons d'achat, accents)" },
+  { key: "accentHover", label: "Lime (survol)" },
+  { key: "accentInk", label: "Lime foncé (texte sur fond clair)" },
+  { key: "forest", label: "Vert forêt (couleur du logo)" },
   { key: "gold", label: "Doré (étoiles/notes)" },
   { key: "ink", label: "Texte principal" },
   { key: "inkSoft", label: "Texte secondaire" },
@@ -28,7 +32,7 @@ export default function ThemeSettingsPage() {
   const [saved, setSaved] = useState(false);
 
   useEffect(() => {
-    getSettings("theme").then((t) => {
+    getSettings("themeV2").then((t) => {
       setTheme(t);
       setReady(true);
     });
@@ -37,7 +41,7 @@ export default function ThemeSettingsPage() {
   async function handleSave() {
     setSaving(true);
     try {
-      await saveSettings("theme", theme);
+      await saveSettings("themeV2", theme);
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } finally {

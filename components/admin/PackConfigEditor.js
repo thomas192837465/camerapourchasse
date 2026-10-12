@@ -14,6 +14,11 @@ const EMPTY_PACK = {
   packTitle: "",
   packSubtitle: "",
   packBadge: "",
+  // "addon" : case « Ajouter une carte SD ? » sous les packs de quantité (par défaut).
+  // "formula" : deux cartes « Caméra seule » / « Pack » (affichage historique).
+  displayMode: "addon",
+  addonTitle: "",
+  addonSubtitle: "",
 };
 
 // Pack croisé avec un AUTRE produit Shopify déjà publié sur le site (ex : ce boîtier caméra +
@@ -80,13 +85,58 @@ export default function PackConfigEditor({ value, onChange, excludeProductId }) 
                   <option value="">— Choisir —</option>
                   {bundledProduct.variants.map((v) => (
                     <option key={v.id} value={v.id}>
-                      {v.title} — €{v.price.toFixed(2).replace(".", ",")}
+                      {v.title} — {v.price.toFixed(2).replace(".", ",")} €
                     </option>
                   ))}
                 </select>
               </div>
             ) : null}
           </div>
+
+          <div className="form-field" style={{ marginTop: 10 }}>
+            <label>Affichage sur la fiche produit</label>
+            <div style={{ display: "flex", gap: 18, flexWrap: "wrap" }}>
+              <label style={{ display: "flex", alignItems: "center", gap: 6, fontWeight: 400 }}>
+                <input
+                  type="radio"
+                  name="pack-display"
+                  checked={pack.displayMode !== "formula"}
+                  onChange={() => set({ displayMode: "addon" })}
+                />
+                Case à cocher « en plus » (ex : Ajouter une carte SD ?)
+              </label>
+              <label style={{ display: "flex", alignItems: "center", gap: 6, fontWeight: 400 }}>
+                <input
+                  type="radio"
+                  name="pack-display"
+                  checked={pack.displayMode === "formula"}
+                  onChange={() => set({ displayMode: "formula" })}
+                />
+                Deux formules « seule » / « pack »
+              </label>
+            </div>
+          </div>
+
+          {pack.displayMode !== "formula" ? (
+            <div className="form-grid">
+              <div className="form-field">
+                <label>Texte de la case</label>
+                <input
+                  placeholder="ex : Ajouter une carte SD ?"
+                  value={pack.addonTitle}
+                  onChange={(e) => set({ addonTitle: e.target.value })}
+                />
+              </div>
+              <div className="form-field">
+                <label>Petite ligne sous la case</label>
+                <input
+                  placeholder="ex : Prête à l'emploi, la caméra filme dès réception."
+                  value={pack.addonSubtitle}
+                  onChange={(e) => set({ addonSubtitle: e.target.value })}
+                />
+              </div>
+            </div>
+          ) : null}
 
           <p className="form-hint" style={{ margin: "10px 0" }}>
             Le prix du pack est calculé automatiquement (prix de cette fiche + prix du produit ajouté, tous deux
@@ -104,6 +154,7 @@ export default function PackConfigEditor({ value, onChange, excludeProductId }) 
             </div>
           </div>
 
+          {pack.displayMode === "formula" ? (
           <div className="form-grid">
             <div className="form-field">
               <label>Titre de l'option "seule"</label>
@@ -142,6 +193,7 @@ export default function PackConfigEditor({ value, onChange, excludeProductId }) 
               />
             </div>
           </div>
+          ) : null}
         </>
       ) : null}
     </div>

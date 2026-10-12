@@ -9,6 +9,7 @@ import { firebaseEnabled } from "@/lib/firebase";
 import { useAuth } from "@/lib/auth";
 import { getVisitorId } from "@/lib/cartActivity";
 import { saveCartRecovery, markCartRecovered } from "@/lib/cartRecovery";
+import { formatPrice } from "@/lib/format";
 
 const emptyForm = {
   name: "",
@@ -144,7 +145,7 @@ export default function CheckoutView() {
 
           {error ? <div className="banner error">{error}</div> : null}
 
-          <button className="btn btn-primary btn-block" type="submit" disabled={submitting}>
+          <button className="btn btn-accent btn-lg btn-block" type="submit" disabled={submitting}>
             {submitting ? "Envoi en cours..." : "Confirmer la commande"}
           </button>
           <p className="form-hint" style={{ marginTop: 10 }}>
@@ -159,12 +160,12 @@ export default function CheckoutView() {
               <span>
                 {it.name} × {it.qty}
               </span>
-              <span>€{(it.qty * it.price).toFixed(2).replace(".", ",")}</span>
+              <span>{formatPrice((it.qty * it.price))}</span>
             </div>
           ))}
           <div className="summary-row total">
             <span>Total</span>
-            <span>€{total.toFixed(2).replace(".", ",")}</span>
+            <span>{formatPrice(total)}</span>
           </div>
         </div>
       </form>

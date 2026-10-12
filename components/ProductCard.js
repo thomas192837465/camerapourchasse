@@ -5,6 +5,7 @@ import Image from "next/image";
 import { CameraIcon } from "./Icons";
 import TrustRating from "./TrustRating";
 import { useCart } from "@/lib/cart-context";
+import { formatPrice } from "@/lib/format";
 
 export default function ProductCard({ product }) {
   const { addItem } = useCart();
@@ -25,16 +26,20 @@ export default function ProductCard({ product }) {
     });
   }
 
+  const href = `/produits/${product.categoryId}/${product.slug}`;
+  const savings = hasDiscount ? product.compareAtPrice - product.price : 0;
+
   return (
     <article className="product-card">
-      <Link className="product-thumb" href={`/produits/${product.categoryId}/${product.slug}`}>
-        {hasDiscount ? (
-          <span className="badge badge-discount">-{discountPct}%</span>
-        ) : product.isPromo ? (
-          <span className="badge badge-promo">Promotion</span>
-        ) : product.isBestSeller ? (
-          <span className="badge">Best-seller</span>
-        ) : null}
+      <Link className="product-thumb" href={href} tabIndex={-1} aria-hidden="true">
+        <span className="product-badges">
+          {product.isBestSeller ? <span className="badge">Best-seller</span> : null}
+          {hasDiscount ? (
+            <span className="badge badge-discount">-{discountPct}%</span>
+          ) : product.isPromo ? (
+            <span className="badge badge-promo">Promo</span>
+          ) : null}
+        </span>
         {image ? (
           <Image
             src={image}
@@ -49,17 +54,18 @@ export default function ProductCard({ product }) {
       </Link>
       <div className="product-body">
         <h3>
-          <Link href={`/produits/${product.categoryId}/${product.slug}`}>{product.name}</Link>
+          <Link href={href}>{product.name}</Link>
         </h3>
         <TrustRating average={product.rating?.average || 0} count={product.rating?.count || 0} size="sm" />
-        <div className="price">
-          €{product.price.toFixed(2).replace(".", ",")}
-          {product.compareAtPrice ? (
-            <span className="compare">€{product.compareAtPrice.toFixed(2).replace(".", ",")}</span>
-          ) : null}
+        <div className="product-card-bottom">
+          <div className="price">
+            {formatPrice(product.price)}
+            {hasDiscount ? <span className="compare">{formatPrice(product.compareAtPrice)}</span> : null}
+          </div>
+          {savings >= 1 ? <span className="product-savings">Économisez {formatPrice(savings)}</span> : null}
         </div>
-        <button className="btn btn-primary btn-block btn-sm" onClick={handleAdd}>
-          Ajouter au Panier
+        <button className="btn btn-dark btn-block btn-sm" onClick={handleAdd}>
+          Ajouter au panier
         </button>
       </div>
     </article>

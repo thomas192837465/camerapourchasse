@@ -1,9 +1,7 @@
 import FaIcon from "./FaIcon";
 import { cloudinaryTransform } from "@/lib/cloudinaryUrl";
+import { formatPrice } from "@/lib/format";
 
-function formatPrice(value) {
-  return `${Number(value).toFixed(2).replace(".", ",")}€`;
-}
 
 // Sélecteur "formule" pour les produits Shopify vendus avec un pack (ex : "Caméra seule" / "Pack
 // Prêt à filmer" avec carte SD) — chaque carte affiche son propre prix, son économie réelle et sa

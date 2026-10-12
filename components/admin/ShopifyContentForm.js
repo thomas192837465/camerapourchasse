@@ -132,9 +132,24 @@ export default function ShopifyContentForm({ shopifyProduct, initialContent, cat
       </div>
 
       <div className="admin-card">
+        <h2>Packs de quantité (1 / 2 / 3)</h2>
+        <p className="form-hint" style={{ marginBottom: 10 }}>
+          Les paliers et remises se règlent pour tout le site dans Réglages → Contenu → « Packs de quantité ».
+        </p>
+        <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+          <input
+            type="checkbox"
+            checked={!content.hideQtyTiers}
+            onChange={(e) => set("hideQtyTiers", !e.target.checked)}
+          />
+          Afficher les packs de quantité sur cette fiche
+        </label>
+      </div>
+
+      <div className="admin-card">
         <h2>Pack avec un autre produit</h2>
         <p className="form-hint" style={{ marginBottom: 10 }}>
-          Propose sur la fiche un choix "Caméra seule" / "Pack" qui ajoute un second produit déjà publié sur le site
+          Propose sur la fiche un produit en plus (case « Ajouter une carte SD ? ») ou un choix "Caméra seule" / "Pack", qui ajoute un second produit déjà publié sur le site
           (ex : une carte SD, potentiellement fournie par un fournisseur différent). Les deux produits sont ajoutés
           au panier comme deux lignes Shopify distinctes, pour que chaque expédition garde son propre suivi.
         </p>
@@ -155,6 +170,70 @@ export default function ShopifyContentForm({ shopifyProduct, initialContent, cat
           onChange={(images) => set("images", images)}
           targetSize={{ width: generalSettings.productImageWidth, height: generalSettings.productImageHeight }}
         />
+      </div>
+
+      <div className="admin-card">
+        <h2>Phrase d'accroche</h2>
+        <p className="form-hint" style={{ marginBottom: 10 }}>
+          Une ligne sous le nom du produit : le bénéfice principal (ex : « Recevez les photos de votre poste sur
+          votre téléphone, même à 300 km. »).
+        </p>
+        <div className="form-field">
+          <input value={content.headline || ""} onChange={(e) => set("headline", e.target.value)} />
+        </div>
+      </div>
+
+      <div className="admin-card">
+        <h2>Chiffres clés (bande « En chiffres »)</h2>
+        <p className="form-hint" style={{ marginBottom: 10 }}>
+          2 à 4 chiffres affichés en grand sous l'achat (ex : « 0,2 s » / « Déclenchement »). Laissé vide, les 4
+          premières spécifications techniques sont utilisées.
+        </p>
+        {(content.keyStats || []).map((stat, i) => (
+          <div className="repeatable-row" key={i}>
+            <div className="form-field">
+              <input
+                placeholder="Valeur (ex : 25 m)"
+                value={stat.value}
+                onChange={(e) => updateListItem("keyStats", i, { ...stat, value: e.target.value })}
+              />
+            </div>
+            <div className="form-field">
+              <input
+                placeholder="Libellé (ex : Portée de détection)"
+                value={stat.label}
+                onChange={(e) => updateListItem("keyStats", i, { ...stat, label: e.target.value })}
+              />
+            </div>
+            <button type="button" className="icon-btn" onClick={() => removeListItem("keyStats", i)}>
+              <TrashIcon />
+            </button>
+          </div>
+        ))}
+        <button type="button" className="add-row-btn" onClick={() => addListItem("keyStats", { value: "", label: "" })}>
+          + Ajouter un chiffre clé
+        </button>
+      </div>
+
+      <div className="admin-card">
+        <h2>Dans la boîte</h2>
+        {(content.inBox || []).map((item, i) => (
+          <div className="repeatable-row" key={i}>
+            <div className="form-field">
+              <input
+                placeholder="ex : 1 sangle de fixation"
+                value={item}
+                onChange={(e) => updateListItem("inBox", i, e.target.value)}
+              />
+            </div>
+            <button type="button" className="icon-btn" onClick={() => removeListItem("inBox", i)}>
+              <TrashIcon />
+            </button>
+          </div>
+        ))}
+        <button type="button" className="add-row-btn" onClick={() => addListItem("inBox", "")}>
+          + Ajouter un élément
+        </button>
       </div>
 
       <div className="admin-card">

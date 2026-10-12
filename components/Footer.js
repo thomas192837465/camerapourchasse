@@ -58,20 +58,35 @@ export default function Footer({ content }) {
     <footer className="site-footer">
       <div className="container footer-grid">
         <div className="footer-brand">
-          <div className="logo">
-            <span className="logo-mark" style={{ background: "rgba(255,255,255,0.1)" }}>
-              {content.logoImage?.url ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img src={cloudinaryTransform(content.logoImage.url, "w_120,q_auto,f_auto")} alt={content.logoImage.alt || ""} />
-              ) : (
-                <LogoMarkIcon />
-              )}
-            </span>
-            <span className="logo-text">
-              <span className="line1" style={{ color: "#fff" }}>{content.logoLine1}</span>
-              <span className="line2" style={{ color: "#9fc79a" }}>{content.logoLine2}</span>
-            </span>
-          </div>
+          <Link href="/" className="logo footer-logo">
+            {content.logoImageLight?.url ? (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                className="logo-image"
+                src={cloudinaryTransform(content.logoImageLight.url, "h_96,q_auto,f_auto")}
+                alt={content.logoImageLight.alt || content.logoImage?.alt || ""}
+              />
+            ) : content.logoImage?.url ? (
+              // Logo principal recoloré en blanc par CSS (voir .logo-image-invert) tant qu'aucune
+              // version "fond sombre" n'est envoyée dans l'admin.
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                className="logo-image logo-image-invert"
+                src={cloudinaryTransform(content.logoImage.url, "h_96,q_auto,f_auto")}
+                alt={content.logoImage.alt || ""}
+              />
+            ) : (
+              <>
+                <span className="logo-mark">
+                  <LogoMarkIcon />
+                </span>
+                <span className="logo-text">
+                  <span className="line1" style={{ color: "#fff" }}>{content.logoLine1}</span>
+                  <span className="line2" style={{ color: "var(--accent)" }}>{content.logoLine2}</span>
+                </span>
+              </>
+            )}
+          </Link>
           <p>{content.footerDescription}</p>
         </div>
 
@@ -108,7 +123,7 @@ export default function Footer({ content }) {
               <button type="submit" className="btn btn-primary" disabled={submitting}>
                 {submitting ? "Envoi…" : "S'inscrire"}
               </button>
-              {error ? <p className="footer-newsletter-thanks" style={{ color: "#f0a93a" }}>{error}</p> : null}
+              {error ? <p className="footer-newsletter-thanks" style={{ color: "var(--gold)" }}>{error}</p> : null}
             </form>
           )}
         </div>

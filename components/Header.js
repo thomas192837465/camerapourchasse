@@ -14,7 +14,24 @@ export default function Header({ content, categories = [], navItems = [] }) {
     setMobileOpen(false);
   }
 
+  const announcements = (content.announcementText || "")
+    .split("·")
+    .map((t) => t.trim())
+    .filter(Boolean);
+
   return (
+    <>
+    {announcements.length ? (
+      <div className="announcement-bar">
+        <div className="container">
+          {announcements.map((t, i) => (
+            <span key={i} className={i > 0 ? "announcement-extra" : undefined}>
+              {t}
+            </span>
+          ))}
+        </div>
+      </div>
+    ) : null}
     <header className="site-header">
       <div className="container">
         <Link href="/" className="logo" onClick={closeMobile}>
@@ -22,7 +39,7 @@ export default function Header({ content, categories = [], navItems = [] }) {
             // eslint-disable-next-line @next/next/no-img-element
             <img
               className="logo-image"
-              src={cloudinaryTransform(content.logoImage.url, "h_88,q_auto,f_auto")}
+              src={cloudinaryTransform(content.logoImage.url, "h_96,q_auto,f_auto")}
               alt={content.logoImage.alt || content.logoLine1 || ""}
             />
           ) : (
@@ -136,5 +153,6 @@ export default function Header({ content, categories = [], navItems = [] }) {
         </nav>
       ) : null}
     </header>
+    </>
   );
 }

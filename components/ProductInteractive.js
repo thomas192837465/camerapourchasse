@@ -5,18 +5,18 @@ import Image from "next/image";
 import { CameraIcon, CheckIcon, ChevronLeftIcon, ChevronRightIcon, PlayIcon } from "./Icons";
 import { useCart } from "@/lib/cart-context";
 import QtyStepper from "./QtyStepper";
-import Tabs from "./Tabs";
 import TrustRating from "./TrustRating";
-import ReviewsList from "./ReviewsList";
 import ProductPackSelector from "./ProductPackSelector";
 import FaIcon from "./FaIcon";
 import DeliveryEstimate from "./DeliveryEstimate";
+import PromoInline from "./PromoInline";
 import { cloudinaryTransform } from "@/lib/cloudinaryUrl";
 import { videoPosterUrl } from "@/lib/cloudinary";
+import { formatPrice, fill } from "@/lib/format";
 
-const VISIBLE_THUMBS = 3;
 
-export default function ProductInteractive({ product, bundle }) {
+export default function ProductInteractive({ product, bundle, trustBadges = [], qtyTiers = [], promo = null, texts = {} }) {
+  const T = texts;
   const images = (product.images || []).filter((img) => img.url);
   const [activeImage, setActiveImage] = useState(0);
 
@@ -70,7 +70,7 @@ export default function ProductInteractive({ product, bundle }) {
                   >
                     {bundle.variants.map((v) => (
                       <option key={v.id} value={v.id} disabled={!v.availableForSale}>
-                        {bundle.name} — {v.label} ({v.price.toFixed(2).replace(".", ",")}€
+                        {bundle.name} — {v.label} ({formatPrice(v.price)}
                         {v.availableForSale ? "" : ", rupture de stock"})
                       </option>
                     ))}
@@ -93,7 +93,19 @@ export default function ProductInteractive({ product, bundle }) {
     if (!isMultiVariant) return null;
     return (product.variants.find((v) => v.availableForSale) || product.variants[0]).id;
   });
-  const [qty, setQty] = useState(1);
+  // Packs de quantité (1 / 2 / 3 caméras) : remise en % sur chaque caméra au-delà de 1.
+  // La même remise DOIT exister côté Shopify (remise automatique "dès 2 / dès 3 articles"),
+  // sinon le prix affiché ici et celui du paiement diffèrent — voir REFONTE_A_LIRE.md.
+  const tiers = product.hideQtyTiers
+    ? []
+    : (qtyTiers || []).filter((t) => Number(t.qty) >= 1).sort((a, b) => a.qty - b.qty);
+  const useTiers = tiers.length > 1;
+  const [tierQty, setTierQty] = useState(() => (useTiers ? Number(tiers[0].qty) : 1));
+  const [stepperQty, setQty] = useState(1);
+  const qty = useTiers ? tierQty : stepperQty;
+  const activeTier = useTiers ? tiers.find((t) => Number(t.qty) === tierQty) : null;
+  const tierPct = Number(activeTier?.discountPct) || 0;
+  const applyTier = (unit, pct = tierPct) => Math.round(unit * (1 - pct / 100) * 100) / 100;
   const { addItem } = useCart();
   const [added, setAdded] = useState(false);
   const buyRowRef = useRef(null);
@@ -128,18 +140,16 @@ export default function ProductInteractive({ product, bundle }) {
     setActiveImage((i) => (i + 1) % images.length);
   }
 
-  const TOTAL_SLOTS = 4;
-  const hasOverflow = images.length > TOTAL_SLOTS;
-  const visibleThumbs = hasOverflow ? images.slice(0, VISIBLE_THUMBS) : images;
-  const overflowImage = hasOverflow ? images[VISIBLE_THUMBS] : null;
-  const overflowCount = hasOverflow ? images.length - TOTAL_SLOTS : 0;
 
   function handleAdd() {
     addItem(
       {
         productId: product.id,
         name: selectedVariant ? `${product.name} — ${selectedVariant.title}` : product.name,
-        price: hasBundle ? product.price : displayPrice,
+        price: applyTier(hasBundle ? product.price : displayPrice),
+        // Prix plein + paliers : le panier recalcule la remise si la quantité y est modifiée.
+        fullPrice: hasBundle ? product.price : displayPrice,
+        tiers: useTiers ? tiers.map((t) => ({ qty: Number(t.qty), discountPct: Number(t.discountPct) || 0 })) : undefined,
         image: images.find((img) => img.type !== "video")?.url || "",
         variant,
         source: product.source,
@@ -171,19 +181,34 @@ export default function ProductInteractive({ product, bundle }) {
     setTimeout(() => setAdded(false), 2000);
   }
 
-  const stickyPrice = hasBundle ? selectedBundleOption?.price ?? product.price : displayPrice;
+  // Prix unitaire de la caméra (formule/variante choisie), puis total réel de la sélection :
+  // caméra(s) remisée(s) selon le pack + carte(s) SD si la formule "pack" est choisie.
+  const cameraUnit = hasBundle ? product.price : displayPrice;
+  const bundleUnit = hasBundle && selectedOptionId === "pack" && selectedBundleVariant ? selectedBundleVariant.price : 0;
+  const totalPrice = qty * (applyTier(cameraUnit) + bundleUnit);
+  // Pack avec un autre produit : case « en plus » (par défaut) ou deux formules (affichage historique).
+  const addonMode = hasBundle && Boolean(bundleOptions) && product.pack?.displayMode !== "formula";
+  const formulaMode = hasBundle && Boolean(bundleOptions) && !addonMode;
+  const showPriceBlock = !useTiers && !formulaMode;
+
+  const reviewCount = product.rating?.count || 0;
+  const inBox = (product.inBox || []).filter(Boolean);
 
   return (
     <>
-    <section className="product-detail">
-      <div>
+    <section className="product-detail" id="acheter">
+      <div className="pd-gallery">
         <div className="gallery-main">
           {images.length ? (
             images[activeImage]?.type === "video" ? (
               <video
                 key={images[activeImage].url}
                 src={images[activeImage].url}
+                poster={videoPosterUrl(images[activeImage].url)}
                 controls
+                autoPlay
+                muted
+                loop
                 playsInline
                 className="gallery-main-video"
               />
@@ -215,46 +240,32 @@ export default function ProductInteractive({ product, bundle }) {
         </div>
 
         {images.length > 1 ? (
-          <div className="gallery-thumbs">
-            {visibleThumbs.map((img, i) => (
-              <button key={i} className={i === activeImage ? "active" : ""} onClick={() => setActiveImage(i)}>
+          <div className="gallery-thumbs" role="tablist" aria-label="Photos et vidéos du produit">
+            {images.map((img, i) => (
+              <button
+                key={i}
+                type="button"
+                className={i === activeImage ? "active" : ""}
+                onClick={() => setActiveImage(i)}
+                aria-label={img.type === "video" ? "Voir la vidéo" : `Voir la photo ${i + 1}`}
+              >
                 <ThumbMedia img={img} alt={product.name} />
               </button>
             ))}
-            {overflowImage ? (
-              <button
-                className={activeImage >= VISIBLE_THUMBS ? "active" : ""}
-                onClick={() => setActiveImage(VISIBLE_THUMBS)}
-              >
-                <ThumbMedia img={overflowImage} alt={product.name} />
-                <span className="gallery-thumbs-more-overlay">+{overflowCount}</span>
-              </button>
-            ) : null}
           </div>
         ) : null}
       </div>
 
-      <div>
+      <div className="pd-buy">
+        {reviewCount ? (
+          <a href="#avis" className="pd-rating">
+            <TrustRating average={product.rating.average} count={reviewCount} />
+          </a>
+        ) : null}
+
         <h1 className="pd-title">{product.name}</h1>
-
-        <div className="pd-rating">
-          <TrustRating average={product.rating?.average || 0} count={product.rating?.count || 0} />
-        </div>
-
-        {!hasBundle || !bundleOptions ? (
-          <div className="pd-price">
-            €{product.price.toFixed(2).replace(".", ",")}
-            {product.compareAtPrice ? (
-              <>
-                <span className="compare" style={{ fontSize: "1.1rem", marginLeft: 10 }}>
-                  €{product.compareAtPrice.toFixed(2).replace(".", ",")}
-                </span>
-                <span className="discount-pct" style={{ marginLeft: 10 }}>
-                  -{Math.round((1 - product.price / product.compareAtPrice) * 100)}%
-                </span>
-              </>
-            ) : null}
-          </div>
+        {product.headline || product.shortDescription ? (
+          <p className="pd-headline">{product.headline || product.shortDescription}</p>
         ) : null}
 
         {product.features?.length ? (
@@ -267,13 +278,125 @@ export default function ProductInteractive({ product, bundle }) {
           </ul>
         ) : null}
 
-        {hasBundle && bundleOptions ? (
-          <ProductPackSelector
-            variants={bundleOptions}
-            selectedId={selectedOptionId}
-            onSelect={setSelectedOptionId}
-          />
-        ) : product.source !== "shopify" && product.variants?.length ? (
+        {useTiers ? (
+          <>
+            <p className="pd-choose-label">{T.tiersTitle}</p>
+            <div className="qty-tiers" role="radiogroup" aria-label={T.tiersTitle}>
+              {tiers.map((t) => {
+                const n = Number(t.qty);
+                const pct = Number(t.discountPct) || 0;
+                const unit = applyTier(cameraUnit, pct);
+                const full = (product.compareAtPrice > cameraUnit ? product.compareAtPrice : cameraUnit) * n;
+                const selected = n === tierQty;
+                return (
+                  <label key={n} className={`qty-tier${selected ? " selected" : ""}`}>
+                    <input
+                      type="radio"
+                      name="qty-tier"
+                      className="pack-option-input"
+                      checked={selected}
+                      onChange={() => setTierQty(n)}
+                    />
+                    {t.badge ? <span className="pack-option-badge">{t.badge}</span> : null}
+                    <span className={`pack-option-radio${selected ? " checked" : ""}`} aria-hidden="true" />
+                    <span className="qty-tier-thumbs" aria-hidden="true">
+                      {Array.from({ length: Math.min(n, 3) }).map((_, i) =>
+                        images[0]?.url ? (
+                          <img key={i} src={cloudinaryTransform(images[0].url, "w_80,h_80,c_pad,b_white,q_auto,f_auto")} alt="" />
+                        ) : (
+                          <CameraIcon key={i} />
+                        )
+                      )}
+                    </span>
+                    <span className="qty-tier-body">
+                      <strong>
+                        {n} {n > 1 ? T.unitPlural : T.unitSingular}
+                        {pct > 0 ? <span className="qty-tier-pct">-{pct}%</span> : null}
+                      </strong>
+                      <small>{n > 1 ? fill(T.perUnitText, { prix: formatPrice(unit) }) : t.label || ""}</small>
+                    </span>
+                    <span className="qty-tier-price">
+                      <strong>{formatPrice(unit * n)}</strong>
+                      {full > unit * n + 0.009 ? <span className="compare">{formatPrice(full)}</span> : null}
+                    </span>
+                  </label>
+                );
+              })}
+            </div>
+          </>
+        ) : null}
+
+        {showPriceBlock ? (
+          <div className="pd-price">
+            <span className="pd-price-current">{formatPrice(product.price)}</span>
+            {product.compareAtPrice > product.price ? (
+              <>
+                <span className="compare">{formatPrice(product.compareAtPrice)}</span>
+                <span className="discount-pct">
+                  -{Math.round((1 - product.price / product.compareAtPrice) * 100)}%
+                </span>
+              </>
+            ) : null}
+          </div>
+        ) : null}
+
+        {addonMode && selectedBundleVariant ? (
+          <label className={`pd-addon${selectedOptionId === "pack" ? " checked" : ""}`}>
+            <input
+              type="checkbox"
+              className="pd-addon-input"
+              checked={selectedOptionId === "pack"}
+              onChange={(e) => setSelectedOptionId(e.target.checked ? "pack" : "solo")}
+            />
+            <span className="pd-addon-box" aria-hidden="true">
+              <CheckIcon />
+            </span>
+            <span className="pd-addon-media" aria-hidden="true">
+              {bundledImageNode}
+            </span>
+            <span className="pd-addon-body">
+              <strong>{product.pack?.addonTitle || `Ajouter : ${bundle.name}`}</strong>
+              {product.pack?.addonSubtitle ? <small>{product.pack.addonSubtitle}</small> : null}
+              {bundle.variants.length > 1 ? (
+                <select
+                  value={selectedBundleVariantId}
+                  onChange={(e) => {
+                    setSelectedBundleVariantId(e.target.value);
+                    // Choisir une capacité = vouloir l'option : on coche la case automatiquement.
+                    setSelectedOptionId("pack");
+                  }}
+                  onClick={(e) => {
+                    e.stopPropagation();
+                  }}
+                  aria-label="Choisir la version"
+                >
+                  {bundle.variants.map((v) => (
+                    <option key={v.id} value={v.id} disabled={!v.availableForSale}>
+                      {v.label} — {formatPrice(v.price)}
+                      {v.availableForSale ? "" : " (rupture)"}
+                    </option>
+                  ))}
+                </select>
+              ) : null}
+            </span>
+            <span className="pd-addon-price">
+              <strong>+{formatPrice(selectedBundleVariant.price * qty)}</strong>
+              {qty > 1 ? <small>{formatPrice(selectedBundleVariant.price)} {T.addonPerUnitText}</small> : null}
+            </span>
+          </label>
+        ) : null}
+
+        {formulaMode ? (
+          <>
+            <p className="pd-choose-label">{useTiers ? T.formulaTitle : T.formulaChooseTitle}</p>
+            {useTiers && qty > 1 ? <p className="pd-choose-hint">{T.formulaHint}</p> : null}
+            <ProductPackSelector
+              variants={bundleOptions}
+              selectedId={selectedOptionId}
+              onSelect={setSelectedOptionId}
+            />
+          </>
+        ) : !hasBundle && product.source !== "shopify" && product.variants?.length ? (
           <>
             <p className="pd-variant-label">
               Variante : <em>{variant}</em>
@@ -292,57 +415,123 @@ export default function ProductInteractive({ product, bundle }) {
           </>
         ) : null}
 
+        {product.stock > 0 && T.stockLabel ? (
+          <p className="pd-stock">
+            <span className="pd-stock-dot" aria-hidden="true" /> {T.stockLabel}
+          </p>
+        ) : null}
+
         <div className="pd-buy-row" ref={buyRowRef}>
-          <QtyStepper value={qty} onChange={setQty} />
-          <button className="btn btn-primary" onClick={handleAdd}>
-            {added ? "Ajouté ✓" : "Ajouter au Panier"}
+          {useTiers ? null : <QtyStepper value={stepperQty} onChange={setQty} />}
+          <button className="btn btn-accent btn-lg pd-atc" onClick={handleAdd}>
+            {added ? (
+              T.atcAddedLabel
+            ) : (
+              <>
+                <span>{T.atcLabel}</span>
+                <span className="pd-atc-sep" aria-hidden="true" />
+                <span>{formatPrice(totalPrice)}</span>
+              </>
+            )}
           </button>
         </div>
+        {T.microTrust?.filter(Boolean).length ? (
+          <p className="pd-microtrust">
+            {T.microTrust.filter(Boolean).map((m, i) => (
+              <span key={i}>{m}</span>
+            ))}
+          </p>
+        ) : null}
+
+        {promo?.enabled ? <PromoInline promo={promo} /> : null}
 
         <DeliveryEstimate />
 
-        <Tabs
-          tabs={[
-            {
-              key: "description",
-              label: "Description",
-              content: <p>{product.description}</p>,
-            },
-            {
-              key: "specs",
-              label: "Spécifications",
-              content: product.specs?.length ? (
-                <table className="spec-table">
-                  <tbody>
-                    {product.specs.map((s, i) => (
-                      <tr key={i}>
-                        <td>{s.label}</td>
-                        <td>{s.value}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              ) : (
-                <p>Aucune spécification renseignée.</p>
-              ),
-            },
-            {
-              key: "avis",
-              label: "Avis Clients",
-              content: <ReviewsList reviews={product.reviews} rating={product.rating} />,
-            },
-          ]}
-        />
+        {T.guaranteeTitle ? (
+          <div className="pd-guarantee">
+            {T.guaranteeSealValue ? (
+              <span className="pd-guarantee-seal" aria-hidden="true">
+                <strong>{T.guaranteeSealValue}</strong>
+                <small>{T.guaranteeSealUnit}</small>
+              </span>
+            ) : null}
+            <div>
+              <strong>{T.guaranteeTitle}</strong>
+              {T.guaranteeText ? <p>{T.guaranteeText}</p> : null}
+            </div>
+          </div>
+        ) : null}
+      </div>
+
+      <div className="pd-details">
+        {product.description ? (
+          <details className="pd-acc" open>
+            <summary>{T.accDescriptionTitle}</summary>
+            <div className="pd-acc-body">
+              <p>{product.description}</p>
+            </div>
+          </details>
+        ) : null}
+        {product.specs?.length ? (
+          <details className="pd-acc">
+            <summary>{T.accSpecsTitle}</summary>
+            <div className="pd-acc-body">
+              <table className="spec-table">
+                <tbody>
+                  {product.specs.map((s, i) => (
+                    <tr key={i}>
+                      <td>{s.label}</td>
+                      <td>{s.value}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </details>
+        ) : null}
+        {inBox.length ? (
+          <details className="pd-acc">
+            <summary>{T.accInBoxTitle}</summary>
+            <div className="pd-acc-body">
+              <ul className="pd-inbox">
+                {inBox.map((item, i) => (
+                  <li key={i}>
+                    <CheckIcon /> {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </details>
+        ) : null}
+        {T.accShippingTitle ? (
+          <details className="pd-acc">
+            <summary>{T.accShippingTitle}</summary>
+            <div className="pd-acc-body">
+              <p>{T.accShippingText}</p>
+              <p className="pd-acc-links">
+                <a href="/livraison">Page Livraison</a> · <a href="/cgv">CGV</a>
+              </p>
+            </div>
+          </details>
+        ) : null}
+        {T.accWarrantyTitle ? (
+          <details className="pd-acc">
+            <summary>{T.accWarrantyTitle}</summary>
+            <div className="pd-acc-body">
+              <p>{T.accWarrantyText}</p>
+            </div>
+          </details>
+        ) : null}
       </div>
     </section>
 
     <div className={`pd-sticky-bar${showStickyBar ? " visible" : ""}`}>
       <div className="pd-sticky-info">
         <span className="pd-sticky-name">{product.name}</span>
-        <span className="pd-sticky-price">€{stickyPrice.toFixed(2).replace(".", ",")}</span>
+        <span className="pd-sticky-price">{formatPrice(totalPrice)}</span>
       </div>
-      <button className="btn btn-primary" onClick={handleAdd}>
-        {added ? "Ajouté ✓" : "Ajouter au Panier"}
+      <button className="btn btn-accent" onClick={handleAdd}>
+        {added ? T.atcAddedLabel : T.atcLabel}
       </button>
     </div>
     </>

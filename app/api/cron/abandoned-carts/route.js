@@ -4,6 +4,7 @@ import { auth } from "@/lib/firebase";
 import { getAbandonedCarts, markReminderSent } from "@/lib/cartRecovery";
 import { sendEmail, emailEnabled } from "@/lib/email";
 import { getSettings } from "@/lib/settings";
+import { formatPrice } from "@/lib/format";
 
 // Relance un panier "site" (/commande, hors Shopify) laissé sans commande depuis au moins 1h après
 // que le client a saisi son e-mail — voir lib/cartRecovery.js pour pourquoi Shopify n'est pas
@@ -40,7 +41,7 @@ export async function GET(request) {
     let sent = 0;
     for (const cart of carts) {
       const itemsHtml = cart.items
-        .map((it) => `<li>${it.qty} × ${it.name} — €${(it.qty * it.price).toFixed(2).replace(".", ",")}</li>`)
+        .map((it) => `<li>${it.qty} × ${it.name} — ${formatPrice((it.qty * it.price))}</li>`)
         .join("");
 
       const result = await sendEmail({
@@ -50,7 +51,7 @@ export async function GET(request) {
           <p>Bonjour,</p>
           <p>Vous avez laissé ces articles dans votre panier sur ${seo.siteTitle || "notre boutique"} :</p>
           <ul>${itemsHtml}</ul>
-          <p><strong>Total : €${Number(cart.total).toFixed(2).replace(".", ",")}</strong></p>
+          <p><strong>Total : ${formatPrice(cart.total)}</strong></p>
           <p><a href="${siteUrl}/panier">Reprendre ma commande</a></p>
         `,
       });

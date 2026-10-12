@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import Link from "next/link";
 import { logout } from "@/lib/auth";
 import { getOrdersByUser, ORDER_STATUSES } from "@/lib/orders";
+import { formatPrice } from "@/lib/format";
 
 function statusLabel(value) {
   return ORDER_STATUSES.find((s) => s.value === value)?.label || value;
@@ -54,7 +55,7 @@ export default function AccountDashboard({ user }) {
                 <tr key={o.id}>
                   <td>{o.id.slice(0, 8)}</td>
                   <td>{o.createdAt?.seconds ? new Date(o.createdAt.seconds * 1000).toLocaleDateString("fr-FR") : "—"}</td>
-                  <td>€{Number(o.total).toFixed(2).replace(".", ",")}</td>
+                  <td>{formatPrice(o.total)}</td>
                   <td>
                     <span className={`status-pill ${o.status === "annulee" ? "annulee" : ""}`}>
                       {statusLabel(o.status)}

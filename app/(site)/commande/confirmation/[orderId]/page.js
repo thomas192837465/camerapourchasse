@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getOrderById, ORDER_STATUSES } from "@/lib/orders";
 import { CheckIcon } from "@/components/Icons";
+import { formatPrice } from "@/lib/format";
 
 export const metadata = {
   title: "Commande confirmée",
@@ -39,12 +40,12 @@ export default async function ConfirmationPage({ params }) {
                 <span>
                   {it.name} × {it.qty}
                 </span>
-                <span>€{(it.qty * it.price).toFixed(2).replace(".", ",")}</span>
+                <span>{formatPrice((it.qty * it.price))}</span>
               </div>
             ))}
             <div className="summary-row total">
               <span>Total</span>
-              <span>€{Number(order.total).toFixed(2).replace(".", ",")}</span>
+              <span>{formatPrice(order.total)}</span>
             </div>
             {order.shipping?.trackingNumber ? (
               <p style={{ marginTop: 14, fontSize: "0.85rem", color: "var(--ink-soft)" }}>

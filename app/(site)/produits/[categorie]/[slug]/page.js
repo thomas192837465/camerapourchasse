@@ -2,6 +2,7 @@ import { notFound, redirect } from "next/navigation";
 import { getProductBySlug, getRelatedProducts, getBundledVariant } from "@/lib/products";
 import { getCategoryBySlug } from "@/lib/categories";
 import { getSettings } from "@/lib/settings";
+import { defaultContent } from "@/lib/defaults";
 import { pageMetadata } from "@/lib/metadata";
 import ProductDetail from "@/components/ProductDetail";
 
@@ -36,12 +37,13 @@ export default async function ProductPage({ params }) {
     redirect(`/produits/${product.categoryId}/${slug}`);
   }
 
-  const [category, related, seo, content, bundle] = await Promise.all([
+  const [category, related, seo, content, bundle, legal] = await Promise.all([
     getCategoryBySlug(product.categoryId),
     getRelatedProducts(product.categoryId, product.id, 24),
     getSettings("seo"),
     getSettings("content"),
     getBundledVariant(product.pack),
+    getSettings("legal"),
   ]);
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "";
@@ -54,6 +56,17 @@ export default async function ProductPage({ params }) {
       siteName={seo.siteTitle}
       siteUrl={siteUrl}
       bundle={bundle}
+      trustBadges={content.trustBadges}
+      brandPoints={content.homeStoryPoints}
+      contactEmail={legal.email}
+      texts={{ ...defaultContent.pdpTexts, ...(content.pdpTexts || {}) }}
+      qtyTiers={content.qtyTiersEnabled !== false ? content.qtyTiers : []}
+      promo={{
+        enabled: content.promoInlineEnabled !== false,
+        amountLabel: content.promoInlineAmountLabel,
+        title: content.promoInlineTitle,
+        text: content.promoInlineText,
+      }}
       testimonials={{
         title: content.testimonialsTitle,
         rating: content.testimonialsRating,
