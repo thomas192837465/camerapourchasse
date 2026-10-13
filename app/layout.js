@@ -99,7 +99,7 @@ export default async function RootLayout({ children }) {
   const theme = await getSettings("themeV2");
 
   return (
-    <html lang="fr">
+    <html lang="fr" data-scroll-behavior="smooth">
       <head>
         <style dangerouslySetInnerHTML={{ __html: themeToCssVars(theme) }} />
       </head>
