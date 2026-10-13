@@ -1,15 +1,39 @@
 import { notFound, permanentRedirect } from "next/navigation";
 import { getCategoryBySlug, getCategories } from "@/lib/categories";
 import { getProductBySlug, getPublishedProducts } from "@/lib/products";
+import { getSettings } from "@/lib/settings";
 import { pageMetadata } from "@/lib/metadata";
+import { productPath } from "@/lib/productUrl";
 import ProductListing from "@/components/ProductListing";
+import ProductPage, { productMetadata } from "@/components/ProductPage";
 
-// URL canonique d'une catégorie : /produits/{slug}. Si le segment ne correspond à aucune
-// catégorie, on retombe sur l'ancien comportement : /produits/{slug} était autrefois l'URL
-// d'une fiche produit, conservée pour rediriger de façon permanente vers /produits/{categorie}/{slug}.
+export const revalidate = 60;
+
+// Anciennes pages supprimées : tant qu'aucune catégorie ne reprend ces adresses (ou ne les liste
+// dans ses "Anciennes adresses"), elles redirigent vers la page Nos caméras plutôt qu'une erreur 404.
+const RETIRED = ["piege-photo", "camera-de-chasse-sans-abonnement", "cameras-de-chasse-connectees"];
+
+// /produits/{segment} sert, dans cet ordre :
+//  1. une catégorie (son slug),
+//  2. une ancienne adresse de catégorie (champ "Anciennes adresses" de la catégorie) → redirection,
+//  3. une fiche produit (son slug ; un ancien slug ou le handle Shopify redirige vers le bon),
+//  4. une ancienne page supprimée (RETIRED) → redirection vers /produits.
+async function resolve(segment) {
+  const categories = await getCategories();
+  const category = categories.find((c) => c.slug === segment);
+  if (category) return { category, categories };
+  const renamed = categories.find((c) => (c.formerSlugs || []).includes(segment));
+  if (renamed) return { redirectTo: `/produits/${renamed.slug}` };
+  const product = await getProductBySlug(segment);
+  if (product) return { product };
+  if (RETIRED.includes(segment)) return { redirectTo: "/produits" };
+  return {};
+}
+
 export async function generateMetadata({ params }) {
   const { categorie } = await params;
-  const category = await getCategoryBySlug(categorie);
+  const { category, product } = await resolve(categorie);
+  if (product) return productMetadata(product);
   if (!category) return {};
   return pageMetadata(`/produits/${category.slug}`, {
     title: category.seo?.metaTitle || category.name,
@@ -20,19 +44,20 @@ export async function generateMetadata({ params }) {
   });
 }
 
-export default async function CategoryOrLegacyProductPage({ params, searchParams }) {
+export default async function CategoryOrProductPage({ params, searchParams }) {
   const { categorie } = await params;
-  const category = await getCategoryBySlug(categorie);
+  const { category, categories, product, redirectTo } = await resolve(categorie);
+
+  if (redirectTo) permanentRedirect(redirectTo);
 
   if (category) {
     const sp = await searchParams;
     const tags = (sp?.tags || "").split(",").filter(Boolean);
     const maxPrice = sp?.max ? Number(sp.max) : undefined;
     const search = sp?.q || "";
-
-    const [categories, products] = await Promise.all([
-      getCategories(),
+    const [products, navigation] = await Promise.all([
       getPublishedProducts({ categoryIds: [category.slug], tags, maxPrice, search, excludePromo: true }),
+      getSettings("navigation"),
     ]);
 
     return (
@@ -40,14 +65,16 @@ export default async function CategoryOrLegacyProductPage({ params, searchParams
         categories={categories}
         products={products}
         selectedCategorySlugs={[category.slug]}
-        title={category.name}
+        title={category.h1 || category.name}
+        intro={category.intro}
         category={category}
+        listingLabel={navigation.productsLabel || "Nos caméras"}
         siteUrl={process.env.NEXT_PUBLIC_SITE_URL || ""}
       />
     );
   }
 
-  const product = await getProductBySlug(categorie);
   if (!product) notFound();
-  permanentRedirect(`/produits/${product.categoryId}/${categorie}`);
+  if (productPath(product) !== `/produits/${categorie}`) permanentRedirect(productPath(product));
+  return <ProductPage product={product} />;
 }

@@ -541,6 +541,126 @@ export default function ContentSettingsPage() {
       </div>
 
       <div className="admin-card">
+        <h2>Page « Nos caméras » (/produits)</h2>
+        <p className="form-hint" style={{ marginBottom: 10 }}>
+          Page qui vise « caméra de chasse » sur Google : titre H1, intro au-dessus des produits, puis sous la grille
+          le guide, le tableau comparatif et le bloc prix / FAQ.
+        </p>
+        <div className="form-grid">
+          <div className="form-field">
+            <label>Titre H1</label>
+            <input value={content.produitsH1 || ""} onChange={(e) => set("produitsH1", e.target.value)} />
+          </div>
+          <div className="form-field">
+            <label>Titre Google (sans « | WildTrail », ajouté automatiquement)</label>
+            <input value={content.produitsMetaTitle || ""} onChange={(e) => set("produitsMetaTitle", e.target.value)} />
+          </div>
+        </div>
+        <div className="form-field">
+          <label>Description Google (155 caractères max)</label>
+          <textarea
+            rows={2}
+            value={content.produitsMetaDescription || ""}
+            onChange={(e) => set("produitsMetaDescription", e.target.value)}
+          />
+        </div>
+        <div className="form-field">
+          <label>Intro au-dessus des produits (gras avec **texte**, liens avec [texte](/adresse))</label>
+          <textarea rows={3} value={content.produitsIntro || ""} onChange={(e) => set("produitsIntro", e.target.value)} />
+        </div>
+        <h3 style={{ margin: "18px 0 8px" }}>Guide sous les produits</h3>
+        <ContentBlocksEditor blocks={content.produitsIntroBlocks} onChange={(blocks) => set("produitsIntroBlocks", blocks)} />
+        <h3 style={{ margin: "18px 0 8px" }}>Tableau comparatif</h3>
+        <div className="form-field">
+          <label>Titre du tableau (vide = pas de titre)</label>
+          <input value={content.comparisonTitle || ""} onChange={(e) => set("comparisonTitle", e.target.value)} />
+        </div>
+        <p className="form-hint" style={{ marginBottom: 8 }}>
+          Une ligne par modèle. Le prix est repris automatiquement du produit dont le nom contient le modèle (ex : « H80 »).
+        </p>
+        {(content.comparisonRows || []).map((row, i) => (
+          <div className="repeatable-row" key={row.id || i} style={{ marginBottom: 8 }}>
+            {[
+              ["model", "Modèle"],
+              ["connectivity", "Connexion"],
+              ["energy", "Énergie"],
+              ["night", "Vision nocturne"],
+            ].map(([field, label]) => (
+              <div className="form-field" key={field}>
+                <input
+                  placeholder={label}
+                  aria-label={label}
+                  value={row[field] || ""}
+                  onChange={(e) =>
+                    set(
+                      "comparisonRows",
+                      content.comparisonRows.map((r, j) => (j === i ? { ...r, [field]: e.target.value } : r))
+                    )
+                  }
+                />
+              </div>
+            ))}
+            <button
+              type="button"
+              className="icon-btn"
+              aria-label="Supprimer la ligne"
+              onClick={() => set("comparisonRows", content.comparisonRows.filter((_, j) => j !== i))}
+            >
+              ×
+            </button>
+          </div>
+        ))}
+        <button
+          type="button"
+          className="add-row-btn"
+          onClick={() =>
+            set("comparisonRows", [
+              ...(content.comparisonRows || []),
+              { id: `cmp-${Date.now()}`, model: "", connectivity: "", energy: "", night: "" },
+            ])
+          }
+        >
+          + Ajouter un modèle
+        </button>
+        <h3 style={{ margin: "18px 0 8px" }}>Bloc prix et FAQ (sous le tableau)</h3>
+        <ContentBlocksEditor blocks={content.produitsPricingBlocks} onChange={(blocks) => set("produitsPricingBlocks", blocks)} />
+      </div>
+
+      <div className="admin-card">
+        <h2>Page Contact</h2>
+        <p className="form-hint" style={{ marginBottom: 10 }}>
+          L&apos;e-mail et le téléphone affichés viennent de Réglages → Légal. Les messages envoyés arrivent dans
+          Messages clients (et une copie par e-mail à l&apos;adresse de Réglages → Légal).
+        </p>
+        <div className="form-grid">
+          <div className="form-field">
+            <label>Titre</label>
+            <input value={content.contactTitle || ""} onChange={(e) => set("contactTitle", e.target.value)} />
+          </div>
+          <div className="form-field">
+            <label>Délai de réponse / horaires</label>
+            <input value={content.contactHours || ""} onChange={(e) => set("contactHours", e.target.value)} />
+          </div>
+        </div>
+        <div className="form-field">
+          <label>Texte d&apos;introduction</label>
+          <textarea rows={2} value={content.contactIntro || ""} onChange={(e) => set("contactIntro", e.target.value)} />
+        </div>
+        <div className="form-field">
+          <label>Sujets proposés (un par ligne, vide = pas de liste)</label>
+          <textarea
+            rows={5}
+            value={(content.contactSubjects || []).join("\n")}
+            onChange={(e) => set("contactSubjects", e.target.value.split("\n"))}
+          />
+        </div>
+        <div className="form-field">
+          <label>Message affiché après l&apos;envoi</label>
+          <input value={content.contactSuccess || ""} onChange={(e) => set("contactSuccess", e.target.value)} />
+        </div>
+      </div>
+
+      <div className="admin-card">
         <h2>Encart « -5 € » sous le bouton d'achat (fiches produit)</h2>
         <p className="form-hint" style={{ marginBottom: 10 }}>
           Le visiteur laisse son e-mail, reçoit le code ci-dessus et le code est appliqué automatiquement au

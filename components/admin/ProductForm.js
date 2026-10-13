@@ -105,7 +105,7 @@ export default function ProductForm({ initialProduct, categories, generalSetting
             <span className="form-hint">/produits/{product.slug || "..."}</span>
           </div>
           <div className="form-field">
-            <label>Catégorie</label>
+            <label>Catégorie principale</label>
             <select required value={product.categoryId} onChange={(e) => set("categoryId", e.target.value)}>
               <option value="">— Choisir —</option>
               {categories.map((c) => (
@@ -114,6 +114,34 @@ export default function ProductForm({ initialProduct, categories, generalSetting
                 </option>
               ))}
             </select>
+          </div>
+          <div className="form-field full">
+            <label>Aussi visible dans</label>
+            <div style={{ display: "flex", flexWrap: "wrap", gap: "6px 16px" }}>
+              {categories
+                .filter((c) => c.slug !== product.categoryId)
+                .map((c) => (
+                  <label key={c.id} style={{ display: "flex", alignItems: "center", gap: 6, fontWeight: 400 }}>
+                    <input
+                      type="checkbox"
+                      checked={(product.extraCategoryIds || []).includes(c.slug)}
+                      onChange={(e) =>
+                        set(
+                          "extraCategoryIds",
+                          e.target.checked
+                            ? [...(product.extraCategoryIds || []), c.slug]
+                            : (product.extraCategoryIds || []).filter((s) => s !== c.slug)
+                        )
+                      }
+                    />
+                    {c.name}
+                  </label>
+                ))}
+            </div>
+            <span className="form-hint">
+              Catégories secondaires : le produit y apparaît aussi (ex : une caméra solaire 4G dans « 4G » et
+              « Solaire »). Son adresse et son fil d&apos;Ariane restent ceux de la catégorie principale.
+            </span>
           </div>
           <div className="form-field full">
             <label>Description courte (résumé, utilisé pour le SEO par défaut)</label>

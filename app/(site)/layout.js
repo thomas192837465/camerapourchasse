@@ -17,7 +17,14 @@ export default async function SiteLayout({ children }) {
     getCategories(),
     getRecentPosts(3),
   ]);
-  const navCategories = categories.filter((c) => c.showInNav !== false);
+  // Une catégorie déjà présente comme lien du menu (ex : Accessoires) n'est pas répétée dans le
+  // menu déroulant "Nos caméras".
+  const linkedPaths = new Set(
+    (navigation.items || []).flatMap((item) => [item.href, ...(item.children || []).map((c) => c.href)]).filter(Boolean)
+  );
+  const navCategories = categories.filter(
+    (c) => c.showInNav !== false && !linkedPaths.has(`/produits/${c.slug}`)
+  );
 
   // Les composants interactifs (header, footer, panier, popup) ne reçoivent que les champs dont
   // ils ont besoin : envoyer tout le contenu de l'accueil au navigateur alourdissait chaque page.
@@ -40,7 +47,13 @@ export default async function SiteLayout({ children }) {
 
   return (
     <>
-      <Header content={shellContent} categories={navCategories} navItems={navigation.items} />
+      <Header
+        content={shellContent}
+        categories={navCategories}
+        navItems={navigation.items}
+        productsLabel={navigation.productsLabel || "Nos caméras"}
+        productsAllLabel={navigation.productsAllLabel || "Toutes les caméras"}
+      />
       {children}
       <BlogTeaser posts={recentPosts} />
       <Footer content={shellContent} />

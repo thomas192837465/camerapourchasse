@@ -4,9 +4,10 @@ import ProductCarousel from "./ProductCarousel";
 import ContentBlocks from "./ContentBlocks";
 import TestimonialsSection from "./TestimonialsSection";
 import { ProductKeyStats, ProductReviews, ProductBrandPromise, ProductFaq, ProductFinalCta } from "./ProductSections";
+import { productPath } from "@/lib/productUrl";
 
-export default function ProductDetail({ product, category, related, siteName, siteUrl = "", bundle, testimonials, trustBadges, brandPoints, contactEmail, qtyTiers, promo, texts = {} }) {
-  const productUrl = `${siteUrl}/produits/${product.categoryId}/${product.slug}`;
+export default function ProductDetail({ product, category, related, siteName, siteUrl = "", bundle, testimonials, trustBadges, brandPoints, contactEmail, qtyTiers, promo, texts = {}, listingLabel = "Nos caméras" }) {
+  const productUrl = `${siteUrl}${productPath(product)}`;
   const faq = (product.faq || []).filter((f) => f.question && f.answer);
   const validReviews = (product.reviews || []).filter((r) => r.name && r.text);
   const featuredImage = product.seo?.featuredImage?.url;
@@ -61,7 +62,7 @@ export default function ProductDetail({ product, category, related, siteName, si
 
   const breadcrumbItems = [
     { name: "Accueil", url: `${siteUrl}/` },
-    { name: "Produits", url: `${siteUrl}/produits` },
+    { name: listingLabel, url: `${siteUrl}/produits` },
     ...(category ? [{ name: category.name, url: `${siteUrl}/produits/${category.slug}` }] : []),
     { name: product.name, url: productUrl },
   ];
@@ -101,7 +102,7 @@ export default function ProductDetail({ product, category, related, siteName, si
         <nav className="breadcrumb" aria-label="Fil d'Ariane">
           <Link href="/">Accueil</Link>
           <span className="sep">/</span>
-          <Link href="/produits">Produits</Link>
+          <Link href="/produits">{listingLabel}</Link>
           {category ? (
             <>
               <span className="sep">/</span>

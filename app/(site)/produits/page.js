@@ -4,6 +4,8 @@ import { getSettings } from "@/lib/settings";
 import { pageMetadata } from "@/lib/metadata";
 import ProductListing from "@/components/ProductListing";
 
+// Page « Nos caméras » : page pilier sur « caméra de chasse » (H1, intro, guide et comparatif
+// réglables dans Admin → Contenu → « Page Nos caméras »).
 // La canonical pointe toujours vers /produits, jamais vers une variante filtrée/triée/recherchée
 // (?categorie=...&q=...) : sans ça, chaque combinaison de filtres devient une URL indexable
 // potentiellement dupliquée aux yeux de Google.
@@ -24,10 +26,10 @@ export async function generateMetadata({ searchParams }) {
     }
   }
 
+  const content = await getSettings("content");
   return pageMetadata("/produits", {
-    title: q ? `Résultats pour "${q}"` : "Toutes nos caméras de chasse — prix et modèles",
-    description:
-      "Comparez les 5 caméras de chasse WildTrail : 4G, solaire, Wi-Fi. De 79 à 90 €, sans abonnement obligatoire, garantie 2 ans et SAV en France.",
+    title: q ? `Résultats pour "${q}"` : content.produitsMetaTitle || content.produitsH1 || "Caméra de chasse",
+    description: content.produitsMetaDescription || "",
   });
 }
 
@@ -38,10 +40,12 @@ export default async function ProductsPage({ searchParams }) {
   const maxPrice = sp?.max ? Number(sp.max) : undefined;
   const search = sp?.q || "";
 
-  const [categories, products, content] = await Promise.all([
+  const [categories, products, allProducts, content, navigation] = await Promise.all([
     getCategories(),
     getPublishedProducts({ categoryIds, tags, maxPrice, search }),
+    getPublishedProducts({}),
     getSettings("content"),
+    getSettings("navigation"),
   ]);
 
   return (
@@ -49,9 +53,12 @@ export default async function ProductsPage({ searchParams }) {
       categories={categories}
       products={products}
       selectedCategorySlugs={categoryIds}
-      title={search ? `Résultats pour "${search}"` : "Toutes nos caméras de chasse"}
+      title={search ? `Résultats pour "${search}"` : content.produitsH1 || "Caméra de chasse"}
+      intro={search ? "" : content.produitsIntro}
       introBlocks={content.produitsIntroBlocks}
       pricingBlocks={content.produitsPricingBlocks}
+      comparison={{ title: content.comparisonTitle, rows: content.comparisonRows, products: allProducts }}
+      listingLabel={navigation.productsLabel || "Nos caméras"}
     />
   );
 }

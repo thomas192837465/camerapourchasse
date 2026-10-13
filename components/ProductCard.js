@@ -6,6 +6,7 @@ import { CameraIcon } from "./Icons";
 import TrustRating from "./TrustRating";
 import { useCart } from "@/lib/cart-context";
 import { formatPrice } from "@/lib/format";
+import { productPath } from "@/lib/productUrl";
 
 export default function ProductCard({ product }) {
   const { addItem } = useCart();
@@ -26,7 +27,7 @@ export default function ProductCard({ product }) {
     });
   }
 
-  const href = `/produits/${product.categoryId}/${product.slug}`;
+  const href = productPath(product);
   const savings = hasDiscount ? product.compareAtPrice - product.price : 0;
 
   return (

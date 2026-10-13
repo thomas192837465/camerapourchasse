@@ -1,6 +1,7 @@
 import { getPublishedProducts } from "@/lib/products";
 import { getCategories } from "@/lib/categories";
 import { getPublishedPosts } from "@/lib/posts";
+import { productPath } from "@/lib/productUrl";
 
 // Sans ça, Next.js peut figer ce sitemap au moment du build sur Vercel : les produits/articles
 // ajoutés ensuite depuis l'admin (sans nouveau déploiement) n'y apparaîtraient jamais.
@@ -18,9 +19,8 @@ export default async function sitemap() {
   const staticRoutes = [
     "",
     "/produits",
-    "/produits/piege-photo",
-    "/produits/camera-de-chasse-sans-abonnement",
     "/blog",
+    "/contact",
     "/livraison",
     "/notre-histoire",
     "/mentions-legales",
@@ -36,7 +36,7 @@ export default async function sitemap() {
   }));
 
   const productRoutes = products.map((p) => ({
-    url: `${base}/produits/${p.categoryId}/${p.slug}`,
+    url: `${base}${productPath(p)}`,
     lastModified: p.updatedAt ? new Date(p.updatedAt.seconds ? p.updatedAt.seconds * 1000 : p.updatedAt) : new Date(),
   }));
 

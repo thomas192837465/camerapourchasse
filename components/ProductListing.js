@@ -4,6 +4,7 @@ import ResultsView from "./ResultsView";
 import ContentBlocks from "./ContentBlocks";
 import ProductComparisonTable from "./ProductComparisonTable";
 import { buildFaqJsonLd } from "@/lib/schema";
+import { renderRichText } from "@/lib/richText";
 
 export default function ProductListing({
   categories,
@@ -12,8 +13,11 @@ export default function ProductListing({
   title,
   category,
   siteUrl = "",
+  intro,
   introBlocks,
   pricingBlocks,
+  comparison,
+  listingLabel = "Nos caméras",
 }) {
   const breadcrumbJsonLd = category
     ? {
@@ -21,7 +25,7 @@ export default function ProductListing({
         "@type": "BreadcrumbList",
         itemListElement: [
           { "@type": "ListItem", position: 1, name: "Accueil", item: `${siteUrl}/` },
-          { "@type": "ListItem", position: 2, name: "Produits", item: `${siteUrl}/produits` },
+          { "@type": "ListItem", position: 2, name: listingLabel, item: `${siteUrl}/produits` },
           { "@type": "ListItem", position: 3, name: category.name, item: `${siteUrl}/produits/${category.slug}` },
         ],
       }
@@ -44,13 +48,14 @@ export default function ProductListing({
         <nav className="breadcrumb">
           <Link href="/">Accueil</Link>
           <span className="sep">/</span>
-          <Link href="/produits">Produits</Link>
+          <Link href="/produits">{listingLabel}</Link>
           <span className="sep">/</span>
           <span className="current">{category.name}</span>
         </nav>
       ) : null}
 
       <h1 className="listing-title">{title}</h1>
+      {intro ? <p className="listing-intro" dangerouslySetInnerHTML={{ __html: renderRichText(intro) }} /> : null}
 
       <div className="search-layout">
         <Filters categories={categories} selectedCategorySlugs={selectedCategorySlugs} />
@@ -62,7 +67,7 @@ export default function ProductListing({
       ) : (
         <>
           <ContentBlocks blocks={introBlocks} />
-          {(introBlocks || pricingBlocks) ? <ProductComparisonTable /> : null}
+          {comparison ? <ProductComparisonTable {...comparison} /> : null}
           <ContentBlocks blocks={pricingBlocks} />
         </>
       )}

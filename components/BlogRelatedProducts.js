@@ -3,6 +3,7 @@ import Image from "next/image";
 import TrustRating from "./TrustRating";
 import { CameraIcon, ChevronRightIcon } from "./Icons";
 import { formatPrice } from "@/lib/format";
+import { productPath } from "@/lib/productUrl";
 
 export default function BlogRelatedProducts({ products }) {
   if (!products?.length) return null;
@@ -16,7 +17,7 @@ export default function BlogRelatedProducts({ products }) {
           return (
             <Link
               key={product.id}
-              href={`/produits/${product.categoryId}/${product.slug}`}
+              href={productPath(product)}
               className="blog-sidebar-product"
             >
               <span className="blog-sidebar-product-thumb">

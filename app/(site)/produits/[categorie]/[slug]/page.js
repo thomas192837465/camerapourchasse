@@ -1,77 +1,12 @@
-import { notFound, redirect } from "next/navigation";
-import { getProductBySlug, getRelatedProducts, getBundledVariant } from "@/lib/products";
-import { getCategoryBySlug } from "@/lib/categories";
-import { getSettings } from "@/lib/settings";
-import { defaultContent } from "@/lib/defaults";
-import { pageMetadata } from "@/lib/metadata";
-import ProductDetail from "@/components/ProductDetail";
+import { notFound, permanentRedirect } from "next/navigation";
+import { getProductBySlug } from "@/lib/products";
+import { productPath } from "@/lib/productUrl";
 
-export const revalidate = 60;
-
-export async function generateMetadata({ params }) {
+// Ancienne adresse des fiches (/produits/{catégorie}/{produit}) : redirection permanente vers
+// l'adresse actuelle /produits/{produit}, pour garder les liens et le référencement existants.
+export default async function LegacyProductUrl({ params }) {
   const { slug } = await params;
   const product = await getProductBySlug(slug);
-  if (!product) return {};
-
-  // Image de mise en avant choisie dans l'admin (SEO) en priorité, sinon la première photo du produit.
-  const featuredImage = product.seo?.featuredImage?.url;
-  const galleryImages = product.images?.filter((i) => i.url && i.type !== "video").map((i) => i.url) || [];
-  const ogImages = featuredImage ? [featuredImage, ...galleryImages.filter((u) => u !== featuredImage)] : galleryImages;
-
-  return pageMetadata(`/produits/${product.categoryId}/${product.slug}`, {
-    title: product.seo?.metaTitle || product.name,
-    description: product.seo?.metaDescription || product.shortDescription || product.description?.slice(0, 155),
-    images: ogImages,
-  });
-}
-
-export default async function ProductPage({ params }) {
-  const { categorie, slug } = await params;
-  const product = await getProductBySlug(slug);
   if (!product) notFound();
-
-  // URL canonique : /produits/{slug-catégorie}/{slug-produit}. Si l'URL ne correspond pas
-  // à la vraie catégorie du produit (lien obsolète, catégorie renommée...), on redirige
-  // vers la bonne URL plutôt que de servir un contenu dupliqué (SEO).
-  if (product.categoryId !== categorie) {
-    redirect(`/produits/${product.categoryId}/${slug}`);
-  }
-
-  const [category, related, seo, content, bundle, legal] = await Promise.all([
-    getCategoryBySlug(product.categoryId),
-    getRelatedProducts(product.categoryId, product.id, 24),
-    getSettings("seo"),
-    getSettings("content"),
-    getBundledVariant(product.pack),
-    getSettings("legal"),
-  ]);
-
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "";
-
-  return (
-    <ProductDetail
-      product={product}
-      category={category}
-      related={related}
-      siteName={seo.siteTitle}
-      siteUrl={siteUrl}
-      bundle={bundle}
-      trustBadges={content.trustBadges}
-      brandPoints={content.homeStoryPoints}
-      contactEmail={legal.email}
-      texts={{ ...defaultContent.pdpTexts, ...(content.pdpTexts || {}) }}
-      qtyTiers={content.qtyTiersEnabled !== false ? content.qtyTiers : []}
-      promo={{
-        enabled: content.promoInlineEnabled !== false,
-        amountLabel: content.promoInlineAmountLabel,
-        title: content.promoInlineTitle,
-        text: content.promoInlineText,
-      }}
-      testimonials={{
-        title: content.testimonialsTitle,
-        rating: content.testimonialsRating,
-        items: content.testimonials,
-      }}
-    />
-  );
+  permanentRedirect(productPath(product));
 }

@@ -89,10 +89,36 @@ export default function NavigationSettingsPage() {
         <div>
           <h1>Navigation</h1>
           <p>
-            Liens affichés dans la barre de navigation, après le menu déroulant "Produits" (dont le contenu se gère
-            depuis Catégories).
+            Le menu commence par un menu déroulant qui liste les catégories cochées « Afficher dans le menu »
+            (Catalogue → Catégories), puis affiche les liens ci-dessous.
           </p>
         </div>
+      </div>
+
+      <div className="admin-card">
+        <h2>Menu déroulant des catégories</h2>
+        <div className="repeatable-row">
+          <div className="form-field">
+            <label>Libellé du menu</label>
+            <input
+              placeholder="Nos caméras"
+              value={nav.productsLabel ?? ""}
+              onChange={(e) => setNav((n) => ({ ...n, productsLabel: e.target.value }))}
+            />
+          </div>
+          <div className="form-field">
+            <label>Dernier lien (vers /produits)</label>
+            <input
+              placeholder="Toutes les caméras"
+              value={nav.productsAllLabel ?? ""}
+              onChange={(e) => setNav((n) => ({ ...n, productsAllLabel: e.target.value }))}
+            />
+          </div>
+        </div>
+        <p className="form-hint">
+          Une catégorie ajoutée comme lien ci-dessous (ex : Accessoires) n&apos;est pas répétée dans ce menu
+          déroulant. Pour en masquer une autre, décochez « Afficher dans le menu » dans sa fiche catégorie.
+        </p>
       </div>
 
       <div className="admin-card">

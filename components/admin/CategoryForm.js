@@ -12,6 +12,9 @@ const emptyCategory = {
   slug: "",
   order: 1,
   showInNav: true,
+  h1: "",
+  intro: "",
+  formerSlugs: [],
   seo: { metaTitle: "", metaDescription: "" },
   image: { url: "", alt: "" },
   blocks: [],
@@ -57,7 +60,7 @@ export default function CategoryForm({ initialCategory, onSubmit, onDelete }) {
         <h2>Informations générales</h2>
         <div className="form-grid">
           <div className="form-field full">
-            <label>Titre (affiché dans le menu "Produits" et sur la page d'accueil)</label>
+            <label>Nom (affiché dans le menu « Nos caméras » et sur la page d'accueil)</label>
             <input required value={category.name} onChange={(e) => handleNameChange(e.target.value)} />
           </div>
           <div className="form-field">
@@ -73,6 +76,22 @@ export default function CategoryForm({ initialCategory, onSubmit, onDelete }) {
             <span className="form-hint">/produits/{category.slug || "..."}</span>
           </div>
           <div className="form-field">
+            <label>Anciennes adresses (redirigées ici)</label>
+            <input
+              placeholder="ex : cameras-de-chasse-connectees"
+              value={(category.formerSlugs || []).join(", ")}
+              onChange={(e) =>
+                set(
+                  "formerSlugs",
+                  e.target.value.split(",").map((s) => slugify(s.trim())).filter(Boolean)
+                )
+              }
+            />
+            <span className="form-hint">
+              Slugs séparés par des virgules : /produits/ancien-slug redirige définitivement vers cette catégorie.
+            </span>
+          </div>
+          <div className="form-field">
             <label>Ordre d'affichage</label>
             <input type="number" value={category.order} onChange={(e) => set("order", e.target.value)} />
           </div>
@@ -83,7 +102,7 @@ export default function CategoryForm({ initialCategory, onSubmit, onDelete }) {
                 checked={category.showInNav}
                 onChange={(e) => set("showInNav", e.target.checked)}
               />
-              Afficher comme sous-menu dans "Produits" (barre de navigation)
+              Afficher dans le menu déroulant « Nos caméras »
             </label>
           </div>
         </div>
@@ -99,9 +118,22 @@ export default function CategoryForm({ initialCategory, onSubmit, onDelete }) {
       </div>
 
       <div className="admin-card">
-        <h2>Contenu de la page (SEO)</h2>
+        <h2>Haut de page</h2>
+        <div className="form-field">
+          <label>Titre H1 (vide = le nom de la catégorie)</label>
+          <input value={category.h1 || ""} placeholder={category.name} onChange={(e) => set("h1", e.target.value)} />
+        </div>
+        <div className="form-field">
+          <label>Intro au-dessus des produits (2 à 4 phrases)</label>
+          <textarea rows={3} value={category.intro || ""} onChange={(e) => set("intro", e.target.value)} />
+          <span className="form-hint">Gras avec **texte**, liens avec [texte](/adresse).</span>
+        </div>
+      </div>
+
+      <div className="admin-card">
+        <h2>Guide sous les produits (SEO)</h2>
         <p className="form-hint" style={{ marginBottom: 10 }}>
-          Affiché sur la page dédiée /produits/{category.slug || "..."}, sous le titre H1. Ajoutez des blocs dans
+          Affiché sur la page /produits/{category.slug || "..."}, sous la grille de produits. Ajoutez des blocs dans
           l'ordre voulu (déplaçables avec les flèches) : titres, paragraphes (gras et liens possibles), photos,
           tableaux et FAQ (avec balisage FAQPage pour Google et les IA).
         </p>
@@ -111,7 +143,7 @@ export default function CategoryForm({ initialCategory, onSubmit, onDelete }) {
       <div className="admin-card">
         <h2>SEO</h2>
         <p className="form-hint" style={{ marginBottom: 10 }}>
-          Utilisé sur la page /produits quand un visiteur filtre uniquement sur cette catégorie.
+          Titre et description affichés dans Google pour /produits/{category.slug || "..."}.
         </p>
         <div className="form-field">
           <label>Titre meta (balise &lt;title&gt;)</label>

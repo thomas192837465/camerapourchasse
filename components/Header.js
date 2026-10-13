@@ -6,7 +6,7 @@ import { LogoMarkIcon, CartIcon, UserIcon, ChevronDownIcon, MenuIcon, CloseIcon 
 import { useCart } from "@/lib/cart-context";
 import { cloudinaryTransform } from "@/lib/cloudinaryUrl";
 
-export default function Header({ content, categories = [], navItems = [] }) {
+export default function Header({ content, categories = [], navItems = [], productsLabel = "Nos caméras", productsAllLabel = "Toutes les caméras" }) {
   const { count, openDrawer } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -58,7 +58,7 @@ export default function Header({ content, categories = [], navItems = [] }) {
         <nav className="main-nav">
           <div className="nav-dropdown">
             <Link href="/produits">
-              Produits <ChevronDownIcon />
+              {productsLabel} <ChevronDownIcon />
             </Link>
             <div className="nav-dropdown-panel">
               {categories.map((cat) => (
@@ -66,7 +66,7 @@ export default function Header({ content, categories = [], navItems = [] }) {
                   {cat.name}
                 </Link>
               ))}
-              <Link href="/produits">Toutes les caméras</Link>
+              <Link href="/produits">{productsAllLabel}</Link>
             </div>
           </div>
           {navItems.map((item) =>
@@ -117,7 +117,7 @@ export default function Header({ content, categories = [], navItems = [] }) {
         <nav className="mobile-nav" aria-label="Menu mobile">
           <details className="mobile-nav-group">
             <summary>
-              Produits <ChevronDownIcon />
+              {productsLabel} <ChevronDownIcon />
             </summary>
             <div className="mobile-nav-sublinks">
               {categories.map((cat) => (
@@ -126,7 +126,7 @@ export default function Header({ content, categories = [], navItems = [] }) {
                 </Link>
               ))}
               <Link href="/produits" onClick={closeMobile}>
-                Toutes les caméras
+                {productsAllLabel}
               </Link>
             </div>
           </details>
