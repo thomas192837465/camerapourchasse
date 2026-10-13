@@ -6,7 +6,7 @@ import ImageUploader from "./ImageUploader";
 import SingleImageField from "./SingleImageField";
 import ReviewsEditor from "./ReviewsEditor";
 import ContentBlocksEditor from "./ContentBlocksEditor";
-import { slugify } from "@/lib/products";
+import { slugify, slugifyTyping } from "@/lib/products";
 import { TrashIcon } from "@/components/Icons";
 
 const emptyProduct = {
@@ -99,8 +99,9 @@ export default function ProductForm({ initialProduct, categories, generalSetting
               value={product.slug}
               onChange={(e) => {
                 setSlugTouched(true);
-                set("slug", slugify(e.target.value));
+                set("slug", slugifyTyping(e.target.value));
               }}
+              onBlur={(e) => set("slug", slugify(e.target.value))}
             />
             <span className="form-hint">/produits/{product.slug || "..."}</span>
           </div>

@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { slugify } from "@/lib/products";
+import { slugify, slugifyTyping } from "@/lib/products";
 import { TrashIcon } from "@/components/Icons";
 import SingleImageField from "./SingleImageField";
 import ContentBlocksEditor from "./ContentBlocksEditor";
@@ -24,6 +24,7 @@ export default function CategoryForm({ initialCategory, onSubmit, onDelete }) {
   const router = useRouter();
   const [category, setCategory] = useState(() => ({ ...emptyCategory, ...initialCategory }));
   const [slugTouched, setSlugTouched] = useState(Boolean(initialCategory?.slug));
+  const [formerText, setFormerText] = useState(() => (initialCategory?.formerSlugs || []).join(", "));
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState("");
 
@@ -70,8 +71,9 @@ export default function CategoryForm({ initialCategory, onSubmit, onDelete }) {
               value={category.slug}
               onChange={(e) => {
                 setSlugTouched(true);
-                set("slug", slugify(e.target.value));
+                set("slug", slugifyTyping(e.target.value));
               }}
+              onBlur={(e) => set("slug", slugify(e.target.value))}
             />
             <span className="form-hint">/produits/{category.slug || "..."}</span>
           </div>
@@ -79,13 +81,16 @@ export default function CategoryForm({ initialCategory, onSubmit, onDelete }) {
             <label>Anciennes adresses (redirigées ici)</label>
             <input
               placeholder="ex : cameras-de-chasse-connectees"
-              value={(category.formerSlugs || []).join(", ")}
-              onChange={(e) =>
+              value={formerText}
+              onChange={(e) => {
+                // Le texte saisi reste tel quel à l'écran (sinon les tirets disparaissent pendant
+                // la frappe) ; la liste enregistrée, elle, est nettoyée.
+                setFormerText(e.target.value);
                 set(
                   "formerSlugs",
                   e.target.value.split(",").map((s) => slugify(s.trim())).filter(Boolean)
-                )
-              }
+                );
+              }}
             />
             <span className="form-hint">
               Slugs séparés par des virgules : /produits/ancien-slug redirige définitivement vers cette catégorie.

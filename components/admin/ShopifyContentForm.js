@@ -9,11 +9,14 @@ import ContentBlocksEditor from "./ContentBlocksEditor";
 import PackConfigEditor from "./PackConfigEditor";
 import { TrashIcon } from "@/components/Icons";
 import { emptyShopifyContent, shopifyGidToDocId } from "@/lib/shopifyContent";
-import { slugify } from "@/lib/products";
+import { slugify, slugifyTyping } from "@/lib/products";
 
 export default function ShopifyContentForm({ shopifyProduct, initialContent, categories, generalSettings, onSubmit }) {
   const router = useRouter();
   const [content, setContent] = useState(() => ({ ...emptyShopifyContent, ...initialContent }));
+  // Slug en vigueur à l'ouverture : s'il change, l'ancien est gardé dans formerSlugs pour que
+  // l'ancienne adresse de la fiche redirige vers la nouvelle (au lieu d'une erreur 404).
+  const [savedSlug, setSavedSlug] = useState(() => initialContent?.customSlug || shopifyProduct.handle);
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
   const [error, setError] = useState("");
@@ -45,7 +48,13 @@ export default function ShopifyContentForm({ shopifyProduct, initialContent, cat
 
     setSaving(true);
     try {
-      await onSubmit(content);
+      const currentSlug = content.customSlug || shopifyProduct.handle;
+      const formerSlugs = (content.formerSlugs || []).filter((s) => s && s !== currentSlug);
+      if (savedSlug && savedSlug !== currentSlug && !formerSlugs.includes(savedSlug)) formerSlugs.push(savedSlug);
+      const toSave = { ...content, formerSlugs };
+      await onSubmit(toSave);
+      setContent(toSave);
+      setSavedSlug(currentSlug);
       setSaved(true);
       setTimeout(() => setSaved(false), 2000);
     } catch (err) {
@@ -149,7 +158,8 @@ export default function ShopifyContentForm({ shopifyProduct, initialContent, cat
             <input
               value={content.customSlug}
               placeholder={shopifyProduct.handle}
-              onChange={(e) => set("customSlug", slugify(e.target.value))}
+              onChange={(e) => set("customSlug", slugifyTyping(e.target.value))}
+              onBlur={(e) => set("customSlug", slugify(e.target.value))}
             />
             <span className="form-hint">
               /produits/{content.customSlug || shopifyProduct.handle} — doit être unique parmi tous vos produits et

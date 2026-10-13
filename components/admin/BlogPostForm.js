@@ -7,7 +7,7 @@ import SingleImageField from "./SingleImageField";
 import ContentBlocksEditor from "./ContentBlocksEditor";
 import RelatedProductsField from "./RelatedProductsField";
 import RelatedPostsField from "./RelatedPostsField";
-import { slugify } from "@/lib/products";
+import { slugify, slugifyTyping } from "@/lib/products";
 import { getBlogCategories } from "@/lib/blogCategories";
 import { TrashIcon } from "@/components/Icons";
 
@@ -88,8 +88,9 @@ export default function BlogPostForm({ initialPost, onSubmit, onDelete }) {
               value={post.slug}
               onChange={(e) => {
                 setSlugTouched(true);
-                set("slug", slugify(e.target.value));
+                set("slug", slugifyTyping(e.target.value));
               }}
+              onBlur={(e) => set("slug", slugify(e.target.value))}
             />
             <span className="form-hint">/blog/{post.slug || "..."}</span>
           </div>
