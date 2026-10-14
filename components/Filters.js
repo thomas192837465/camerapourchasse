@@ -5,7 +5,7 @@ import { ChevronDownIcon } from "./Icons";
 /** Panneau de filtres (contrôlé) : l'état et le filtrage vivent dans FilterableResults, côté
  * navigateur, pour que cocher une case ou bouger le prix soit instantané (aucun aller-retour
  * serveur). */
-export default function Filters({ categories, selectedCategories, onToggleCategory, maxPrice, onMaxPrice }) {
+export default function Filters({ categories, allLabel, allSelected, onShowAll, selectedCategories, onToggleCategory, maxPrice, onMaxPrice }) {
   return (
     <aside className="filters">
       <h2>Résultats</h2>
@@ -15,6 +15,12 @@ export default function Filters({ categories, selectedCategories, onToggleCatego
           Catégorie <ChevronDownIcon />
         </summary>
         <div className="filter-body">
+          {allLabel ? (
+            <label className="filter-checkbox">
+              <input type="checkbox" checked={allSelected} onChange={onShowAll} />
+              {allLabel}
+            </label>
+          ) : null}
           {categories.map((cat) => (
             <label className="filter-checkbox" key={cat.id}>
               <input

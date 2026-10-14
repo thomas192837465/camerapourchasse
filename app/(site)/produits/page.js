@@ -1,4 +1,9 @@
+<<<<<<< ours
 import { getSiteCategories, getCategoryBySlug } from "@/lib/categories";
+=======
+import { getSiteCategories, getCategoryBySlug, isInFilters } from "@/lib/categories";
+import { productCategoryIds } from "@/lib/productUrl";
+>>>>>>> theirs
 import { getPublishedProducts } from "@/lib/products";
 import { getSettings } from "@/lib/settings";
 import { pageMetadata } from "@/lib/metadata";
@@ -48,7 +53,14 @@ export default async function ProductsPage({ searchParams }) {
     getSettings("content"),
     getSettings("navigation"),
   ]);
-  const products = search || tags.length ? await getPublishedProducts({ tags, search }) : allProducts;
+  // Sans recherche, « Nos caméras » ne liste pas les produits rangés uniquement dans une catégorie
+  // retirée des filtres (ex : Accessoires, qui a sa propre page). Un produit sans catégorie reste listé.
+  const hiddenFromListing = new Set(categories.filter((c) => !isInFilters(c)).map((c) => c.slug));
+  const inListing = (p) => {
+    const ids = productCategoryIds(p).filter((id) => id !== "aucune");
+    return !ids.length || ids.some((id) => !hiddenFromListing.has(id));
+  };
+  const products = search || tags.length ? await getPublishedProducts({ tags, search }) : allProducts.filter(inListing);
 
   return (
     <ProductListing
@@ -62,6 +74,7 @@ export default async function ProductsPage({ searchParams }) {
       comparison={{ title: content.comparisonTitle, rows: content.comparisonRows, products: allProducts }}
       listingLabel={navigation.productsLabel || "Nos caméras"}
       initialMaxPrice={Number.isFinite(maxPrice) ? maxPrice : 500}
+      allLabel={content.produitsFiltersAllLabel || "Toutes nos caméras"}
     />
   );
 }

@@ -4,6 +4,7 @@ import ContentBlocks from "./ContentBlocks";
 import ProductComparisonTable from "./ProductComparisonTable";
 import { buildFaqJsonLd } from "@/lib/schema";
 import { renderRichText } from "@/lib/richText";
+import { isInFilters } from "@/lib/categories";
 
 export default function ProductListing({
   categories,
@@ -18,6 +19,7 @@ export default function ProductListing({
   comparison,
   listingLabel = "Nos caméras",
   initialMaxPrice = 500,
+  allLabel = "Toutes nos caméras",
 }) {
   const breadcrumbJsonLd = category
     ? {
@@ -58,7 +60,8 @@ export default function ProductListing({
       {intro ? <p className="listing-intro" dangerouslySetInnerHTML={{ __html: renderRichText(intro) }} /> : null}
 
       <FilterableResults
-        categories={categories}
+        categories={categories.filter(isInFilters)}
+        allLabel={allLabel}
         products={products}
         lockedCategory={category ? category.slug : null}
         initialCategories={selectedCategorySlugs || []}

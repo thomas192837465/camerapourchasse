@@ -12,6 +12,10 @@ const emptyCategory = {
   slug: "",
   order: 1,
   visible: true,
+<<<<<<< ours
+=======
+  inFilters: true,
+>>>>>>> theirs
   showInNav: true,
   h1: "",
   intro: "",
@@ -119,6 +123,23 @@ export default function CategoryForm({ initialCategory, onSubmit, onDelete }) {
             <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <input
                 type="checkbox"
+<<<<<<< ours
+=======
+                checked={category.inFilters !== false}
+                onChange={(e) => set("inFilters", e.target.checked)}
+              />
+              Afficher dans les filtres de « Nos caméras »
+            </label>
+            <span className="form-hint">
+              Décoché (ex : Accessoires) : la catégorie garde sa page, mais n&apos;apparaît pas dans les filtres et ses
+              produits ne sont pas listés dans « Nos caméras ».
+            </span>
+          </div>
+          <div className="form-field" style={{ justifyContent: "center" }}>
+            <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <input
+                type="checkbox"
+>>>>>>> theirs
                 checked={category.showInNav}
                 onChange={(e) => set("showInNav", e.target.checked)}
               />

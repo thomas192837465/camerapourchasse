@@ -12,7 +12,7 @@ import { productCategoryIds } from "@/lib/productUrl";
  * Sur une page catégorie (/produits/{slug}), changer de catégorie reste une vraie navigation
  * vers la page de l'autre catégorie.
  */
-export default function FilterableResults({ categories, products, lockedCategory, initialCategories = [], initialMaxPrice = 500 }) {
+export default function FilterableResults({ categories, allLabel, products, lockedCategory, initialCategories = [], initialMaxPrice = 500 }) {
   const router = useRouter();
   const [selected, setSelected] = useState(lockedCategory ? [lockedCategory] : initialCategories);
   const [maxPrice, setMaxPrice] = useState(initialMaxPrice);
@@ -40,6 +40,16 @@ export default function FilterableResults({ categories, products, lockedCategory
     syncUrl(next, maxPrice);
   }
 
+  // « Toutes nos caméras » : retire le filtre de catégorie (sur une page catégorie, retour au catalogue).
+  function showAll() {
+    if (lockedCategory) {
+      router.push("/produits");
+      return;
+    }
+    setSelected([]);
+    syncUrl([], maxPrice);
+  }
+
   function changeMaxPrice(value) {
     setMaxPrice(value);
     syncUrl(selected, value);
@@ -59,6 +69,9 @@ export default function FilterableResults({ categories, products, lockedCategory
     <div className="search-layout">
       <Filters
         categories={categories}
+        allLabel={allLabel}
+        allSelected={!lockedCategory && !selected.length}
+        onShowAll={showAll}
         selectedCategories={selected}
         onToggleCategory={toggleCategory}
         maxPrice={maxPrice}

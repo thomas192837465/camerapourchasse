@@ -565,6 +565,17 @@ export default function ContentSettingsPage() {
           />
         </div>
         <div className="form-field">
+          <label>Premier choix des filtres (affiche toute la gamme)</label>
+          <input
+            placeholder="Toutes nos caméras"
+            value={content.produitsFiltersAllLabel || ""}
+            onChange={(e) => set("produitsFiltersAllLabel", e.target.value)}
+          />
+          <span className="form-hint">
+            Les catégories listées dans les filtres se choisissent dans chaque fiche catégorie (« Afficher dans les filtres »).
+          </span>
+        </div>
+        <div className="form-field">
           <label>Intro au-dessus des produits (gras avec **texte**, liens avec [texte](/adresse))</label>
           <textarea rows={3} value={content.produitsIntro || ""} onChange={(e) => set("produitsIntro", e.target.value)} />
         </div>

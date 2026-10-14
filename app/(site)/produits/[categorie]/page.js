@@ -69,9 +69,10 @@ export default async function CategoryOrProductPage({ params, searchParams }) {
   if (redirectTo) permanentRedirect(redirectTo);
 
   if (category) {
-    const [products, navigation] = await Promise.all([
+    const [products, navigation, content] = await Promise.all([
       getPublishedProducts({ categoryIds: [category.slug], excludePromo: true }),
       getSettings("navigation"),
+      getSettings("content"),
     ]);
 
     return (
@@ -83,6 +84,7 @@ export default async function CategoryOrProductPage({ params, searchParams }) {
         intro={category.intro}
         category={category}
         listingLabel={navigation.productsLabel || "Nos caméras"}
+        allLabel={content.produitsFiltersAllLabel || "Toutes nos caméras"}
         siteUrl={process.env.NEXT_PUBLIC_SITE_URL || ""}
       />
     );
