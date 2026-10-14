@@ -1,5 +1,10 @@
 <<<<<<< ours
+<<<<<<< ours
 import { getSiteCategories, getCategoryBySlug } from "@/lib/categories";
+=======
+import { getSiteCategories, getCategoryBySlug, isInFilters } from "@/lib/categories";
+import { productCategoryIds } from "@/lib/productUrl";
+>>>>>>> theirs
 =======
 import { getSiteCategories, getCategoryBySlug, isInFilters } from "@/lib/categories";
 import { productCategoryIds } from "@/lib/productUrl";
