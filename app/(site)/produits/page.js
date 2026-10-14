@@ -40,13 +40,15 @@ export default async function ProductsPage({ searchParams }) {
   const maxPrice = sp?.max ? Number(sp.max) : undefined;
   const search = sp?.q || "";
 
-  const [categories, products, allProducts, content, navigation] = await Promise.all([
+  // Tous les produits sont envoyés une fois : catégories et prix se filtrent ensuite dans le
+  // navigateur (FilterableResults), sans recharger la page à chaque clic.
+  const [categories, allProducts, content, navigation] = await Promise.all([
     getCategories(),
-    getPublishedProducts({ categoryIds, tags, maxPrice, search }),
     getPublishedProducts({}),
     getSettings("content"),
     getSettings("navigation"),
   ]);
+  const products = search || tags.length ? await getPublishedProducts({ tags, search }) : allProducts;
 
   return (
     <ProductListing
@@ -59,6 +61,7 @@ export default async function ProductsPage({ searchParams }) {
       pricingBlocks={content.produitsPricingBlocks}
       comparison={{ title: content.comparisonTitle, rows: content.comparisonRows, products: allProducts }}
       listingLabel={navigation.productsLabel || "Nos caméras"}
+      initialMaxPrice={Number.isFinite(maxPrice) ? maxPrice : 500}
     />
   );
 }

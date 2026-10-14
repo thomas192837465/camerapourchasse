@@ -109,6 +109,7 @@ export default function ProductForm({ initialProduct, categories, generalSetting
             <label>Catégorie principale</label>
             <select required value={product.categoryId} onChange={(e) => set("categoryId", e.target.value)}>
               <option value="">— Choisir —</option>
+              <option value="aucune">Aucune (visible seulement dans « Nos caméras »)</option>
               {categories.map((c) => (
                 <option key={c.id} value={c.slug}>
                   {c.name}

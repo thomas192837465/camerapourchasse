@@ -115,6 +115,14 @@ export default function NavigationSettingsPage() {
             />
           </div>
         </div>
+        <label style={{ display: "flex", alignItems: "center", gap: 8, margin: "4px 0 10px" }}>
+          <input
+            type="checkbox"
+            checked={nav.productsDropdown === true}
+            onChange={(e) => setNav((n) => ({ ...n, productsDropdown: e.target.checked }))}
+          />
+          Afficher les catégories dans un menu déroulant (sinon, simple lien vers /produits)
+        </label>
         <p className="form-hint">
           Une catégorie ajoutée comme lien ci-dessous (ex : Accessoires) n&apos;est pas répétée dans ce menu
           déroulant. Pour en masquer une autre, décochez « Afficher dans le menu » dans sa fiche catégorie.

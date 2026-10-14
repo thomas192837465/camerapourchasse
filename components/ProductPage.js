@@ -1,4 +1,4 @@
-import { getRelatedProducts, getBundledVariant } from "@/lib/products";
+import { getRelatedProducts, getBundledVariant, getPublishedProducts } from "@/lib/products";
 import { getCategoryBySlug } from "@/lib/categories";
 import { getSettings } from "@/lib/settings";
 import { defaultContent } from "@/lib/defaults";
@@ -24,7 +24,10 @@ export function productMetadata(product) {
 export default async function ProductPage({ product }) {
   const [category, related, seo, content, bundle, legal, navigation] = await Promise.all([
     getCategoryBySlug(product.categoryId),
-    getRelatedProducts(product.categoryId, product.id, 24),
+    // Produit sans catégorie (« aucune ») : on propose le reste de la gamme.
+    product.categoryId && product.categoryId !== "aucune"
+      ? getRelatedProducts(product.categoryId, product.id, 24)
+      : getPublishedProducts({ excludePromo: true }).then((all) => all.filter((p) => p.id !== product.id).slice(0, 24)),
     getSettings("seo"),
     getSettings("content"),
     getBundledVariant(product.pack),

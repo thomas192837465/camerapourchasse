@@ -53,6 +53,7 @@ export default async function SiteLayout({ children }) {
         navItems={navigation.items}
         productsLabel={navigation.productsLabel || "Nos caméras"}
         productsAllLabel={navigation.productsAllLabel || "Toutes les caméras"}
+        productsDropdown={navigation.productsDropdown === true}
       />
       {children}
       <BlogTeaser posts={recentPosts} />

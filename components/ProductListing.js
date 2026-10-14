@@ -1,6 +1,5 @@
 import Link from "next/link";
-import Filters from "./Filters";
-import ResultsView from "./ResultsView";
+import FilterableResults from "./FilterableResults";
 import ContentBlocks from "./ContentBlocks";
 import ProductComparisonTable from "./ProductComparisonTable";
 import { buildFaqJsonLd } from "@/lib/schema";
@@ -18,6 +17,7 @@ export default function ProductListing({
   pricingBlocks,
   comparison,
   listingLabel = "Nos caméras",
+  initialMaxPrice = 500,
 }) {
   const breadcrumbJsonLd = category
     ? {
@@ -57,10 +57,13 @@ export default function ProductListing({
       <h1 className="listing-title">{title}</h1>
       {intro ? <p className="listing-intro" dangerouslySetInnerHTML={{ __html: renderRichText(intro) }} /> : null}
 
-      <div className="search-layout">
-        <Filters categories={categories} selectedCategorySlugs={selectedCategorySlugs} />
-        <ResultsView products={products} />
-      </div>
+      <FilterableResults
+        categories={categories}
+        products={products}
+        lockedCategory={category ? category.slug : null}
+        initialCategories={selectedCategorySlugs || []}
+        initialMaxPrice={initialMaxPrice}
+      />
 
       {category ? (
         <ContentBlocks blocks={category.blocks} />

@@ -6,7 +6,7 @@ import { LogoMarkIcon, CartIcon, UserIcon, ChevronDownIcon, MenuIcon, CloseIcon 
 import { useCart } from "@/lib/cart-context";
 import { cloudinaryTransform } from "@/lib/cloudinaryUrl";
 
-export default function Header({ content, categories = [], navItems = [], productsLabel = "Nos caméras", productsAllLabel = "Toutes les caméras" }) {
+export default function Header({ content, categories = [], navItems = [], productsLabel = "Nos caméras", productsAllLabel = "Toutes les caméras", productsDropdown = false }) {
   const { count, openDrawer } = useCart();
   const [mobileOpen, setMobileOpen] = useState(false);
 
@@ -56,19 +56,23 @@ export default function Header({ content, categories = [], navItems = [], produc
         </Link>
 
         <nav className="main-nav">
-          <div className="nav-dropdown">
-            <Link href="/produits">
-              {productsLabel} <ChevronDownIcon />
-            </Link>
-            <div className="nav-dropdown-panel">
-              {categories.map((cat) => (
-                <Link key={cat.id} href={`/produits/${cat.slug}`}>
-                  {cat.name}
-                </Link>
-              ))}
-              <Link href="/produits">{productsAllLabel}</Link>
+          {productsDropdown && categories.length ? (
+            <div className="nav-dropdown">
+              <Link href="/produits">
+                {productsLabel} <ChevronDownIcon />
+              </Link>
+              <div className="nav-dropdown-panel">
+                {categories.map((cat) => (
+                  <Link key={cat.id} href={`/produits/${cat.slug}`}>
+                    {cat.name}
+                  </Link>
+                ))}
+                <Link href="/produits">{productsAllLabel}</Link>
+              </div>
             </div>
-          </div>
+          ) : (
+            <Link href="/produits">{productsLabel}</Link>
+          )}
           {navItems.map((item) =>
             item.children?.length ? (
               <div className="nav-dropdown" key={item.id}>
@@ -115,21 +119,27 @@ export default function Header({ content, categories = [], navItems = [], produc
 
       {mobileOpen ? (
         <nav className="mobile-nav" aria-label="Menu mobile">
-          <details className="mobile-nav-group">
-            <summary>
-              {productsLabel} <ChevronDownIcon />
-            </summary>
-            <div className="mobile-nav-sublinks">
-              {categories.map((cat) => (
-                <Link key={cat.id} href={`/produits/${cat.slug}`} onClick={closeMobile}>
-                  {cat.name}
+          {productsDropdown && categories.length ? (
+            <details className="mobile-nav-group">
+              <summary>
+                {productsLabel} <ChevronDownIcon />
+              </summary>
+              <div className="mobile-nav-sublinks">
+                {categories.map((cat) => (
+                  <Link key={cat.id} href={`/produits/${cat.slug}`} onClick={closeMobile}>
+                    {cat.name}
+                  </Link>
+                ))}
+                <Link href="/produits" onClick={closeMobile}>
+                  {productsAllLabel}
                 </Link>
-              ))}
-              <Link href="/produits" onClick={closeMobile}>
-                {productsAllLabel}
-              </Link>
-            </div>
-          </details>
+              </div>
+            </details>
+          ) : (
+            <Link className="mobile-nav-link" href="/produits" onClick={closeMobile}>
+              {productsLabel}
+            </Link>
+          )}
           {navItems.map((item) =>
             item.children?.length ? (
               <details className="mobile-nav-group" key={item.id}>

@@ -2,6 +2,7 @@ import { notFound, permanentRedirect } from "next/navigation";
 import { getCategoryBySlug, getCategories } from "@/lib/categories";
 import { getProductBySlug, getPublishedProducts } from "@/lib/products";
 import { getSettings } from "@/lib/settings";
+import { getPostBySlug } from "@/lib/posts";
 import { pageMetadata } from "@/lib/metadata";
 import { productPath } from "@/lib/productUrl";
 import ProductListing from "@/components/ProductListing";
@@ -11,7 +12,14 @@ export const revalidate = 60;
 
 // Anciennes pages supprimées : tant qu'aucune catégorie ne reprend ces adresses (ou ne les liste
 // dans ses "Anciennes adresses"), elles redirigent vers la page Nos caméras plutôt qu'une erreur 404.
-const RETIRED = ["piege-photo", "camera-de-chasse-sans-abonnement", "cameras-de-chasse-connectees"];
+// piege-photo → l'article /blog/piege-photo dès qu'il est publié.
+const RETIRED = {
+  "piege-photo": { post: "piege-photo" },
+  "camera-de-chasse-sans-abonnement": {},
+  "cameras-de-chasse-connectees": {},
+  "camera-de-chasse-4g": {},
+  "camera-de-chasse-wifi": {},
+};
 
 // /produits/{segment} sert, dans cet ordre :
 //  1. une catégorie (son slug),
@@ -26,7 +34,11 @@ async function resolve(segment) {
   if (renamed) return { redirectTo: `/produits/${renamed.slug}` };
   const product = await getProductBySlug(segment);
   if (product) return { product };
-  if (RETIRED.includes(segment)) return { redirectTo: "/produits" };
+  const retired = RETIRED[segment];
+  if (retired) {
+    const post = retired.post ? await getPostBySlug(retired.post).catch(() => null) : null;
+    return { redirectTo: post ? `/blog/${retired.post}` : "/produits" };
+  }
   return {};
 }
 
@@ -51,12 +63,8 @@ export default async function CategoryOrProductPage({ params, searchParams }) {
   if (redirectTo) permanentRedirect(redirectTo);
 
   if (category) {
-    const sp = await searchParams;
-    const tags = (sp?.tags || "").split(",").filter(Boolean);
-    const maxPrice = sp?.max ? Number(sp.max) : undefined;
-    const search = sp?.q || "";
     const [products, navigation] = await Promise.all([
-      getPublishedProducts({ categoryIds: [category.slug], tags, maxPrice, search, excludePromo: true }),
+      getPublishedProducts({ categoryIds: [category.slug], excludePromo: true }),
       getSettings("navigation"),
     ]);
 
