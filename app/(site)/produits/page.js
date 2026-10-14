@@ -1,4 +1,4 @@
-import { getCategories, getCategoryBySlug } from "@/lib/categories";
+import { getSiteCategories, getCategoryBySlug } from "@/lib/categories";
 import { getPublishedProducts } from "@/lib/products";
 import { getSettings } from "@/lib/settings";
 import { pageMetadata } from "@/lib/metadata";
@@ -43,7 +43,7 @@ export default async function ProductsPage({ searchParams }) {
   // Tous les produits sont envoyés une fois : catégories et prix se filtrent ensuite dans le
   // navigateur (FilterableResults), sans recharger la page à chaque clic.
   const [categories, allProducts, content, navigation] = await Promise.all([
-    getCategories(),
+    getSiteCategories(),
     getPublishedProducts({}),
     getSettings("content"),
     getSettings("navigation"),
@@ -54,7 +54,7 @@ export default async function ProductsPage({ searchParams }) {
     <ProductListing
       categories={categories}
       products={products}
-      selectedCategorySlugs={categoryIds}
+      selectedCategorySlugs={categoryIds.filter((id) => categories.some((c) => c.slug === id))}
       title={search ? `Résultats pour "${search}"` : content.produitsH1 || "Caméra de chasse"}
       intro={search ? "" : content.produitsIntro}
       introBlocks={content.produitsIntroBlocks}

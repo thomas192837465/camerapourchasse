@@ -101,7 +101,7 @@ export default function ShopifyContentForm({ shopifyProduct, initialContent, cat
               <option value="aucune">Aucune (visible seulement dans « Nos caméras »)</option>
               {categories.map((c) => (
                 <option key={c.id} value={c.slug}>
-                  {c.name}
+                  {c.name}{c.visible === false ? " (masquée)" : ""}
                 </option>
               ))}
             </select>
@@ -125,7 +125,7 @@ export default function ShopifyContentForm({ shopifyProduct, initialContent, cat
                         )
                       }
                     />
-                    {c.name}
+                    {c.name}{c.visible === false ? " (masquée)" : ""}
                   </label>
                 ))}
             </div>

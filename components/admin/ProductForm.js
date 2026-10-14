@@ -112,7 +112,7 @@ export default function ProductForm({ initialProduct, categories, generalSetting
               <option value="aucune">Aucune (visible seulement dans « Nos caméras »)</option>
               {categories.map((c) => (
                 <option key={c.id} value={c.slug}>
-                  {c.name}
+                  {c.name}{c.visible === false ? " (masquée)" : ""}
                 </option>
               ))}
             </select>
@@ -136,7 +136,7 @@ export default function ProductForm({ initialProduct, categories, generalSetting
                         )
                       }
                     />
-                    {c.name}
+                    {c.name}{c.visible === false ? " (masquée)" : ""}
                   </label>
                 ))}
             </div>

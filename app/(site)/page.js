@@ -1,5 +1,5 @@
 import { getSettings } from "@/lib/settings";
-import { getCategories } from "@/lib/categories";
+import { getSiteCategories } from "@/lib/categories";
 import { getPublishedProducts } from "@/lib/products";
 import { pageMetadata } from "@/lib/metadata";
 import { buildFaqJsonLd } from "@/lib/schema";
@@ -49,7 +49,7 @@ function toPostalAddress(raw) {
 export default async function HomePage() {
   const [content, categories, allProducts, seo, legal] = await Promise.all([
     getSettings("content"),
-    getCategories(),
+    getSiteCategories(),
     getPublishedProducts(),
     getSettings("seo"),
     getSettings("legal"),

@@ -4232,6 +4232,14 @@ h1, h2, h3, h4, p {
   color: var(--green-700);
 }
 
+.status-toggle {
+  border: 0;
+  cursor: pointer;
+  font: inherit;
+  transition: opacity 0.15s;
+}
+.status-toggle:hover { opacity: 0.75; }
+.status-toggle:disabled { cursor: wait; }
 .status-pill.draft {
   background: #f1ede0;
   color: #8a7a3a;

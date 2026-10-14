@@ -1,5 +1,5 @@
 import { notFound, permanentRedirect } from "next/navigation";
-import { getCategoryBySlug, getCategories } from "@/lib/categories";
+import { getCategories, isVisible } from "@/lib/categories";
 import { getProductBySlug, getPublishedProducts } from "@/lib/products";
 import { getSettings } from "@/lib/settings";
 import { getPostBySlug } from "@/lib/posts";
@@ -26,15 +26,21 @@ const RETIRED = {
 //  2. une ancienne adresse de catégorie (champ "Anciennes adresses" de la catégorie) → redirection,
 //  3. une fiche produit (son slug ; un ancien slug ou le handle Shopify redirige vers le bon),
 //  4. une ancienne page supprimée (RETIRED) → redirection vers /produits.
+// Une catégorie masquée dans l'admin n'a plus de page : son adresse suit les règles 2 et 4
+// (catégorie qui la liste dans ses anciennes adresses, sinon RETIRED, sinon /produits).
 async function resolve(segment) {
-  const categories = await getCategories();
+  const all = await getCategories();
+  const categories = all.filter(isVisible);
   const category = categories.find((c) => c.slug === segment);
   if (category) return { category, categories };
   const renamed = categories.find((c) => (c.formerSlugs || []).includes(segment));
   if (renamed) return { redirectTo: `/produits/${renamed.slug}` };
-  const product = await getProductBySlug(segment);
-  if (product) return { product };
-  const retired = RETIRED[segment];
+  const hidden = all.some((c) => c.slug === segment);
+  if (!hidden) {
+    const product = await getProductBySlug(segment);
+    if (product) return { product };
+  }
+  const retired = RETIRED[segment] || (hidden ? {} : null);
   if (retired) {
     const post = retired.post ? await getPostBySlug(retired.post).catch(() => null) : null;
     return { redirectTo: post ? `/blog/${retired.post}` : "/produits" };

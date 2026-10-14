@@ -11,6 +11,7 @@ const emptyCategory = {
   name: "",
   slug: "",
   order: 1,
+  visible: true,
   showInNav: true,
   h1: "",
   intro: "",
@@ -99,6 +100,20 @@ export default function CategoryForm({ initialCategory, onSubmit, onDelete }) {
           <div className="form-field">
             <label>Ordre d'affichage</label>
             <input type="number" value={category.order} onChange={(e) => set("order", e.target.value)} />
+          </div>
+          <div className="form-field" style={{ justifyContent: "center" }}>
+            <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
+              <input
+                type="checkbox"
+                checked={category.visible !== false}
+                onChange={(e) => set("visible", e.target.checked)}
+              />
+              En ligne sur le site
+            </label>
+            <span className="form-hint">
+              Décoché : la catégorie reste dans l'admin mais disparaît du site (menu, filtres, accueil, sitemap) et son
+              adresse redirige vers « Nos caméras » ou vers la catégorie qui la liste dans ses anciennes adresses.
+            </span>
           </div>
           <div className="form-field" style={{ justifyContent: "center" }}>
             <label style={{ display: "flex", alignItems: "center", gap: 8 }}>

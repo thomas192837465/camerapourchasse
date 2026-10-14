@@ -1,5 +1,5 @@
 import { getPublishedProducts } from "@/lib/products";
-import { getCategories } from "@/lib/categories";
+import { getSiteCategories } from "@/lib/categories";
 import { getPublishedPosts } from "@/lib/posts";
 import { productPath } from "@/lib/productUrl";
 
@@ -12,7 +12,7 @@ export default async function sitemap() {
   const base = process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000";
   const [products, categories, posts] = await Promise.all([
     getPublishedProducts({}),
-    getCategories(),
+    getSiteCategories(),
     getPublishedPosts(),
   ]);
 

@@ -1,5 +1,5 @@
 import { getSettings } from "@/lib/settings";
-import { getCategories } from "@/lib/categories";
+import { getSiteCategories } from "@/lib/categories";
 import { getRecentPosts } from "@/lib/posts";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
@@ -14,7 +14,7 @@ export default async function SiteLayout({ children }) {
   const [content, navigation, categories, recentPosts] = await Promise.all([
     getSettings("content"),
     getSettings("navigation"),
-    getCategories(),
+    getSiteCategories(),
     getRecentPosts(3),
   ]);
   // Une catégorie déjà présente comme lien du menu (ex : Accessoires) n'est pas répétée dans le
