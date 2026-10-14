@@ -12,14 +12,7 @@ const emptyCategory = {
   slug: "",
   order: 1,
   visible: true,
-<<<<<<< ours
-<<<<<<< ours
-=======
   inFilters: true,
->>>>>>> theirs
-=======
-  inFilters: true,
->>>>>>> theirs
   showInNav: true,
   h1: "",
   intro: "",
@@ -127,11 +120,6 @@ export default function CategoryForm({ initialCategory, onSubmit, onDelete }) {
             <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <input
                 type="checkbox"
-<<<<<<< ours
-<<<<<<< ours
-=======
-=======
->>>>>>> theirs
                 checked={category.inFilters !== false}
                 onChange={(e) => set("inFilters", e.target.checked)}
               />
@@ -146,10 +134,6 @@ export default function CategoryForm({ initialCategory, onSubmit, onDelete }) {
             <label style={{ display: "flex", alignItems: "center", gap: 8 }}>
               <input
                 type="checkbox"
-<<<<<<< ours
->>>>>>> theirs
-=======
->>>>>>> theirs
                 checked={category.showInNav}
                 onChange={(e) => set("showInNav", e.target.checked)}
               />

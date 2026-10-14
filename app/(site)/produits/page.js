@@ -1,14 +1,5 @@
-<<<<<<< ours
-<<<<<<< ours
-import { getSiteCategories, getCategoryBySlug } from "@/lib/categories";
-=======
 import { getSiteCategories, getCategoryBySlug, isInFilters } from "@/lib/categories";
 import { productCategoryIds } from "@/lib/productUrl";
->>>>>>> theirs
-=======
-import { getSiteCategories, getCategoryBySlug, isInFilters } from "@/lib/categories";
-import { productCategoryIds } from "@/lib/productUrl";
->>>>>>> theirs
 import { getPublishedProducts } from "@/lib/products";
 import { getSettings } from "@/lib/settings";
 import { pageMetadata } from "@/lib/metadata";
