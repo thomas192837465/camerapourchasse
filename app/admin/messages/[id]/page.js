@@ -8,6 +8,7 @@ import {
   markThreadRead,
   replyToThread,
 } from "@/lib/supportThreads";
+import { useAuth } from "@/lib/auth";
 
 function formatDate(iso) {
   if (!iso) return "";
@@ -27,6 +28,7 @@ export default function AdminMessageThreadPage() {
   const { id } = useParams();
   const threadId = decodeURIComponent(id);
   const router = useRouter();
+  const { user } = useAuth();
   const [thread, setThread] = useState(null);
   const [messages, setMessages] = useState([]);
   const [reply, setReply] = useState("");
@@ -54,7 +56,8 @@ export default function AdminMessageThreadPage() {
         .split("\n\n")
         .map((p) => `<p>${p.replace(/\n/g, "<br/>")}</p>`)
         .join("");
-      await replyToThread(threadId, { html, text: reply });
+      const idToken = await user.getIdToken();
+      await replyToThread(threadId, { html, text: reply, idToken });
       setReply("");
     } catch (err) {
       setError(err.message || "Échec de l'envoi.");
