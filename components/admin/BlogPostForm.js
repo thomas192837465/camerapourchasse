@@ -145,18 +145,31 @@ export default function BlogPostForm({ initialPost, onSubmit, onDelete }) {
           Chaque bloc "Titre (H2)" ou "Sous-titre (H3)" apparaît automatiquement dans le sommaire affiché en haut de
           l'article.
         </p>
-        <ContentBlocksEditor blocks={post.blocks} onChange={(blocks) => set("blocks", blocks)} />
+        <ContentBlocksEditor allowProducts blocks={post.blocks} onChange={(blocks) => set("blocks", blocks)} />
       </div>
 
       <div className="admin-card">
         <h2>Produits recommandés</h2>
         <p className="form-hint" style={{ marginBottom: 10 }}>
-          Affichés dans la barre latérale de l'article, avec leur photo, note et prix réels.
+          Affichés dans la barre latérale de l'article, avec leur photo, note et prix réels. Ce sont aussi les
+          premières caméras proposées dans les cartes glissées dans le texte.
         </p>
         <RelatedProductsField
           value={post.relatedProductSlugs}
           onChange={(slugs) => set("relatedProductSlugs", slugs)}
         />
+        <label style={{ display: "flex", alignItems: "center", gap: 8, marginTop: 14 }}>
+          <input
+            type="checkbox"
+            checked={post.autoProductCards !== false}
+            onChange={(e) => set("autoProductCards", e.target.checked)}
+          />
+          Insérer automatiquement des cartes caméra dans le texte de cet article
+        </label>
+        <p className="form-hint">
+          Fréquence et textes des cartes : Réglages → Contenu → Page « Blog ». Un bloc « Caméra » ajouté à la main dans
+          le contenu remplace l&apos;insertion automatique.
+        </p>
       </div>
 
       <div className="admin-card">

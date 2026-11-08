@@ -2,6 +2,7 @@
 
 import { TrashIcon } from "@/components/Icons";
 import SingleImageField from "./SingleImageField";
+import ProductBlockEditor from "./ProductBlockEditor";
 
 const BLOCK_LABELS = {
   heading: "Titre (H2)",
@@ -11,6 +12,7 @@ const BLOCK_LABELS = {
   imageText: "Image + texte",
   table: "Tableau",
   faq: "FAQ",
+  product: "Caméra (carte produit)",
 };
 
 function makeBlock(type, extraProps) {
@@ -23,11 +25,13 @@ function makeBlock(type, extraProps) {
     imageText: { side: "right", heading: "", items: [], image: { url: "", alt: "" }, caption: "" },
     table: { title: "", intro: "", rows: [] },
     faq: { items: [] },
+    product: { productSlug: "", note: "" },
   }[type];
   return { id, type, ...extra, ...extraProps };
 }
 
-export default function ContentBlocksEditor({ blocks, onChange }) {
+// allowProducts : propose le bloc « Caméra » (articles de blog uniquement, seul endroit où il s'affiche).
+export default function ContentBlocksEditor({ blocks, onChange, allowProducts = false }) {
   function update(index, patch) {
     onChange(blocks.map((b, i) => (i === index ? { ...b, ...patch } : b)));
   }
@@ -119,13 +123,17 @@ export default function ContentBlocksEditor({ blocks, onChange }) {
             <TableBlockEditor block={block} onChange={(patch) => update(i, patch)} />
           ) : null}
 
+          {block.type === "product" ? (
+            <ProductBlockEditor block={block} onChange={(patch) => update(i, patch)} />
+          ) : null}
+
           {block.type === "faq" ? <FaqBlockEditor block={block} onChange={(patch) => update(i, patch)} /> : null}
         </div>
       ))}
 
       <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
         {Object.entries(BLOCK_LABELS)
-          .filter(([type]) => type !== "imageText")
+          .filter(([type]) => type !== "imageText" && (allowProducts || type !== "product"))
           .map(([type, label]) => (
             <button key={type} type="button" className="btn btn-outline btn-sm" onClick={() => add(type)}>
               + {label}

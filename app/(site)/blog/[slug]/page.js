@@ -9,7 +9,9 @@ import {
   getRelatedPosts,
   getManualRelatedPosts,
 } from "@/lib/posts";
-import { getProductsBySlugs } from "@/lib/products";
+import { getPublishedProducts } from "@/lib/products";
+import { getSiteCategories } from "@/lib/categories";
+import { withProductCards } from "@/lib/blogProductCards";
 import { getSettings } from "@/lib/settings";
 import { buildFaqJsonLd } from "@/lib/schema";
 import { pageMetadata } from "@/lib/metadata";
@@ -42,12 +44,17 @@ export default async function BlogPostPage({ params }) {
   const post = await getPostBySlug(slug);
   if (!post) notFound();
 
-  const [seo, content, allPosts, relatedProducts] = await Promise.all([
+  const [seo, content, allPosts, products, categories] = await Promise.all([
     getSettings("seo"),
     getSettings("content"),
     getPublishedPosts(),
-    getProductsBySlugs(post.relatedProductSlugs),
+    getPublishedProducts(),
+    getSiteCategories(),
   ]);
+  const bySlug = new Map(products.map((p) => [p.slug, p]));
+  const relatedProducts = (post.relatedProductSlugs || []).map((s) => bySlug.get(s)).filter(Boolean);
+  // Cartes caméra dans le texte : blocs « Caméra » placés à la main, sinon insertion automatique.
+  const articleBlocks = withProductCards(post, products, categories, content);
 
   const siteUrl = process.env.NEXT_PUBLIC_SITE_URL || "";
   const postUrl = `${siteUrl}/blog/${post.slug}`;
@@ -131,7 +138,12 @@ export default async function BlogPostPage({ params }) {
             </div>
           ) : null}
 
-          <ContentBlocks blocks={post.blocks} variant="article" />
+          <ContentBlocks
+            blocks={articleBlocks}
+            variant="article"
+            products={products}
+            productCard={{ label: content.blogProductCardLabel, cta: content.blogProductCardCta }}
+          />
 
           {relatedPosts.length ? (
             <section className="blog-related-articles">

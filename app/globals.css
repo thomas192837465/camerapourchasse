@@ -6920,3 +6920,90 @@ h1, h2, h3, h4, p {
 /* Intro courte sous le H1 des pages de liste (catégories, Nos caméras) */
 .listing-intro { max-width: 760px; margin: -6px 0 24px; color: var(--ink-soft); font-size: 16px; line-height: 1.6; }
 .listing-intro a { color: var(--ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+
+/* ---------- Carte caméra dans le texte d'un article ---------- */
+.blog-product-card {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  gap: 22px;
+  align-items: center;
+  margin: 10px 0;
+  padding: 18px;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  border-left: 4px solid var(--accent);
+  border-radius: var(--radius-lg);
+  transition: box-shadow 0.2s ease;
+}
+.blog-product-card:hover { box-shadow: var(--shadow-md); }
+.blog-product-card-media {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  background: #fff;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  color: var(--ink-faint);
+}
+.blog-product-card-media img { padding: 8px; }
+.blog-product-card-body { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.blog-product-card-label {
+  align-self: flex-start;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--green-900);
+  color: var(--accent);
+  font-family: var(--font-head);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.blog-product-card-name {
+  font-family: var(--font-head);
+  font-size: 1.15rem;
+  font-weight: 700;
+  line-height: 1.25;
+  color: var(--ink);
+  text-decoration: none;
+}
+.blog-product-card-name:hover { color: var(--accent-ink); }
+.blog-product-card-text {
+  margin: 0;
+  color: var(--ink-soft);
+  font-size: 0.95rem;
+  line-height: 1.5;
+  text-align: left;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.blog-product-card-foot {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: 4px;
+}
+.blog-product-card-price {
+  font-family: var(--font-head);
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: var(--ink);
+}
+.blog-product-card-price s {
+  margin-left: 8px;
+  font-size: 0.95rem;
+  font-weight: 400;
+  color: var(--ink-faint);
+}
+.blog-product-card .btn svg { width: 16px; height: 16px; }
+@media (max-width: 640px) {
+  .blog-product-card { grid-template-columns: 96px 1fr; gap: 14px; padding: 14px; }
+  .blog-product-card-text { -webkit-line-clamp: 2; }
+  .blog-product-card-foot .btn { width: 100%; }
+}

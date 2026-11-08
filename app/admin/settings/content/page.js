@@ -847,6 +847,60 @@ export default function ContentSettingsPage() {
           <textarea rows={2} value={content.blogAboutText} onChange={(e) => set("blogAboutText", e.target.value)} />
         </div>
         <p className="form-hint">Cet encart renvoie vers la page "Notre histoire".</p>
+
+        <h3 style={{ margin: "22px 0 8px" }}>Cartes caméra dans les articles</h3>
+        <label style={{ display: "flex", alignItems: "center", gap: 8, margin: "4px 0 10px" }}>
+          <input
+            type="checkbox"
+            checked={content.blogProductCards !== false}
+            onChange={(e) => set("blogProductCards", e.target.checked)}
+          />
+          Insérer automatiquement des cartes caméra entre les sections des articles
+        </label>
+        <div className="repeatable-row">
+          <div className="form-field">
+            <label>Une carte tous les … titres (H2)</label>
+            <input
+              type="number"
+              min="1"
+              value={content.blogProductCardsEvery ?? 2}
+              onChange={(e) => set("blogProductCardsEvery", Number(e.target.value))}
+            />
+          </div>
+          <div className="form-field">
+            <label>Nombre maximum de cartes par article</label>
+            <input
+              type="number"
+              min="0"
+              value={content.blogProductCardsMax ?? 3}
+              onChange={(e) => set("blogProductCardsMax", Number(e.target.value))}
+            />
+          </div>
+        </div>
+        <div className="repeatable-row">
+          <div className="form-field">
+            <label>Étiquette de la carte</label>
+            <input
+              placeholder="Notre sélection"
+              value={content.blogProductCardLabel ?? ""}
+              onChange={(e) => set("blogProductCardLabel", e.target.value)}
+            />
+          </div>
+          <div className="form-field">
+            <label>Texte du bouton</label>
+            <input
+              placeholder="Voir la caméra"
+              value={content.blogProductCardCta ?? ""}
+              onChange={(e) => set("blogProductCardCta", e.target.value)}
+            />
+          </div>
+        </div>
+        <p className="form-hint">
+          Les caméras choisies : d&apos;abord les « Produits recommandés » cochés dans l&apos;article, puis celles qui
+          collent au sujet (solaire, 4G, Wi-Fi…), puis les best-sellers. Pour placer une caméra précise à un endroit
+          précis, ajoutez un bloc « Caméra » dans l&apos;article : l&apos;insertion automatique est alors désactivée
+          pour cet article.
+        </p>
       </div>
 
       <button className="btn btn-primary" onClick={handleSave} disabled={saving}>

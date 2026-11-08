@@ -1,5 +1,6 @@
 import Image from "next/image";
 import { renderRichText } from "@/lib/richText";
+import ProductInlineCard from "./ProductInlineCard";
 
 function renderTextBlock(block) {
   if (block.type === "heading") {
@@ -86,7 +87,9 @@ function renderStandaloneBlock(block) {
 // sur l'accueil, notre histoire, les pages catégorie, etc.
 // variant="article" : mise en page d'origine (carte encadrée, texte justifié, blocs empilés), pour
 // les articles de blog qui partagent la colonne avec une barre latérale (sommaire, produits liés).
-export default function ContentBlocks({ blocks, variant = "page" }) {
+// Blocs « product » (carte caméra) : `products` = liste des produits de la boutique, `productCard`
+// = textes de la carte ({ label, cta }). Sans `products`, ces blocs sont simplement ignorés.
+export default function ContentBlocks({ blocks, variant = "page", products, productCard }) {
   if (!blocks?.length) return null;
 
   const rows = [];
@@ -109,6 +112,11 @@ export default function ContentBlocks({ blocks, variant = "page" }) {
     } else if (block.type === "imageText") {
       flushText();
       rows.push({ kind: "imageText", key: block.id, block });
+    } else if (block.type === "product") {
+      const product = products?.find((p) => p.slug === block.productSlug);
+      if (!product) return;
+      flushText();
+      rows.push({ kind: "product", key: block.id, block, product });
     } else if (block.type === "table" || block.type === "faq") {
       flushText();
       rows.push({ kind: "standalone", key: block.id, block });
@@ -123,6 +131,18 @@ export default function ContentBlocks({ blocks, variant = "page" }) {
       <div className="content-blocks-inner">
       {rows.map((row) => {
         if (row.kind === "standalone") return renderStandaloneBlock(row.block);
+
+        if (row.kind === "product") {
+          return (
+            <ProductInlineCard
+              key={row.key}
+              product={row.product}
+              note={row.block.note}
+              label={productCard?.label}
+              cta={productCard?.cta}
+            />
+          );
+        }
 
         if (row.kind === "media") {
           if (!row.text.length) {
