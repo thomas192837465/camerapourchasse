@@ -59,45 +59,48 @@ export default async function CgvPage() {
         <section>
           <h2>Article 4 — Paiement</h2>
           <p>
-            Au jour de la rédaction des présentes CGV, le règlement des commandes s'effectue à réception ou par
-            virement bancaire, les coordonnées étant communiquées au client après validation de sa commande. Un
-            moyen de paiement en ligne pourra être proposé ultérieurement.
+            Le règlement des commandes s'effectue comptant en ligne au moment de la validation de la commande par
+            carte bancaire (Visa, Mastercard, American Express) via notre plateforme de paiement sécurisée (protocole
+            de chiffrement SSL/TLS). La commande n'est définitive qu'après confirmation de l'autorisation de paiement
+            par l'organisme bancaire.
           </p>
         </section>
 
         <section>
           <h2>Article 5 — Livraison</h2>
           <p>
-            Les produits sont livrés à l'adresse indiquée par le client lors de la commande, dans les délais
-            précisés sur la fiche produit ou communiqués lors de la confirmation de commande. En cas de retard
-            important, le client en est informé dans les meilleurs délais.
+            Les commandes sont expédiées depuis notre entrepôt en France. En France métropolitaine, la livraison est
+            gratuite et le colis est livré sous <strong>4 à 5 jours ouvrés</strong> après validation de la commande
+            via Colissimo avec numéro de suivi. En cas de retard important, le client en est informé dans les
+            meilleurs délais.
           </p>
         </section>
 
         <section>
-          <h2>Article 6 — Droit de rétractation</h2>
+          <h2>Article 6 — Droit de rétractation et retours</h2>
           <p>
             Conformément aux articles L221-18 et suivants du Code de la consommation, le client dispose d'un délai
             de <strong>14 jours</strong> à compter de la réception du produit pour exercer son droit de
             rétractation, sans avoir à justifier de motif ni à payer de pénalité, à l'exception des frais de retour
-            qui restent à sa charge.
+            qui restent à sa charge (dépôt du colis auprès du transporteur de son choix). Les produits retournés
+            doivent être neufs, complets et dans leur emballage d'origine.
           </p>
           <p>
             Pour exercer ce droit, le client notifie sa décision par écrit à{" "}
             <LegalField value={legal.email} placeholder="e-mail de contact" /> puis retourne le produit, dans son
             état d'origine, à l'adresse suivante : <LegalField value={returnAddress} placeholder="adresse de retour" />
-            . Le remboursement intervient dans un délai de 14 jours suivant la réception du produit retourné.
+            . Le remboursement intégral intervient dans un délai de <strong>5 jours ouvrés</strong> suivant la
+            réception et la vérification du produit retourné.
           </p>
         </section>
 
         <section>
-          <h2>Article 7 — Garanties légales</h2>
+          <h2>Article 7 — Garanties légales et garantie commerciale</h2>
           <p>
             Tout produit vendu bénéficie de la garantie légale de conformité (articles L217-3 et suivants du Code
             de la consommation) et de la garantie légale contre les vices cachés (articles 1641 et suivants du Code
-            civil). À ce titre, le client peut décider de mettre en œuvre la garantie contre les défauts de
-            conformité et adresser une réclamation au vendeur, sans avoir à démontrer l'existence du défaut de
-            conformité pendant les 24 mois suivant la délivrance du bien.
+            civil) pendant <strong>2 ans (24 mois)</strong> suivant la délivrance du bien. Le service après-vente
+            est basé en France.
           </p>
         </section>
 

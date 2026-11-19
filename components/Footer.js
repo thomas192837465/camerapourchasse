@@ -108,7 +108,8 @@ export default function Footer({ content }) {
           <h4>Légal</h4>
           <ul>
             <li><Link href="/mentions-legales">Mentions légales</Link></li>
-            <li><Link href="/cgv">CGV</Link></li>
+            <li><Link href="/cgv">CGV &amp; Politique de retour</Link></li>
+            <li><Link href="/livraison">Politique de livraison</Link></li>
             <li><CookiePreferencesLink /></li>
           </ul>
         </div>
@@ -129,7 +130,7 @@ export default function Footer({ content }) {
         </div>
       </div>
       <div className="footer-bottom">
-        <div>© {new Date().getFullYear()} {content.logoLine1} {content.logoLine2}. Tous droits réservés.</div>
+        <div>© {new Date().getFullYear()} {content.logoLine1} (KREA) — {content.logoLine2}. Tous droits réservés.</div>
       </div>
     </footer>
   );
